@@ -15,8 +15,12 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased bg-[#f4f5fa] selection:bg-[#22074d] selection:text-white">
-        <div class="min-h-screen flex flex-col justify-center items-center p-4 sm:p-6">
+        @if ($fullBleed)
             {{ $slot }}
-        </div>
+        @else
+            <div class="min-h-screen flex flex-col justify-center items-center p-4 sm:p-6">
+                {{ $slot }}
+            </div>
+        @endif
     </body>
 </html>

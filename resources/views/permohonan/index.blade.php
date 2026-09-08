@@ -1,22 +1,22 @@
 <x-portal-layout>
     <x-slot name="title">
-        Permohonan Saya - Pembukaan Wasiat Tertutup
+        Histori Permohonan - Balai Harta Peninggalan
     </x-slot>
 
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header -->
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
-                <h2 class="text-2xl font-bold text-[#0f172a] tracking-tight">
-                    Permohonan Saya
+                <h2 class="text-2xl font-bold text-[#0c2a55] tracking-tight">
+                    Histori Permohonan
                 </h2>
                 <p class="text-xs sm:text-sm text-gray-500 mt-1">
-                    Daftar riwayat dan status pengajuan pembukaan wasiat tertutup Anda.
+                    Daftar riwayat dan status pengajuan permohonan Anda di Balai Harta Peninggalan Surabaya.
                 </p>
             </div>
 
             <a href="{{ route('permohonan.create') }}" 
-               class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold text-xs sm:text-sm rounded-lg shadow-sm transition">
+               class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#0066d6] hover:bg-[#0055b8] text-white font-semibold text-xs sm:text-sm rounded-xl shadow-sm transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
@@ -37,7 +37,7 @@
         <div class="bg-white rounded-xl border border-gray-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.02)] overflow-hidden">
             @if ($permohonans->isEmpty())
                 <div class="p-12 text-center">
-                    <div class="w-16 h-16 rounded-full bg-purple-50 text-[#4a1d84] flex items-center justify-center mx-auto mb-4">
+                    <div class="w-16 h-16 rounded-full bg-blue-50 text-[#0066d6] flex items-center justify-center mx-auto mb-4">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                         </svg>
@@ -47,7 +47,7 @@
                         Anda belum pernah membuat pengajuan permohonan pembukaan wasiat tertutup. Klik tombol di bawah untuk mulai.
                     </p>
                     <a href="{{ route('permohonan.create') }}" 
-                       class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#eab308] hover:bg-[#ca8a04] text-[#1e1b4b] font-bold text-xs rounded-lg shadow-sm transition">
+                       class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0066d6] hover:bg-[#0055b8] text-white font-bold text-xs rounded-xl shadow-sm transition">
                         <svg class="w-4 h-4 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                         </svg>
@@ -57,7 +57,7 @@
             @else
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-gray-700">
-                        <thead class="bg-[#faf7fd] text-[#2e1065] uppercase text-[11px] font-bold border-b border-purple-100/70">
+                        <thead class="bg-[#f0f4f9] text-[#0c2a55] uppercase text-[11px] font-bold border-b border-blue-100">
                             <tr>
                                 <th class="px-6 py-3.5">No. Permohonan</th>
                                 <th class="px-6 py-3.5">Nama Pewasiat</th>

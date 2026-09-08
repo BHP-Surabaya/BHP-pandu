@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 160" fill="none" preserveAspectRatio="xMidYMax meet" class="w-full h-auto">
+  <defs>
+    <!-- Soft blue gradient matching theme -->
+    <linearGradient id="skylineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#93c5fd" stop-opacity="0.35" />
+      <stop offset="60%" stop-color="#bfdbfe" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#dbeafe" stop-opacity="0.6" />
+    </linearGradient>
+    <linearGradient id="backSkylineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#cbd5e1" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#93c5fd" stop-opacity="0.25" />
+    </linearGradient>
+  </defs>
+
+  <!-- ================= LAYER 1: BACKGROUND SKYLINE (Far Distance) ================= -->
+  <g fill="url(#backSkylineGrad)">
+    <!-- Far Left Background Towers -->
+    <rect x="40" y="80" width="24" height="75" rx="1" />
+    <rect x="68" y="65" width="30" height="90" rx="1" />
+    <polygon points="83,45 80,65 86,65" />
+    <rect x="104" y="85" width="20" height="70" rx="1" />
+
+    <!-- Mid Background Skyscrapers (Behind Suramadu approach) -->
+    <rect x="230" y="90" width="35" height="65" rx="1" />
+    <rect x="270" y="70" width="28" height="85" rx="1" />
+    <polygon points="284,52 282,70 286,70" />
+    <rect x="302" y="82" width="32" height="73" rx="1" />
+
+    <!-- Center City Background Skyline -->
+    <rect x="390" y="60" width="36" height="95" rx="2" />
+    <rect x="430" y="45" width="42" height="110" rx="2" />
+    <polygon points="451,25 449,45 453,45" />
+    <rect x="476" y="75" width="28" height="80" rx="1" />
+    <rect x="508" y="55" width="38" height="100" rx="2" />
+    
+    <!-- Behind Tugu Pahlawan background -->
+    <rect x="620" y="70" width="34" height="85" rx="2" />
+    <rect x="660" y="50" width="40" height="105" rx="2" />
+    <polygon points="680,32 678,50 682,50" />
+    <rect x="705" y="80" width="30" height="75" rx="1" />
+
+    <!-- Right Background City Silhouettes -->
+    <rect x="750" y="65" width="32" height="90" rx="1" />
+    <rect x="1030" y="75" width="38" height="80" rx="1" />
+    <rect x="1072" y="58" width="35" height="97" rx="2" />
+    <polygon points="1090,40 1088,58 1092,58" />
+    <rect x="1112" y="78" width="32" height="77" rx="1" />
+  </g>
+
+  <!-- ================= LAYER 2: FOREGROUND & LANDMARKS ================= -->
+  <g fill="url(#skylineGrad)">
+    
+    <!-- 1. JEMBATAN SURAMADU (Cable-stayed Bridge on Left) -->
+    <!-- Bridge deck -->
+    <rect x="0" y="136" width="320" height="6" rx="1" />
+    <!-- Main Pylon 1 -->
+    <polygon points="140,25 144,25 152,142 136,142" />
+    <polygon points="156,25 160,25 168,142 152,142" />
+    <!-- Crossbeams on Pylon -->
+    <rect x="141" y="48" width="18" height="4" rx="1" />
+    <rect x="139" y="75" width="22" height="4" rx="1" />
+    <rect x="136" y="108" width="28" height="5" rx="1" />
+    <!-- Stay Cables (Left & Right of Pylon) -->
+    <path d="M142,32 L40,136 M142,42 L65,136 M142,52 L90,136 M142,65 L115,136" stroke="#93c5fd" stroke-width="1.2" stroke-opacity="0.4" />
+    <path d="M158,32 L260,136 M158,42 L235,136 M158,52 L210,136 M158,65 L185,136" stroke="#93c5fd" stroke-width="1.2" stroke-opacity="0.4" />
+    <!-- Pier Columns below deck -->
+    <rect x="70" y="142" width="10" height="14" rx="1" />
+    <rect x="140" y="142" width="20" height="14" rx="1" />
+    <rect x="230" y="142" width="10" height="14" rx="1" />
+
+    <!-- 2. MODERN SURABAYA SKYLINE (Center-Left) -->
+    <!-- Tower A (Glass office) -->
+    <rect x="330" y="98" width="26" height="57" rx="1.5" />
+    <!-- Tower B (Stepped) -->
+    <rect x="360" y="72" width="32" height="83" rx="2" />
+    <rect x="366" y="62" width="20" height="10" rx="1" />
+    <polygon points="376,48 375,62 377,62" />
+    <!-- Trees cluster -->
+    <circle cx="325" cy="145" r="12" />
+    <circle cx="345" cy="147" r="9" />
+
+    <!-- Tower C (High-rise Center) -->
+    <rect x="495" y="68" width="36" height="87" rx="2" />
+    <rect x="502" y="58" width="22" height="10" rx="1" />
+
+    <!-- 3. TUGU PAHLAWAN SURABAYA (Center Landmark) -->
+    <!-- Spire / Obelisk (Tapering) -->
+    <polygon points="570,18 572,18 576,132 566,132" />
+    <polygon points="571,10 569,18 573,18" />
+    <!-- Flutes / Segments detailing -->
+    <line x1="571" y1="20" x2="571" y2="132" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.4" />
+    <!-- Base 1 (Pedestal) -->
+    <rect x="560" y="132" width="22" height="8" rx="1" />
+    <!-- Base 2 (Arch steps) -->
+    <rect x="553" y="140" width="36" height="6" rx="1" />
+    <rect x="546" y="146" width="50" height="5" rx="1" />
+    <rect x="540" y="151" width="62" height="5" rx="1" />
+    <!-- Surrounding park trees -->
+    <circle cx="536" cy="147" r="9" />
+    <circle cx="606" cy="146" r="10" />
+    <circle cx="620" cy="148" r="8" />
+
+    <!-- 4. BALAI HARTA PENINGGALAN COURTHOUSE (Iconic Pillars Building on Right) -->
+    <!-- Center Pediment Roof -->
+    <polygon points="880,52 790,85 970,85" />
+    <!-- Medallion in pediment -->
+    <circle cx="880" cy="74" r="5" fill="#60a5fa" fill-opacity="0.5" />
+    <!-- Architrave Beam -->
+    <rect x="796" y="86" width="168" height="6" rx="1" />
+    <!-- 6 Classical Pillars / Columns -->
+    <rect x="808" y="94" width="9" height="44" rx="1" />
+    <rect x="834" y="94" width="9" height="44" rx="1" />
+    <rect x="860" y="94" width="9" height="44" rx="1" />
+    <rect x="891" y="94" width="9" height="44" rx="1" />
+    <rect x="917" y="94" width="9" height="44" rx="1" />
+    <rect x="943" y="94" width="9" height="44" rx="1" />
+    <!-- Column capitals & bases -->
+    <rect x="806" y="92" width="13" height="2.5" rx="0.5" />
+    <rect x="832" y="92" width="13" height="2.5" rx="0.5" />
+    <rect x="858" y="92" width="13" height="2.5" rx="0.5" />
+    <rect x="889" y="92" width="13" height="2.5" rx="0.5" />
+    <rect x="915" y="92" width="13" height="2.5" rx="0.5" />
+    <rect x="941" y="92" width="13" height="2.5" rx="0.5" />
+    <!-- Left Wing -->
+    <polygon points="755,90 730,98 795,98" />
+    <rect x="735" y="98" width="60" height="40" rx="1" />
+    <!-- Left Wing Windows -->
+    <rect x="745" y="108" width="12" height="18" rx="1" fill="white" fill-opacity="0.5" />
+    <rect x="768" y="108" width="12" height="18" rx="1" fill="white" fill-opacity="0.5" />
+    <!-- Right Wing -->
+    <polygon points="1005,90 965,98 1030,98" />
+    <rect x="965" y="98" width="60" height="40" rx="1" />
+    <!-- Right Wing Windows -->
+    <rect x="980" y="108" width="12" height="18" rx="1" fill="white" fill-opacity="0.5" />
+    <rect x="1003" y="108" width="12" height="18" rx="1" fill="white" fill-opacity="0.5" />
+    <!-- Courthouse Steps / Plinth -->
+    <rect x="790" y="138" width="180" height="5" rx="1" />
+    <rect x="778" y="143" width="204" height="5" rx="1" />
+    <rect x="725" y="148" width="310" height="5" rx="1" />
+
+    <!-- Lush park foliage around BHP building -->
+    <circle cx="715" cy="138" r="18" />
+    <circle cx="695" cy="144" r="14" />
+    <circle cx="1045" cy="140" r="16" />
+    <circle cx="1068" cy="144" r="13" />
+    <circle cx="1085" cy="147" r="10" />
+
+    <!-- Ground baseline -->
+    <rect x="0" y="153" width="1200" height="4" rx="1" />
+  </g>
+</svg>
