@@ -76,7 +76,7 @@
                         </div>
                         <div>
                             <h4 class="text-xs font-semibold text-white">Untuk Notaris & Publik</h4>
-                            <p class="text-[11px] text-blue-100/80 leading-relaxed">Mendukung akun Notaris, PPAT, maupun pemohon perorangan.</p>
+                            <p class="text-[11px] text-blue-100/80 leading-relaxed">Mendukung akun Notaris maupun pemohon perorangan.</p>
                         </div>
                     </div>
 
@@ -105,8 +105,9 @@
             <div class="flex-1 p-6 sm:p-10 bg-white" x-data="{ 
                 showPassword: false, 
                 showPasswordConfirm: false,
-                selectedPekerjaan: '{{ old('pekerjaan_select', (in_array(old('pekerjaan'), ['Notaris', 'PPAT']) ? old('pekerjaan') : (old('pekerjaan') ? 'Lainnya' : ''))) }}',
-                customPekerjaan: '{{ old('pekerjaan_custom', (!in_array(old('pekerjaan'), ['Notaris', 'PPAT']) && old('pekerjaan') ? old('pekerjaan') : '')) }}',
+                selectedPekerjaan: '{{ old('pekerjaan_select', (old('pekerjaan') === 'Notaris' ? 'Notaris' : (old('pekerjaan') ? 'Lainnya' : ''))) }}',
+                customPekerjaan: '{{ old('pekerjaan_custom', (old('pekerjaan') !== 'Notaris' && old('pekerjaan') ? old('pekerjaan') : '')) }}',
+                skNotarisName: '',
                 alamatKtp: @js(old('alamat_ktp', '')),
                 domisiliSamaKtp: @js(old('domisili_sama_ktp') ? true : false),
                 alamatDomisili: @js(old('alamat_domisili', old('domisili_sama_ktp') ? old('alamat_ktp', '') : '')),
@@ -136,7 +137,7 @@
                     </p>
                 </div>
 
-                <form method="POST" action="{{ route('register') }}" class="space-y-6">
+                <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="space-y-6">
                     @csrf
 
                     <!-- ================= BAGIAN 1: INFORMASI DATA DIRI & PROFESI ================= -->
@@ -231,7 +232,6 @@
                                             class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0066d6]/20 focus:border-[#0066d6] transition appearance-none cursor-pointer @error('pekerjaan_select') border-red-500 @enderror @error('pekerjaan') border-red-500 @enderror">
                                         <option value="" disabled :selected="!selectedPekerjaan">-- Pilih Pekerjaan --</option>
                                         <option value="Notaris">Notaris</option>
-                                        <option value="PPAT">PPAT</option>
                                         <option value="Lainnya">Lainnya</option>
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
@@ -275,27 +275,91 @@
                                 <div x-show="selectedPekerjaan === 'Notaris'" 
                                      x-transition:enter="transition ease-out duration-200"
                                      x-cloak 
-                                     class="p-2.5 bg-blue-50/80 border border-blue-100 rounded-lg text-xs text-blue-950 flex items-start gap-2 sm:mt-5">
+                                     class="p-2.5 bg-blue-50/80 border border-blue-200/70 rounded-lg text-xs text-blue-950 flex items-start gap-2 sm:mt-5">
                                     <svg class="w-4 h-4 text-[#0066d6] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    <span>Akun terdaftar sebagai Notaris. Verifikasi lanjutan akan diperlukan.</span>
-                                </div>
-
-                                <!-- Badge Info PPAT -->
-                                <div x-show="selectedPekerjaan === 'PPAT'" 
-                                     x-transition:enter="transition ease-out duration-200"
-                                     x-cloak 
-                                     class="p-2.5 bg-blue-50/80 border border-blue-100 rounded-lg text-xs text-blue-950 flex items-start gap-2 sm:mt-5">
-                                    <svg class="w-4 h-4 text-[#0066d6] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Akun terdaftar sebagai Pejabat Pembuat Akta Tanah (PPAT).</span>
+                                    <span>Akun terdaftar sebagai Notaris. Silakan lengkapi upload SK dan alamat kantor di bawah ini.</span>
                                 </div>
 
                                 <!-- Petunjuk awal jika belum memilih -->
                                 <div x-show="!selectedPekerjaan" class="hidden sm:flex items-center text-xs text-gray-400 italic pt-7">
                                     <span>*Pilih pekerjaan/profesi untuk penyesuaian berkas permohonan.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel Kelengkapan Berkas & Kantor Khusus Notaris -->
+                        <div x-show="selectedPekerjaan === 'Notaris'" 
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 -translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-cloak
+                             class="p-4 sm:p-5 bg-gradient-to-br from-blue-50/90 via-slate-50 to-blue-50/50 border border-blue-200/80 rounded-xl sm:rounded-2xl space-y-4 shadow-sm">
+                            <div class="flex items-center gap-2.5 pb-2 border-b border-blue-100">
+                                <div class="w-7 h-7 rounded-lg bg-[#0066d6] text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs sm:text-sm font-bold text-[#0c2a55]">Kelengkapan Data Notaris</h4>
+                                    <p class="text-[11px] text-gray-500">Lampirkan SK Pengangkatan Notaris dan Alamat Kantor untuk verifikasi legalitas akun.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <!-- Upload SK Notaris -->
+                                <div>
+                                    <label for="sk_notaris" class="block text-xs font-semibold text-gray-700 mb-1">
+                                        Upload Berkas SK Notaris <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative">
+                                        <input id="sk_notaris" 
+                                               name="sk_notaris" 
+                                               type="file" 
+                                               accept=".pdf,.jpg,.jpeg,.png"
+                                               :required="selectedPekerjaan === 'Notaris'"
+                                               @change="skNotarisName = $event.target.files[0] ? $event.target.files[0].name : ''"
+                                               class="hidden" />
+                                        <label for="sk_notaris" 
+                                               class="flex flex-col items-center justify-center px-4 py-3.5 border-2 border-dashed border-blue-300/90 hover:border-[#0066d6] bg-white rounded-xl cursor-pointer transition group text-center hover:bg-blue-50/40 @error('sk_notaris') border-red-500 @enderror">
+                                            <div class="w-8 h-8 rounded-full bg-blue-100 text-[#0066d6] flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                </svg>
+                                            </div>
+                                            <span x-show="!skNotarisName" class="text-xs font-medium text-gray-700 group-hover:text-[#0066d6]">
+                                                Pilih atau Tarik File SK ke Sini
+                                            </span>
+                                            <div x-show="skNotarisName" class="text-xs font-bold text-[#0066d6] break-all px-2 flex items-center gap-1.5">
+                                                <svg class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                <span x-text="skNotarisName"></span>
+                                            </div>
+                                            <span class="text-[10px] text-gray-400 mt-1">Format PDF, JPG, JPEG, PNG (Maks. 10MB)</span>
+                                        </label>
+                                    </div>
+                                    @error('sk_notaris')
+                                        <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <!-- Alamat Kantor Notaris -->
+                                <div>
+                                    <label for="alamat_kantor" class="block text-xs font-semibold text-gray-700 mb-1">
+                                        Alamat Kantor Notaris <span class="text-red-500">*</span>
+                                    </label>
+                                    <textarea id="alamat_kantor" 
+                                              name="alamat_kantor" 
+                                              rows="3" 
+                                              :required="selectedPekerjaan === 'Notaris'"
+                                              placeholder="Alamat lengkap kantor notaris (Jalan, Nomor, Kelurahan/Desa, Kecamatan, Kota/Kabupaten, Kode Pos)"
+                                              class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0066d6]/20 focus:border-[#0066d6] transition resize-y @error('alamat_kantor') border-red-500 @enderror">{{ old('alamat_kantor') }}</textarea>
+                                    @error('alamat_kantor')
+                                        <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                         </div>

@@ -2,7 +2,10 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
@@ -14,6 +17,7 @@ class RegistrationTest extends TestCase
         $response = $this->get('/register');
 
         $response->assertStatus(200);
+        $response->assertDontSee('<option value="PPAT">', false);
     }
 
     public function test_new_users_can_register(): void
@@ -54,40 +58,44 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register_with_pekerjaan_notaris(): void
     {
+        Storage::fake('public');
+
+        $file = UploadedFile::fake()->create('sk_notaris.pdf', 500, 'application/pdf');
+
         $response = $this->post('/register', [
             'name' => 'Notaris User',
             'email' => 'notaris@example.com',
+            'pekerjaan_select' => 'Notaris',
+            'sk_notaris' => $file,
+            'alamat_kantor' => 'Jl. Dharmahusada Indah No. 12, Surabaya',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+
+        $this->assertGuest();
+        $response->assertRedirect(route('login'));
+
+        $user = User::where('email', 'notaris@example.com')->first();
+        $this->assertNotNull($user);
+        $this->assertSame('Notaris', $user->pekerjaan);
+        $this->assertSame('Jl. Dharmahusada Indah No. 12, Surabaya', $user->alamat_kantor);
+        $this->assertNotNull($user->sk_notaris);
+
+        Storage::disk('public')->assertExists($user->sk_notaris);
+    }
+
+    public function test_sk_notaris_and_alamat_kantor_are_required_when_pekerjaan_is_notaris(): void
+    {
+        $response = $this->post('/register', [
+            'name' => 'Notaris Tanpa SK',
+            'email' => 'notaris2@example.com',
             'pekerjaan_select' => 'Notaris',
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
 
         $this->assertGuest();
-        $response->assertRedirect(route('login'));
-
-        $this->assertDatabaseHas('users', [
-            'email' => 'notaris@example.com',
-            'pekerjaan' => 'Notaris',
-        ]);
-    }
-
-    public function test_new_users_can_register_with_pekerjaan_ppat(): void
-    {
-        $response = $this->post('/register', [
-            'name' => 'PPAT User',
-            'email' => 'ppat@example.com',
-            'pekerjaan_select' => 'PPAT',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ]);
-
-        $this->assertGuest();
-        $response->assertRedirect(route('login'));
-
-        $this->assertDatabaseHas('users', [
-            'email' => 'ppat@example.com',
-            'pekerjaan' => 'PPAT',
-        ]);
+        $response->assertSessionHasErrors(['sk_notaris', 'alamat_kantor']);
     }
 
     public function test_new_users_can_register_with_pekerjaan_lainnya(): void

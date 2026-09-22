@@ -7,18 +7,6 @@
          x-data="{ 
              search: '', 
              activeTab: 'all',
-             infoModal: false, 
-             modalTitle: '', 
-             modalBadge: '',
-             modalDesc: '',
-             modalSyarat: [],
-             openModal(title, badge, desc, syarat) {
-                 this.modalTitle = title;
-                 this.modalBadge = badge;
-                 this.modalDesc = desc;
-                 this.modalSyarat = syarat;
-                 this.infoModal = true;
-             },
              matches(keywords, category) {
                  const query = this.search.trim().toLowerCase();
                  const matchesSearch = !query || keywords.toLowerCase().includes(query);
@@ -152,8 +140,7 @@
             <!-- 1. Pembukaan Wasiat (LAYANAN UTAMA - AKTIF ONLINE) -->
             <div x-show="matches('Pembukaan Wasiat akta wasiat tertutup terbuka ahli waris notaris', 'wasiat')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border-2 border-[#1d68d8]/30 hover:border-[#1d68d8] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between relative overflow-hidden bg-gradient-to-b from-white via-white to-blue-50/20">
-                <div class="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-bl-full pointer-events-none"></div>
+                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
                 
                 <div>
                     <!-- Header Kartu: Ikon & Badge -->
@@ -197,7 +184,7 @@
             <!-- 2. Pendaftaran Wasiat -->
             <div x-show="matches('Pendaftaran Wasiat register akta notaris lapor', 'wasiat')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-sky-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
                 <div>
                     <div class="flex items-start justify-between mb-4">
                         <div class="w-14 h-14 rounded-2xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
@@ -215,7 +202,7 @@
                         </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-sky-700 transition-colors leading-snug">
+                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Pendaftaran Wasiat
                     </h3>
                     <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -224,21 +211,20 @@
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
-                    <button type="button" 
-                            @click="openModal('Pendaftaran Wasiat', 'Registrasi Notaris', 'Layanan pendaftaran daftar akta wasiat yang dibuat di hadapan Notaris untuk dicatat ke dalam buku register resmi BHP Surabaya.', ['Surat Pengantar dari Notaris Pembuat Akta', 'Salinan Akta Wasiat Notariil', 'Identitas Pemberi Wasiat (KTP/KK)', 'Bukti Pembayaran PNBP (bila ada)'])" 
-                            class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
+                    <a href="{{ route('layanan.pengembangan', 'pendaftaran-wasiat') }}" 
+                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
-                    </button>
+                    </a>
                 </div>
             </div>
 
             <!-- 3. Perwalian -->
             <div x-show="matches('Perwalian anak belum dewasa harta waris wali', 'perlindungan')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-emerald-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
                 <div>
                     <div class="flex items-start justify-between mb-4">
                         <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
@@ -255,7 +241,7 @@
                         </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-emerald-700 transition-colors leading-snug">
+                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Perwalian
                     </h3>
                     <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -264,21 +250,20 @@
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
-                    <button type="button" 
-                            @click="openModal('Layanan Perwalian', 'Perlindungan Anak', 'Pengawasan dan pengelolaan harta kekayaan anak di bawah umur yang orang tuanya telah meninggal dunia atau dicabut hak asuhnya.', ['Penetapan Pengadilan Negeri / Agama tentang Perwalian', 'Akta Kematian Orang Tua', 'Akta Kelahiran Anak', 'Daftar Harta Peninggalan (Boedel)', 'KTP & KK Wali yang Ditunjuk'])" 
-                            class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
+                    <a href="{{ route('layanan.pengembangan', 'perwalian') }}" 
+                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
-                    </button>
+                    </a>
                 </div>
             </div>
 
             <!-- 4. Pengampuan -->
             <div x-show="matches('Pengampuan curatele kurator perlindungan dewasa gangguan', 'perlindungan')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-teal-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
                 <div>
                     <div class="flex items-start justify-between mb-4">
                         <div class="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 border border-teal-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
@@ -295,7 +280,7 @@
                         </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-teal-700 transition-colors leading-snug">
+                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Pengampuan
                     </h3>
                     <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -304,21 +289,20 @@
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
-                    <button type="button" 
-                            @click="openModal('Layanan Pengampuan', 'Curatele', 'Pelayanan kepengurusan harta dan pengawasan bagi individu dewasa yang ditetapkan di bawah pengampuan oleh Pengadilan.', ['Penetapan Pengadilan Negeri tentang Pengampuan', 'Surat Keterangan Dokter/Medis yang Relevan', 'KTP & KK Orang yang Diampu dan Pengampu', 'Daftar Rincian Aset/Harta Kekayaan'])" 
-                            class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
+                    <a href="{{ route('layanan.pengembangan', 'pengampuan') }}" 
+                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
-                    </button>
+                    </a>
                 </div>
             </div>
 
             <!-- 5. SKHW (Surat Keterangan Hak Waris) -->
             <div x-show="matches('SKHW Surat Keterangan Hak Waris warisan eropa timur asing', 'wasiat')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-amber-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
                 <div>
                     <div class="flex items-start justify-between mb-4">
                         <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
@@ -335,7 +319,7 @@
                         </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-amber-700 transition-colors leading-snug">
+                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         SKHW
                     </h3>
                     <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -344,21 +328,20 @@
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
-                    <button type="button" 
-                            @click="openModal('Surat Keterangan Hak Waris (SKHW)', 'Hak Waris', 'Penerbitan dokumen legalitas hak waris bagi subjek hukum yang menjadi kewenangan Balai Harta Peninggalan.', ['Surat Kematian Pewaris dari Dispendukcapil', 'Akta Perkawinan / Buku Nikah Pewaris', 'Akta Kelahiran Seluruh Ahli Waris', 'KTP & Kartu Keluarga Seluruh Ahli Waris', 'Surat Keterangan Wasiat dari Ditjen AHU'])" 
-                            class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
+                    <a href="{{ route('layanan.pengembangan', 'skhw') }}" 
+                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
-                    </button>
+                    </a>
                 </div>
             </div>
 
             <!-- 6. Layanan Harta Kekayaan Yang Pemiliknya Tidak Hadir -->
             <div x-show="matches('Layanan Harta Kekayaan Yang Pemiliknya Tidak Hadir afwezigheid ghaib hilang aset', 'harta')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-indigo-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
                 <div>
                     <div class="flex items-start justify-between mb-4">
                         <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
@@ -374,7 +357,7 @@
                         </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-indigo-700 transition-colors leading-snug">
+                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Layanan Harta Kekayaan Yang Pemiliknya Tidak Hadir
                     </h3>
                     <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -383,21 +366,20 @@
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
-                    <button type="button" 
-                            @click="openModal('Layanan Harta Kekayaan Yang Pemiliknya Tidak Hadir', 'Afwezigheid', 'Pelayanan pengurusan harta milik orang yang hilang / tidak diketahui keberadaannya berdasarkan putusan pengadilan.', ['Penetapan Pengadilan tentang Ketidakhadiran (Afwezigheid)', 'Surat Keterangan Hilang dari Kepolisian', 'Bukti Kepemilikan Aset / Properti', 'Identitas Pihak Pemohon / Keluarga'])" 
-                            class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
+                    <a href="{{ route('layanan.pengembangan', 'harta-pemilik-tidak-hadir') }}" 
+                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
-                    </button>
+                    </a>
                 </div>
             </div>
 
             <!-- 7. Layanan Harta Peninggalan Yang Tidak Terurus -->
             <div x-show="matches('Layanan Harta Peninggalan Yang Tidak Terurus onbeheerde boedel warisan terlantar', 'harta')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-blue-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
                 <div>
                     <div class="flex items-start justify-between mb-4">
                         <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
@@ -412,7 +394,7 @@
                         </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-blue-800 transition-colors leading-snug">
+                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Layanan Harta Peninggalan Yang Tidak Terurus
                     </h3>
                     <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -421,21 +403,20 @@
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
-                    <button type="button" 
-                            @click="openModal('Layanan Harta Peninggalan Yang Tidak Terurus', 'Onbeheerde Boedel', 'Pengelolaan dan penyelesaian harta peninggalan orang yang meninggal dunia tanpa ahli waris sah yang menerima.', ['Surat Kematian Pewaris', 'Keterangan Penolakan Waris dari Pengadilan (bila ada)', 'Daftar Aset / Harta Benda yang Ditinggalkan', 'Laporan dari Pihak Ketiga / Lingkungan Terkait'])" 
-                            class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
+                    <a href="{{ route('layanan.pengembangan', 'harta-tidak-terurus') }}" 
+                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
-                    </button>
+                    </a>
                 </div>
             </div>
 
             <!-- 8. Layanan Uang Pihak Ketiga -->
             <div x-show="matches('Layanan Uang Pihak Ketiga konsinyasi penitipan ganti rugi kas', 'harta')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-cyan-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
                 <div>
                     <div class="flex items-start justify-between mb-4">
                         <div class="w-14 h-14 rounded-2xl bg-cyan-50 text-cyan-700 border border-cyan-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
@@ -454,7 +435,7 @@
                         </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-cyan-800 transition-colors leading-snug">
+                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Layanan Uang Pihak Ketiga
                     </h3>
                     <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -463,21 +444,20 @@
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
-                    <button type="button" 
-                            @click="openModal('Layanan Uang Pihak Ketiga', 'Konsinyasi Kas BHP', 'Penyimpanan dan penyaluran dana titipan pihak ketiga berdasarkan perintah pengadilan atau penetapan hukum.', ['Penetapan Konsinyasi dari Pengadilan Negeri', 'Berita Acara Penitipan Uang Ganti Rugi', 'Identitas Pihak Penerima / Termohon Konsinyasi', 'Nomor Rekening Bank yang Sah'])" 
-                            class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
+                    <a href="{{ route('layanan.pengembangan', 'uang-pihak-ketiga') }}" 
+                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
-                    </button>
+                    </a>
                 </div>
             </div>
 
             <!-- 9. Layanan Kepailitan -->
             <div x-show="matches('Layanan Kepailitan kurator negara pengadilan niaga pailit insolvensi', 'harta')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-purple-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
                 <div>
                     <div class="flex items-start justify-between mb-4">
                         <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-700 border border-purple-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
@@ -495,7 +475,7 @@
                         </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-purple-700 transition-colors leading-snug">
+                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Layanan Kepailitan
                     </h3>
                     <p class="text-xs text-slate-500 mt-2 leading-relaxed">
@@ -504,83 +484,16 @@
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
-                    <button type="button" 
-                            @click="openModal('Layanan Kepailitan', 'Kurator Negara', 'Pelaksanaan kewenangan kurator negara untuk mengamankan dan membagikan harta debitur pailit kepada para kreditur.', ['Salinan Putusan Pailit dari Pengadilan Niaga', 'Daftar Kreditur & Debitur Pailit', 'Laporan Harta Kekayaan Debitur Pailit', 'Identitas Kuasa Hukum / Pemohon'])" 
-                            class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer">
+                    <a href="{{ route('layanan.pengembangan', 'kepailitan') }}" 
+                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
                         <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
-                    </button>
+                    </a>
                 </div>
             </div>
 
-        </div>
-
-        <!-- ================= MODAL INFORMASI & PERSYARATAN ================= -->
-        <div x-show="infoModal" 
-             x-transition:enter="transition ease-out duration-200" 
-             x-transition:enter-start="opacity-0" 
-             x-transition:enter-end="opacity-100" 
-             x-transition:leave="transition ease-in duration-150" 
-             x-transition:leave-start="opacity-100" 
-             x-transition:leave-end="opacity-0" 
-             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs" 
-             style="display: none;">
-            <div @click.away="infoModal = false" 
-                 class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in duration-150">
-                
-                <div class="flex items-start justify-between gap-3">
-                    <div class="flex items-center gap-3">
-                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-[#1d68d8] flex items-center justify-center shrink-0">
-                            <img src="{{ asset('images/pengayoman.svg') }}" alt="Pengayoman" class="w-7 h-7 object-contain" />
-                        </div>
-                        <div>
-                            <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 mb-1" x-text="modalBadge"></span>
-                            <h3 class="text-base font-extrabold text-[#071d40]" x-text="modalTitle"></h3>
-                        </div>
-                    </div>
-                    <button type="button" @click="infoModal = false" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition focus:outline-none">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="space-y-4 text-xs">
-                    <div>
-                        <h4 class="font-bold text-slate-900 mb-1">Deskripsi Layanan</h4>
-                        <p class="text-slate-600 leading-relaxed" x-text="modalDesc"></p>
-                    </div>
-
-                    <div>
-                        <h4 class="font-bold text-slate-900 mb-2">Persyaratan Dokumen Umum:</h4>
-                        <ul class="space-y-1.5 pl-1">
-                            <template x-for="(syarat, idx) in modalSyarat" :key="idx">
-                                <li class="flex items-start gap-2 text-slate-600">
-                                    <svg class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    <span x-text="syarat"></span>
-                                </li>
-                            </template>
-                        </ul>
-                    </div>
-
-                    <div class="p-3 bg-amber-50 rounded-xl border border-amber-200/80 text-amber-800 text-[11px] leading-relaxed flex items-start gap-2">
-                        <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>Untuk konsultasi berkas fisik atau pengajuan tatap muka, Anda dapat langsung mengunjungi loket pelayanan Balai Harta Peninggalan Surabaya.</span>
-                    </div>
-                </div>
-
-                <div class="pt-2 flex items-center gap-3">
-                    <button type="button" @click="infoModal = false" class="w-full py-2.5 px-4 bg-[#071d40] hover:bg-[#0b2e66] text-white font-bold text-xs rounded-xl transition cursor-pointer">
-                        Mengerti &amp; Tutup
-                    </button>
-                </div>
-            </div>
         </div>
 
         <!-- Siluet Panorama Memanjang Surabaya & BHP (Jembatan Suramadu, Tugu Pahlawan, Skyline & Gedung BHP) -->
