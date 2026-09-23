@@ -334,4 +334,26 @@ class PermohonanWasiatTest extends TestCase
             'status' => 'menunggu_verifikasi',
         ]);
     }
+
+    public function test_user_can_submit_nomor_voucher_in_tahap_3(): void
+    {
+        $user = User::factory()->create();
+        $permohonan = Permohonan::create([
+            'user_id' => $user->id,
+            'nomor_permohonan' => 'WST-20260907-007',
+            'status' => 'draft',
+        ]);
+
+        $response = $this->actingAs($user)->post(route('permohonan.tahap3.store', $permohonan->id), [
+            'nomor_voucher' => 'AHU-001008002-99887766',
+        ]);
+
+        $response->assertRedirect(route('permohonan.index'));
+
+        $this->assertDatabaseHas('vouchers', [
+            'permohonan_id' => $permohonan->id,
+            'nomor_voucher' => 'AHU-001008002-99887766',
+            'status_pembayaran' => 'belum_bayar',
+        ]);
+    }
 }
