@@ -116,7 +116,7 @@
                                 1
                             </div>
                             <p class="text-sm text-gray-700 font-medium leading-relaxed pt-0.5">
-                                Klik tombol atau link portal di atas (layanan BHP &amp; Pembukaan Wasiat Tertutup Surabaya otomatis terpilih).
+                                Klik tombol <strong>Buka Portal SIMPADHU AHU</strong> di atas. Halaman akan otomatis mengarahkan ke formulir pemesanan voucher layanan <em>Balai Harta Peninggalan &bull; Pewarisan</em>.
                             </p>
                         </div>
 
@@ -127,46 +127,133 @@
                             </div>
                             <div class="space-y-3 flex-1">
                                 <p class="text-sm text-gray-700 font-medium leading-relaxed pt-0.5">
-                                    Lengkapi informasi pemesanan dengan rincian berikut:
+                                    Pada formulir SIMPADHU AHU yang terbuka, silakan pilih opsi berikut:
                                 </p>
 
-                                <!-- Box Detail Formulir -->
-                                <div class="bg-gray-50/70 border border-gray-200/90 rounded-xl p-5 space-y-3 text-xs sm:text-sm text-gray-800">
-                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                        <span class="font-bold text-gray-700">Pelayanan:</span>
-                                        <span class="sm:col-span-2 text-gray-800">Balai Harta Peninggalan dan Kurator Negara &bull; Pewarisan <span class="text-[11px] font-bold text-emerald-600 ml-1">(Otomatis)</span></span>
-                                    </div>
-                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                        <span class="font-bold text-gray-700">Kantor BHP:</span>
-                                        <span class="sm:col-span-2 text-gray-800">BHP Surabaya &bull; Pembukaan Wasiat Tertutup/Rahasia <span class="text-[11px] font-bold text-emerald-600 ml-1">(Otomatis)</span></span>
+                                <!-- Box Pilihan Layanan AHU -->
+                                <div class="bg-amber-50/70 border border-amber-200/90 rounded-xl p-4 sm:p-5 space-y-3 text-xs sm:text-sm text-gray-800">
+                                    <div class="flex items-center gap-2 text-amber-900 font-bold text-xs uppercase tracking-wider">
+                                        <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                                        </svg>
+                                        <span>Pilihan Yang Harus Dipilih di Portal AHU</span>
                                     </div>
 
-                                    <div class="border-t border-gray-200/80 pt-3 mt-3">
-                                        <div class="flex items-center justify-between mb-3">
-                                            <span class="font-bold text-gray-700">Data Pemohon</span>
-                                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#facc15] text-[#1e1b4b] shadow-xs">
-                                                OTOMATIS DARI AKUN
+                                    <div class="space-y-2.5 pt-1">
+                                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 p-2.5 rounded-lg bg-white border border-amber-200/60 shadow-2xs">
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-5 h-5 rounded-md bg-blue-100 text-[#0b2e66] font-bold text-[10px] flex items-center justify-center">A</span>
+                                                <span class="font-bold text-gray-700">Pelayanan Jasa Hukum:</span>
+                                            </div>
+                                            <span class="inline-flex items-center gap-1.5 font-bold text-[#0b2e66] text-xs">
+                                                Balai Harta Peninggalan &bull; Pewarisan
+                                                <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">Sudah Otomatis Terpilih</span>
                                             </span>
                                         </div>
 
-                                        <div class="space-y-2">
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-gray-600">Nama Pemohon:</span>
+                                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 p-2.5 rounded-lg bg-white border border-amber-300 shadow-2xs">
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-5 h-5 rounded-md bg-amber-100 text-amber-900 font-bold text-[10px] flex items-center justify-center">B</span>
+                                                <span class="font-bold text-gray-700">Kolom "Kantor BHP":</span>
+                                            </div>
+                                            <span class="inline-flex items-center gap-1.5 font-extrabold text-[#0b2e66] text-xs">
+                                                Pilih &rarr; <span class="px-2.5 py-1 rounded-md bg-blue-50 border border-blue-200 text-[#1d68d8]">BHP SURABAYA</span>
+                                            </span>
+                                        </div>
+
+                                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 p-2.5 rounded-lg bg-white border border-amber-300 shadow-2xs">
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-5 h-5 rounded-md bg-amber-100 text-amber-900 font-bold text-[10px] flex items-center justify-center">C</span>
+                                                <span class="font-bold text-gray-700">Kolom "Jenis Layanan / Sub-Transaksi":</span>
+                                            </div>
+                                            <span class="inline-flex items-center gap-1.5 font-extrabold text-[#0b2e66] text-xs">
+                                                Pilih &rarr; <span class="px-2.5 py-1 rounded-md bg-blue-50 border border-blue-200 text-[#1d68d8]">Pembukaan Wasiat Tertutup/Rahasia</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Box Detail Formulir Data Pemohon -->
+                                <div class="bg-gray-50/70 border border-gray-200/90 rounded-xl p-5 space-y-3 text-xs sm:text-sm text-gray-800" x-data="{ copied: '' }">
+                                    <div class="flex items-center justify-between pb-2 border-b border-gray-200/80">
+                                        <div>
+                                            <span class="font-bold text-gray-800 text-sm">Data Pemohon untuk Formulir AHU</span>
+                                            <p class="text-[11px] text-slate-500 mt-0.5">Gunakan tombol salin untuk mempermudah pengisian di portal SIMPADHU</p>
+                                        </div>
+                                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#facc15] text-[#1e1b4b] shadow-xs shrink-0">
+                                            DATA AKUN ANDA
+                                        </span>
+                                    </div>
+
+                                    <div class="space-y-2 pt-1">
+                                        <div class="flex items-center justify-between gap-2 p-2 rounded-lg hover:bg-white transition">
+                                            <span class="text-gray-600 font-medium">Nama Pemohon:</span>
+                                            <div class="flex items-center gap-2">
                                                 <span class="font-bold text-gray-900">{{ $user->name }}</span>
-                                            </div>
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-gray-600">NIK:</span>
-                                                <span class="font-bold text-gray-900">{{ $user->nik ?? '3171XXXXXXXXXXXX' }}</span>
-                                            </div>
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-gray-600">Email:</span>
-                                                <span class="font-bold text-gray-900">{{ $user->email }}</span>
-                                            </div>
-                                            <div class="flex items-center justify-between">
-                                                <span class="text-gray-600">Nomor HP:</span>
-                                                <span class="font-bold text-gray-900">{{ $user->phone ?? '0812XXXXXXXX' }}</span>
+                                                <button type="button" 
+                                                        @click="navigator.clipboard.writeText('{{ $user->name }}'); copied = 'name'; setTimeout(() => copied = '', 2000)"
+                                                        class="p-1 rounded hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition" 
+                                                        title="Salin Nama">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+                                                    </svg>
+                                                </button>
                                             </div>
                                         </div>
+
+                                        <div class="flex items-center justify-between gap-2 p-2 rounded-lg hover:bg-white transition">
+                                            <span class="text-gray-600 font-medium">NIK / NPWP 16 Digit:</span>
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-bold text-gray-900 font-mono">{{ $user->nik ?? '3171XXXXXXXXXXXX' }}</span>
+                                                <button type="button" 
+                                                        @click="navigator.clipboard.writeText('{{ $user->nik ?? '' }}'); copied = 'nik'; setTimeout(() => copied = '', 2000)"
+                                                        class="p-1 rounded hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition" 
+                                                        title="Salin NIK">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center justify-between gap-2 p-2 rounded-lg hover:bg-white transition">
+                                            <span class="text-gray-600 font-medium">Email Pemohon:</span>
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-bold text-gray-900">{{ $user->email }}</span>
+                                                <button type="button" 
+                                                        @click="navigator.clipboard.writeText('{{ $user->email }}'); copied = 'email'; setTimeout(() => copied = '', 2000)"
+                                                        class="p-1 rounded hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition" 
+                                                        title="Salin Email">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center justify-between gap-2 p-2 rounded-lg hover:bg-white transition">
+                                            <span class="text-gray-600 font-medium">Nomor HP:</span>
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-bold text-gray-900 font-mono">{{ $user->phone ?? '0812XXXXXXXX' }}</span>
+                                                <button type="button" 
+                                                        @click="navigator.clipboard.writeText('{{ $user->phone ?? '' }}'); copied = 'phone'; setTimeout(() => copied = '', 2000)"
+                                                        class="p-1 rounded hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition" 
+                                                        title="Salin No HP">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-center justify-between gap-2 p-2 rounded-lg hover:bg-white transition">
+                                            <span class="text-gray-600 font-medium">Jumlah Pembelian:</span>
+                                            <span class="font-bold text-gray-900">1</span>
+                                        </div>
+                                    </div>
+
+                                    <div x-show="copied" x-transition class="text-right">
+                                        <span class="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Tersalin ke clipboard!</span>
                                     </div>
                                 </div>
                             </div>
@@ -198,8 +285,48 @@
                                 5
                             </div>
                             <p class="text-sm text-gray-700 font-medium leading-relaxed pt-0.5">
-                                Setelah berhasil disimpan, klik Download untuk menyimpan bukti voucher PNBP Anda.
+                                Setelah berhasil disimpan, klik <strong>Download</strong> untuk mengunduh bukti pemesanan voucher Anda (berisi Kode Voucher &amp; Kode Billing).
                             </p>
+                        </div>
+
+                        <!-- Langkah 6: Input Kode Voucher Hasil dari AHU -->
+                        <div class="flex items-start gap-3 pt-2">
+                            <div class="w-6 h-6 rounded-full bg-[#0b2e66] text-white font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
+                                6
+                            </div>
+                            <div class="space-y-3 flex-1">
+                                <p class="text-sm text-gray-900 font-bold leading-relaxed pt-0.5">
+                                    Masukkan Kode / Nomor Voucher yang Anda peroleh dari SIMPADHU AHU:
+                                </p>
+
+                                <div class="bg-blue-50/70 border border-blue-200/90 rounded-2xl p-5 space-y-3">
+                                    <label for="nomor_voucher" class="block text-xs sm:text-sm font-extrabold text-[#071d40]">
+                                        Nomor Voucher PNBP <span class="text-rose-500">*</span>
+                                    </label>
+
+                                    <div class="relative max-w-lg">
+                                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                            <svg class="w-5 h-5 text-[#1d68d8]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z" />
+                                            </svg>
+                                        </div>
+                                        <input type="text" 
+                                               name="nomor_voucher" 
+                                               id="nomor_voucher" 
+                                               value="{{ old('nomor_voucher', $permohonan->voucher?->nomor_voucher) }}"
+                                               placeholder="Contoh: AHU-001008002-XXXXXXXX atau Kode Billing" 
+                                               class="w-full pl-11 pr-4 py-3 bg-white border border-blue-200 rounded-xl text-sm font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1d68d8] focus:border-transparent transition shadow-xs uppercase tracking-wide" />
+                                    </div>
+
+                                    <p class="text-[11px] text-slate-600 leading-relaxed">
+                                        Salin dan tempelkan Nomor Voucher yang tertera pada bukti unduhan SIMPADHU AHU Anda di atas sebelum menekan tombol <strong>Simpan &amp; Lanjut</strong>.
+                                    </p>
+
+                                    @error('nomor_voucher')
+                                        <p class="text-xs text-rose-600 font-bold mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

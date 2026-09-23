@@ -1,24 +1,24 @@
 <x-guest-layout :full-bleed="true">
-    <div class="relative min-h-screen w-full flex items-center justify-center overflow-x-hidden bg-slate-900">
+    <div class="relative min-h-screen w-full flex items-center justify-center overflow-x-hidden bg-slate-900 py-6 sm:py-10 px-4 sm:px-8">
         <!-- Background Image of BHP Surabaya Building -->
         <div class="absolute inset-0 bg-cover bg-center sm:bg-[center_top_20%] bg-no-repeat transition-all duration-700 scale-100" 
              style="background-image: url('{{ asset('images/bg-gedung-bhp-clean.jpg') }}');">
         </div>
 
-        <!-- Subtle Dark Overlay for contrast and readability -->
-        <div class="absolute inset-0 bg-gradient-to-r from-slate-950/60 via-slate-900/30 to-slate-950/40"></div>
+        <!-- Dark Overlay for contrast and readability -->
+        <div class="absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r from-slate-950/85 via-slate-900/60 to-slate-950/85 lg:from-slate-950/60 lg:via-slate-900/30 lg:to-slate-950/40"></div>
 
         <!-- Main Content Area -->
-        <div class="relative z-10 w-full max-w-6xl mx-auto px-6 py-10 sm:px-10 lg:px-12 flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16 min-h-screen">
+        <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-6 sm:gap-10 lg:gap-16">
             
             <!-- Left Side: Institutional Branding & Motto -->
-            <div class="w-full lg:max-w-xl text-white flex flex-col items-start select-none pt-8 lg:pt-0">
+            <div class="w-full lg:max-w-xl text-white flex flex-col items-center text-center lg:items-start lg:text-left select-none">
                 
                 <!-- Logo & Brand Header -->
-                <div class="flex items-center gap-4 sm:gap-5 mb-3 sm:mb-4">
+                <div class="flex items-center gap-3.5 sm:gap-5 mb-2 sm:mb-4">
                     <!-- BHP Pillars Building Icon (Exact Vector Replica) -->
                     <div class="flex-shrink-0 drop-shadow-[0_4px_10px_rgba(0,0,0,0.3)]">
-                        <svg class="w-14 h-14 sm:w-16 sm:h-16 lg:w-[72px] lg:h-[72px]" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-11 h-11 sm:w-16 sm:h-16 lg:w-[72px] lg:h-[72px]" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <!-- Roof Pediment Triangle -->
                             <path d="M32 6L4 23H60L32 6Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
                             <!-- Inner Triangular Cutout -->
@@ -38,45 +38,45 @@
                     </div>
 
                     <!-- App Title -->
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)] leading-none">
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)] leading-none">
                         <span class="text-white">Pandu</span><span class="text-[#FBBF24]">BHP</span>
                     </h1>
                 </div>
 
                 <!-- Subtitle / Application Description -->
-                <p class="text-base sm:text-lg lg:text-[21px] font-medium text-white/95 leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] mt-1">
+                <p class="text-sm sm:text-lg lg:text-[21px] font-medium text-white/95 leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
                     Sistem Pendukung Administrasi Terpadu<br class="hidden sm:inline" />
-                    Balai Harta Peninggalan
+                    Balai Harta Peninggalan Surabaya
                 </p>
 
-                <!-- Yellow Accent Line -->
-                <div class="w-14 h-1 sm:h-[4px] bg-[#FBBF24] rounded-full my-5 sm:my-6 shadow-[0_2px_6px_rgba(0,0,0,0.2)]"></div>
+                <!-- Yellow Accent Line (Desktop / Tablet) -->
+                <div class="hidden lg:block w-14 h-1 sm:h-[4px] bg-[#FBBF24] rounded-full my-5 sm:my-6 shadow-[0_2px_6px_rgba(0,0,0,0.2)]"></div>
 
-                <!-- Motto -->
-                <p class="text-sm sm:text-base text-white/90 font-normal leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]">
+                <!-- Motto (Desktop / Tablet) -->
+                <p class="hidden lg:block text-sm sm:text-base text-white/90 font-normal leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]">
                     Melayani dengan Integritas,<br />
                     Menuju Kepastian Hukum
                 </p>
             </div>
 
             <!-- Right Side: Frosted Glass Login Card -->
-            <div class="w-full max-w-[430px] flex-shrink-0 pb-8 lg:pb-0">
-                <div class="relative backdrop-blur-xl bg-white/20 sm:bg-white/[0.18] border border-white/40 rounded-[28px] p-7 sm:p-9 shadow-[0_20px_60px_rgba(0,0,0,0.35)] transition-all duration-300 hover:border-white/50" 
+            <div class="w-full max-w-[420px] flex-shrink-0">
+                <div class="relative backdrop-blur-2xl bg-white/[0.18] border border-white/40 rounded-2xl sm:rounded-[28px] p-5 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.4)] transition-all duration-300 hover:border-white/50" 
                      x-data="{ showPassword: false }">
 
                     <!-- Top Avatar Circle & Header -->
-                    <div class="flex flex-col items-center text-center mb-6">
-                        <div class="w-16 h-16 sm:w-[68px] sm:h-[68px] rounded-full border-2 border-white/70 bg-white/10 flex items-center justify-center text-white mb-3 shadow-inner">
+                    <div class="flex flex-col items-center text-center mb-4 sm:mb-6">
+                        <div class="w-12 h-12 sm:w-[64px] sm:h-[64px] rounded-full border-2 border-white/70 bg-white/10 flex items-center justify-center text-white mb-2 sm:mb-3 shadow-inner">
                             <!-- Circular User Outline Icon -->
-                            <svg class="w-9 h-9 sm:w-10 sm:h-10 text-white/95" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6 sm:w-9 sm:h-9 text-white/95" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                             </svg>
                         </div>
 
-                        <h2 class="text-2xl sm:text-[28px] font-bold text-white tracking-tight drop-shadow-sm">
+                        <h2 class="text-xl sm:text-[26px] font-bold text-white tracking-tight drop-shadow-sm">
                             Login
                         </h2>
-                        <p class="text-xs sm:text-sm text-white/85 mt-1 font-normal drop-shadow-sm">
+                        <p class="text-xs sm:text-sm text-white/85 mt-0.5 sm:mt-1 font-normal drop-shadow-sm">
                             Masuk untuk mengakses aplikasi PanduBHP
                         </p>
                     </div>
@@ -89,7 +89,7 @@
                     @endif
 
                     <!-- Login Form -->
-                    <form method="POST" action="{{ route('login') }}" class="space-y-4">
+                    <form method="POST" action="{{ route('login') }}" class="space-y-3.5 sm:space-y-4">
                         @csrf
 
                         <!-- Username / Email Input -->
@@ -109,7 +109,7 @@
                                        autofocus 
                                        autocomplete="username" 
                                        placeholder="Username" 
-                                       class="w-full pl-11 pr-4 py-3 bg-[#e2e8f0]/95 hover:bg-white focus:bg-white text-slate-900 placeholder:text-slate-500 rounded-xl text-sm font-medium border border-white/40 focus:outline-none focus:ring-2 focus:ring-[#0066d6] shadow-sm transition @error('email') border-red-400 ring-2 ring-red-400/40 @enderror" />
+                                       class="w-full pl-11 pr-4 py-2.5 sm:py-3 bg-[#e2e8f0]/95 hover:bg-white focus:bg-white text-slate-900 placeholder:text-slate-500 rounded-xl text-base sm:text-sm font-medium border border-white/40 focus:outline-none focus:ring-2 focus:ring-[#0066d6] shadow-sm transition @error('email') border-red-400 ring-2 ring-red-400/40 @enderror" />
                             </div>
                             @error('email')
                                 <p class="mt-1.5 text-xs text-red-100 bg-red-950/70 py-1.5 px-3 rounded-lg border border-red-400/40 font-medium flex items-center gap-1.5">
@@ -134,7 +134,7 @@
                                        required 
                                        autocomplete="current-password" 
                                        placeholder="Password" 
-                                       class="w-full pl-11 pr-11 py-3 bg-[#e2e8f0]/95 hover:bg-white focus:bg-white text-slate-900 placeholder:text-slate-500 rounded-xl text-sm font-medium border border-white/40 focus:outline-none focus:ring-2 focus:ring-[#0066d6] shadow-sm transition @error('password') border-red-400 ring-2 ring-red-400/40 @enderror" />
+                                       class="w-full pl-11 pr-11 py-2.5 sm:py-3 bg-[#e2e8f0]/95 hover:bg-white focus:bg-white text-slate-900 placeholder:text-slate-500 rounded-xl text-base sm:text-sm font-medium border border-white/40 focus:outline-none focus:ring-2 focus:ring-[#0066d6] shadow-sm transition @error('password') border-red-400 ring-2 ring-red-400/40 @enderror" />
                                 
                                 <!-- Show / Hide Password Button -->
                                 <button type="button" 
@@ -162,7 +162,7 @@
                         </div>
 
                         <!-- Remember Me & Forgot Password -->
-                        <div class="flex items-center justify-between pt-1 text-xs text-white/90">
+                        <div class="flex items-center justify-between pt-0.5 text-xs text-white/90">
                             <label for="remember_me" class="inline-flex items-center cursor-pointer select-none">
                                 <input id="remember_me" 
                                        type="checkbox" 
@@ -180,9 +180,9 @@
                         </div>
 
                         <!-- Submit Button (Masuk ->) -->
-                        <div class="pt-2">
+                        <div class="pt-1.5 sm:pt-2">
                             <button type="submit" 
-                                    class="w-full py-3 px-6 bg-[#0066d6] hover:bg-[#0055b8] active:bg-[#00479e] text-white font-semibold text-sm sm:text-base rounded-xl shadow-lg shadow-blue-900/30 flex items-center justify-center gap-2 transition duration-200 ease-in-out cursor-pointer group">
+                                    class="w-full py-2.5 sm:py-3 px-6 bg-[#0066d6] hover:bg-[#0055b8] active:bg-[#00479e] text-white font-semibold text-sm sm:text-base rounded-xl shadow-lg shadow-blue-900/30 flex items-center justify-center gap-2 transition duration-200 ease-in-out cursor-pointer group">
                                 <span>Masuk</span>
                                 <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -192,7 +192,7 @@
 
                         <!-- Register Link -->
                         @if (Route::has('register'))
-                            <div class="pt-2 text-center text-xs text-white/85">
+                            <div class="pt-1.5 sm:pt-2 text-center text-xs text-white/85">
                                 {{ __('Belum memiliki akun?') }}
                                 <a href="{{ route('register') }}" class="font-bold text-amber-300 hover:text-amber-200 hover:underline ml-1 transition">
                                     {{ __('Daftar Akun Baru') }}
@@ -201,9 +201,9 @@
                         @endif
 
                         <!-- Footer Card Divider & Subtext -->
-                        <div class="pt-4 mt-4 border-t border-white/25 text-center">
+                        <div class="pt-3 mt-3 sm:pt-4 sm:mt-4 border-t border-white/20 text-center">
                             <p class="text-[11px] sm:text-xs text-white/75 font-normal tracking-wide drop-shadow-sm">
-                                Balai Harta Peninggalan dan Kurator Negara Surabaya
+                                Balai Harta Peninggalan Surabaya
                             </p>
                         </div>
                     </form>

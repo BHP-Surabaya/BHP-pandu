@@ -32,14 +32,14 @@ class DashboardTest extends TestCase
     {
         $user = User::factory()->create([
             'name' => 'Fernanda',
-            'pekerjaan' => 'PPAT',
+            'pekerjaan' => 'Notaris',
             'role' => 'pemohon',
         ]);
 
         $response = $this->actingAs($user)->get('/dashboard');
 
         $response->assertStatus(200);
-        $response->assertSee('PPAT');
+        $response->assertSee('Notaris');
         $response->assertSee('Selamat Datang, Fernanda');
         $response->assertSee('Pilih Layanan Yang Ingin Anda Ajukan');
         $response->assertSee('Pembukaan Wasiat');

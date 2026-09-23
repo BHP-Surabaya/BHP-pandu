@@ -12,12 +12,12 @@
         <div class="relative z-10 w-full max-w-5xl bg-white rounded-2xl sm:rounded-[28px] shadow-[0_25px_70px_rgba(0,0,0,0.35)] border border-white/40 overflow-hidden flex flex-col lg:flex-row my-4 sm:my-8">
             
             <!-- Left Side: Royal Blue Hero Banner -->
-            <div class="w-full lg:w-[340px] bg-gradient-to-b from-[#0c2a55] via-[#103873] to-[#0a1e3d] flex-shrink-0 flex flex-col justify-between p-8 sm:p-10 text-white relative overflow-hidden">
+            <div class="w-full lg:w-[340px] bg-gradient-to-b from-[#0c2a55] via-[#103873] to-[#0a1e3d] flex-shrink-0 flex flex-col justify-center items-center p-6 sm:p-10 text-white relative overflow-hidden">
                 <!-- Decorative Glow Backgrounds -->
                 <div class="absolute -top-16 -left-16 w-48 h-48 bg-blue-400/15 rounded-full blur-2xl pointer-events-none"></div>
                 <div class="absolute -bottom-16 -right-16 w-48 h-48 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
 
-                <!-- Top Brand & Logo -->
+                <!-- Brand & Logo -->
                 <div class="flex flex-col items-center text-center relative z-10">
                     <!-- BHP Pillars Building Icon (Exact Vector Replica) -->
                     <div class="inline-flex items-center justify-center p-3 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/15 shadow-inner">
@@ -52,52 +52,6 @@
 
                     <!-- Yellow Accent Bar -->
                     <div class="w-12 h-1 bg-[#FBBF24] rounded-full mt-4 shadow-sm"></div>
-                </div>
-
-                <!-- Middle: Key Features / Guidance -->
-                <div class="my-8 space-y-3.5 relative z-10 hidden sm:block">
-                    <div class="flex items-start gap-3 text-left">
-                        <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 mt-0.5 border border-white/10">
-                            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-semibold text-white">Layanan Resmi BHP</h4>
-                            <p class="text-[11px] text-blue-100/80 leading-relaxed">Pengajuan permohonan pembukaan wasiat tertutup secara digital.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start gap-3 text-left">
-                        <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 mt-0.5 border border-white/10">
-                            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-semibold text-white">Untuk Notaris & Publik</h4>
-                            <p class="text-[11px] text-blue-100/80 leading-relaxed">Mendukung akun Notaris maupun pemohon perorangan.</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start gap-3 text-left">
-                        <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0 mt-0.5 border border-white/10">
-                            <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-xs font-semibold text-white">Aman & Terintegrasi</h4>
-                            <p class="text-[11px] text-blue-100/80 leading-relaxed">Data terlindungi dan verifikasi berkas lebih cepat.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bottom Legal Tag -->
-                <div class="pt-4 border-t border-white/10 text-center relative z-10">
-                    <p class="text-[11px] text-blue-200/80 font-medium">
-                        Balai Harta Peninggalan dan Kurator Negara Surabaya
-                    </p>
                 </div>
             </div>
 

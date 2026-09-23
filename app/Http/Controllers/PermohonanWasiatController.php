@@ -237,9 +237,24 @@ class PermohonanWasiatController extends Controller
     /**
      * Complete Tahap 3 and update status to menunggu_verifikasi.
      */
-    public function storeTahap3(Permohonan $permohonan): RedirectResponse
+    public function storeTahap3(Request $request, Permohonan $permohonan): RedirectResponse
     {
         abort_unless($permohonan->user_id === auth()->id(), 403);
+
+        $request->validate([
+            'nomor_voucher' => ['nullable', 'string', 'max:100'],
+        ]);
+
+        if ($request->filled('nomor_voucher')) {
+            $permohonan->voucher()->updateOrCreate(
+                ['permohonan_id' => $permohonan->id],
+                [
+                    'nomor_voucher' => trim($request->nomor_voucher),
+                    'status_pembayaran' => 'belum_bayar',
+                    'tanggal_input' => now(),
+                ]
+            );
+        }
 
         if ($permohonan->status === 'draft') {
             $permohonan->update([
