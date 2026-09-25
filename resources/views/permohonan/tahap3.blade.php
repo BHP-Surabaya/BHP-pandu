@@ -22,50 +22,77 @@
         </div>
 
         <!-- Header Title -->
-        <div class="mb-6">
-            <h2 class="text-2xl sm:text-[28px] font-bold text-[#0f172a] tracking-tight">
-                Form Pengajuan Wasiat Tertutup
-            </h2>
-            <p class="text-xs sm:text-sm text-gray-500 mt-1">
-                Lengkapi data di bawah ini untuk memulai proses pengajuan wasiat tertutup.
-            </p>
+        <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h2 class="text-2xl sm:text-[28px] font-bold text-[#0f172a] tracking-tight">
+                    Form Pengajuan Wasiat Tertutup
+                </h2>
+                <p class="text-xs sm:text-sm text-gray-500 mt-1">
+                    Lengkapi data di bawah ini untuk memulai proses pengajuan wasiat tertutup.
+                </p>
+            </div>
+            <div>
+                <button type="button" 
+                        onclick="const input = document.getElementById('nomor_voucher'); if(input) { input.value = 'AHU-001008002-{{ $permohonan->id }}' + Math.floor(1000000 + Math.random() * 9000000); input.dispatchEvent(new Event('input')); }" 
+                        class="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold rounded-lg border border-purple-200 bg-purple-50 hover:bg-purple-100 text-[#4a1d84] shadow-xs transition cursor-pointer">
+                    <svg class="w-4 h-4 text-[#4a1d84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    <span>Isi Kode Voucher Dummy</span>
+                </button>
+            </div>
         </div>
 
-        <!-- Stepper Progress Bar (Tahap 1, 2, 3) -->
+        <!-- Stepper Progress Bar (Tahap 1, 2, 3, 4) -->
         <div class="bg-white rounded-xl border border-gray-200/80 p-4 sm:p-5 mb-8 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-            <div class="grid grid-cols-3 items-center gap-2">
+            <div class="flex items-center justify-between gap-2" style="display: flex; flex-direction: row; width: 100%;">
                 <!-- Tahap 1 (Selesai/Link) -->
-                <a href="{{ route('permohonan.create') }}" class="flex items-center gap-3 group">
-                    <div class="w-8 h-8 rounded-full bg-gray-100 group-hover:bg-purple-50 border border-gray-200 group-hover:border-purple-300 text-gray-400 group-hover:text-purple-700 flex items-center justify-center font-bold text-xs flex-shrink-0 transition">
-                        1
+                <a href="{{ route('permohonan.create') }}" class="flex-1 flex items-center gap-3 group" style="flex: 1;">
+                    <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center font-bold text-xs flex-shrink-0 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
                     </div>
                     <div>
-                        <div class="text-xs font-semibold text-gray-400 group-hover:text-purple-700 leading-tight transition">Tahap 1</div>
-                        <div class="text-[11px] text-gray-400 hidden sm:block">Data Pewasiat</div>
+                        <div class="text-xs font-semibold text-gray-700 group-hover:text-purple-700 leading-tight transition">Tahap 1</div>
+                        <div class="text-[11px] text-gray-500 hidden sm:block">Data Pewasiat</div>
                     </div>
                 </a>
 
                 <!-- Tahap 2 (Selesai/Link) -->
-                <a href="{{ route('permohonan.tahap2', $permohonan->id) }}" class="flex items-center gap-3 border-l border-gray-100 pl-4 sm:pl-8 group">
-                    <div class="w-8 h-8 rounded-full bg-gray-100 group-hover:bg-purple-50 border border-gray-200 group-hover:border-purple-300 text-gray-400 group-hover:text-purple-700 flex items-center justify-center font-bold text-xs flex-shrink-0 transition">
-                        2
+                <a href="{{ route('permohonan.tahap2', $permohonan->id) }}" class="flex-1 flex items-center gap-3 border-l border-gray-100 pl-3 sm:pl-6 group" style="flex: 1; border-left: 1px solid #f3f4f6; padding-left: 1rem;">
+                    <div class="w-8 h-8 rounded-full bg-emerald-50 group-hover:bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center justify-center font-bold text-xs flex-shrink-0 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
                     </div>
                     <div>
-                        <div class="text-xs font-semibold text-gray-400 group-hover:text-purple-700 leading-tight transition">Tahap 2</div>
-                        <div class="text-[11px] text-gray-400 hidden sm:block">Data Wasiat</div>
+                        <div class="text-xs font-semibold text-gray-700 group-hover:text-purple-700 leading-tight transition">Tahap 2</div>
+                        <div class="text-[11px] text-gray-500 hidden sm:block">Upload Berkas</div>
                     </div>
                 </a>
 
                 <!-- Tahap 3 (Active) -->
-                <div class="flex items-center gap-3 border-l border-gray-100 pl-4 sm:pl-8">
+                <div class="flex-1 flex items-center gap-3 border-l border-gray-100 pl-3 sm:pl-6" style="flex: 1; border-left: 1px solid #f3f4f6; padding-left: 1rem;">
                     <div class="w-8 h-8 rounded-full bg-[#0b2942] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm">
                         3
                     </div>
                     <div>
                         <div class="text-xs font-bold text-[#0b2942] leading-tight">Tahap 3</div>
-                        <div class="text-[11px] text-gray-600 font-medium hidden sm:block">Dokumen</div>
+                        <div class="text-[11px] text-gray-600 font-medium hidden sm:block">Voucher PNBP</div>
                     </div>
                 </div>
+
+                <!-- Tahap 4 (Link) -->
+                <a href="{{ route('permohonan.tahap4', $permohonan->id) }}" class="flex-1 flex items-center gap-3 border-l border-gray-100 pl-3 sm:pl-6 group" style="flex: 1; border-left: 1px solid #f3f4f6; padding-left: 1rem;">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 group-hover:bg-purple-50 border border-gray-200 group-hover:border-purple-300 text-gray-400 group-hover:text-purple-700 flex items-center justify-center font-bold text-xs flex-shrink-0 transition">
+                        4
+                    </div>
+                    <div>
+                        <div class="text-xs font-semibold text-gray-400 group-hover:text-purple-700 leading-tight transition">Tahap 4</div>
+                        <div class="text-[11px] text-gray-400 hidden sm:block">Preview Data</div>
+                    </div>
+                </a>
             </div>
         </div>
 
@@ -299,10 +326,30 @@
                                     Masukkan Kode / Nomor Voucher yang Anda peroleh dari SIMPADHU AHU:
                                 </p>
 
-                                <div class="bg-blue-50/70 border border-blue-200/90 rounded-2xl p-5 space-y-3">
-                                    <label for="nomor_voucher" class="block text-xs sm:text-sm font-extrabold text-[#071d40]">
-                                        Nomor Voucher PNBP <span class="text-rose-500">*</span>
-                                    </label>
+                                <div class="bg-blue-50/70 border border-blue-200/90 rounded-2xl p-5 space-y-3"
+                                     x-data="{ 
+                                         voucherVal: '{{ old('nomor_voucher', $permohonan->voucher?->nomor_voucher) }}',
+                                         setDummy(val) {
+                                             this.voucherVal = val;
+                                         },
+                                         randomVoucher() {
+                                             const rand = Math.floor(1000000 + Math.random() * 9000000);
+                                             this.voucherVal = 'AHU-001008002-{{ $permohonan->id }}' + rand;
+                                         }
+                                     }">
+                                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                        <label for="nomor_voucher" class="block text-xs sm:text-sm font-extrabold text-[#071d40]">
+                                            Nomor Voucher PNBP <span class="text-rose-500">*</span>
+                                        </label>
+                                        <button type="button" 
+                                                @click="randomVoucher()" 
+                                                class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold rounded-lg border border-purple-200 bg-purple-50 hover:bg-purple-100 text-[#4a1d84] shadow-2xs transition cursor-pointer">
+                                            <svg class="w-3.5 h-3.5 text-[#4a1d84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                            </svg>
+                                            <span>Acak Kode Dummy Baru</span>
+                                        </button>
+                                    </div>
 
                                     <div class="relative max-w-lg">
                                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -313,9 +360,25 @@
                                         <input type="text" 
                                                name="nomor_voucher" 
                                                id="nomor_voucher" 
+                                               x-model="voucherVal"
                                                value="{{ old('nomor_voucher', $permohonan->voucher?->nomor_voucher) }}"
                                                placeholder="Contoh: AHU-001008002-XXXXXXXX atau Kode Billing" 
                                                class="w-full pl-11 pr-4 py-3 bg-white border border-blue-200 rounded-xl text-sm font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1d68d8] focus:border-transparent transition shadow-xs uppercase tracking-wide" />
+                                    </div>
+
+                                    <!-- Quick Dummy Badges (Guaranteed Unique) -->
+                                    <div class="flex flex-wrap items-center gap-2 pt-1">
+                                        <span class="text-[11px] font-semibold text-slate-500">Pilihan Cepat Dummy Unik:</span>
+                                        <button type="button" 
+                                                @click="setDummy('AHU-001008002-{{ $permohonan->id }}' + Math.floor(1000000 + Math.random() * 9000000))" 
+                                                class="px-2.5 py-1 bg-white hover:bg-blue-50 text-[#1d68d8] text-[11px] font-mono font-bold rounded-md border border-blue-200 transition cursor-pointer shadow-2xs">
+                                            + Format AHU Baru
+                                        </button>
+                                        <button type="button" 
+                                                @click="setDummy('82024092400{{ $permohonan->id }}' + Math.floor(1000 + Math.random() * 9000))" 
+                                                class="px-2.5 py-1 bg-white hover:bg-amber-50 text-amber-800 text-[11px] font-mono font-bold rounded-md border border-amber-300 transition cursor-pointer shadow-2xs">
+                                            + Format Billing Simponi (15 Digit)
+                                        </button>
                                     </div>
 
                                     <p class="text-[11px] text-slate-600 leading-relaxed">
@@ -340,8 +403,11 @@
                 </a>
 
                 <button type="submit" 
-                        class="px-7 py-2.5 bg-[#0b2942] hover:bg-[#081f33] active:bg-[#051522] text-white font-bold text-sm rounded-lg shadow-sm hover:shadow transition duration-150 cursor-pointer">
-                    Simpan &amp; Lanjut
+                        class="inline-flex items-center gap-2 px-7 py-2.5 bg-[#0b2942] hover:bg-[#081f33] active:bg-[#051522] text-white font-bold text-sm rounded-lg shadow-sm hover:shadow transition duration-150 cursor-pointer">
+                    <span>Simpan &amp; Lanjut ke Tahap 4</span>
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
                 </button>
             </div>
         </form>

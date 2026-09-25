@@ -53,39 +53,52 @@
             </p>
         </div>
 
-        <!-- Stepper Progress Bar (Tahap 1, 2, 3) -->
+        <!-- Stepper Progress Bar (Tahap 1, 2, 3, 4) -->
         <div class="bg-white rounded-xl border border-gray-200/80 p-4 sm:p-5 mb-8 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-            <div class="grid grid-cols-3 items-center gap-2">
+            <div class="flex items-center justify-between gap-2" style="display: flex; flex-direction: row; width: 100%;">
                 <!-- Tahap 1 (Selesai/Link) -->
-                <a href="{{ route('permohonan.create') }}" class="flex items-center gap-3 group">
-                    <div class="w-8 h-8 rounded-full bg-gray-100 group-hover:bg-purple-50 border border-gray-200 group-hover:border-purple-300 text-gray-400 group-hover:text-purple-700 flex items-center justify-center font-bold text-xs flex-shrink-0 transition">
-                        1
+                <a href="{{ route('permohonan.create') }}" class="flex-1 flex items-center gap-3 group" style="flex: 1;">
+                    <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center font-bold text-xs flex-shrink-0 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                        </svg>
                     </div>
                     <div>
-                        <div class="text-xs font-semibold text-gray-400 group-hover:text-purple-700 leading-tight transition">Tahap 1</div>
-                        <div class="text-[11px] text-gray-400 hidden sm:block">Data Pewasiat</div>
+                        <div class="text-xs font-semibold text-gray-700 group-hover:text-purple-700 leading-tight transition">Tahap 1</div>
+                        <div class="text-[11px] text-gray-500 hidden sm:block">Data Pewasiat</div>
                     </div>
                 </a>
 
                 <!-- Tahap 2 (Active) -->
-                <div class="flex items-center gap-3 border-l border-gray-100 pl-4 sm:pl-8">
+                <div class="flex-1 flex items-center gap-3 border-l border-gray-100 pl-3 sm:pl-6" style="flex: 1; border-left: 1px solid #f3f4f6; padding-left: 1rem;">
                     <div class="w-8 h-8 rounded-full bg-[#0b2942] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm">
                         2
                     </div>
                     <div>
                         <div class="text-xs font-bold text-[#0b2942] leading-tight">Tahap 2</div>
-                        <div class="text-[11px] text-gray-600 font-medium hidden sm:block">Data Wasiat</div>
+                        <div class="text-[11px] text-gray-600 font-medium hidden sm:block">Upload Berkas</div>
                     </div>
                 </div>
 
                 <!-- Tahap 3 (Link) -->
-                <a href="{{ route('permohonan.tahap3', $permohonan->id) }}" class="flex items-center gap-3 border-l border-gray-100 pl-4 sm:pl-8 group">
+                <a href="{{ route('permohonan.tahap3', $permohonan->id) }}" class="flex-1 flex items-center gap-3 border-l border-gray-100 pl-3 sm:pl-6 group" style="flex: 1; border-left: 1px solid #f3f4f6; padding-left: 1rem;">
                     <div class="w-8 h-8 rounded-full bg-gray-100 group-hover:bg-purple-50 border border-gray-200 group-hover:border-purple-300 text-gray-400 group-hover:text-purple-700 flex items-center justify-center font-bold text-xs flex-shrink-0 transition">
                         3
                     </div>
                     <div>
                         <div class="text-xs font-semibold text-gray-400 group-hover:text-purple-700 leading-tight transition">Tahap 3</div>
-                        <div class="text-[11px] text-gray-400 hidden sm:block">Dokumen</div>
+                        <div class="text-[11px] text-gray-400 hidden sm:block">Voucher PNBP</div>
+                    </div>
+                </a>
+
+                <!-- Tahap 4 (Link) -->
+                <a href="{{ route('permohonan.tahap4', $permohonan->id) }}" class="flex-1 flex items-center gap-3 border-l border-gray-100 pl-3 sm:pl-6 group" style="flex: 1; border-left: 1px solid #f3f4f6; padding-left: 1rem;">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 group-hover:bg-purple-50 border border-gray-200 group-hover:border-purple-300 text-gray-400 group-hover:text-purple-700 flex items-center justify-center font-bold text-xs flex-shrink-0 transition">
+                        4
+                    </div>
+                    <div>
+                        <div class="text-xs font-semibold text-gray-400 group-hover:text-purple-700 leading-tight transition">Tahap 4</div>
+                        <div class="text-[11px] text-gray-400 hidden sm:block">Preview Data</div>
                     </div>
                 </a>
             </div>

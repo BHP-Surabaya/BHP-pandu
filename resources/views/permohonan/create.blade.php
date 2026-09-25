@@ -5,6 +5,11 @@
 
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{
         statusKawin: '{{ old('status_kawin', 'tidak_kawin') }}',
+        jenisDokumenPerkawinan: '{{ old('jenis_dokumen_perkawinan', '') }}',
+        nomorDokumenPerkawinan: '{{ old('nomor_dokumen_perkawinan', '') }}',
+        tanggalPerkawinan: '{{ old('tanggal_perkawinan', '') }}',
+        tempatPerkawinan: '{{ old('tempat_perkawinan', '') }}',
+        instansiPenerbitPerkawinan: '{{ old('instansi_penerbit_perkawinan', '') }}',
         memilikiAnak: '{{ old('memiliki_anak', 'tidak_ada') }}',
         pasangans: {{ json_encode(old('pasangans', [['nama_lengkap' => '', 'nik' => '', 'jenis_kelamin' => '']])) }},
         anakList: {{ json_encode(old('anak', [['nama_lengkap' => '', 'nik' => '', 'jenis_kelamin' => '', 'tempat_tanggal_lahir' => '', 'alamat' => '']])) }},
@@ -23,6 +28,64 @@
             if (this.anakList.length > 1) {
                 this.anakList.splice(index, 1);
             }
+        },
+        isiDataDummy() {
+            document.getElementById('nama_lengkap').value = 'Prof. Dr. Ir. Raden Soeprapto Mangoenkoesoemo';
+            if (document.getElementById('dahulu_bernama')) document.getElementById('dahulu_bernama').value = 'Soeprapto';
+            if (document.getElementById('alias')) document.getElementById('alias').value = 'Opa Prapto';
+            document.getElementById('nik').value = '3578011708520001';
+            document.getElementById('jenis_kelamin').value = 'L';
+            document.getElementById('tempat_lahir').value = 'Surabaya';
+            document.getElementById('tanggal_lahir').value = '1952-08-17';
+            document.getElementById('tempat_tinggal_terakhir').value = 'Jl. Raya Darmo No. 45, RT 003 / RW 002, Kel. Keputran, Kec. Tegalsari, Kota Surabaya, Jawa Timur';
+
+            document.getElementById('tempat_kematian').value = 'RSUD Dr. Soetomo, Kota Surabaya';
+            document.getElementById('tanggal_kematian').value = '2026-02-10';
+            document.getElementById('nomor_akta_kematian').value = '3578-KM-10022026-0015';
+            document.getElementById('tanggal_akta_kematian').value = '2026-02-14';
+            document.getElementById('pejabat_pembuat_akta_kematian').value = 'Dinas Kependudukan dan Pencatatan Sipil Kota Surabaya';
+
+            document.getElementById('nomor_surat_dpw').value = 'AHU.2.AH.04.01-14022026/DPW';
+            document.getElementById('tanggal_surat_dpw').value = '2026-02-20';
+            document.getElementById('status_pencatatan').value = 'Terdaftar';
+
+            document.getElementById('nomor_akta_penyimpanan').value = 'WST-12/NOT-SBY/2019';
+            document.getElementById('tanggal_akta_penyimpanan').value = '2019-11-05';
+            document.getElementById('nama_notaris').value = 'Bambang Sugiharto, S.H., M.Kn.';
+            document.getElementById('kedudukan_notaris').value = 'Kota Surabaya';
+
+            this.statusKawin = 'kawin';
+            this.jenisDokumenPerkawinan = 'Buku Nikah';
+            this.nomorDokumenPerkawinan = 'KUA.13.05/PW.01/1978';
+            this.tanggalPerkawinan = '1978-09-15';
+            this.tempatPerkawinan = 'Kota Surabaya';
+            this.instansiPenerbitPerkawinan = 'KUA Kecamatan Tegalsari, Kota Surabaya';
+
+            this.pasangans = [
+                { nama_lengkap: 'Hj. Siti Aminah Soeprapto', nik: '3578015509550002', jenis_kelamin: 'P' }
+            ];
+
+            this.memilikiAnak = 'ada';
+            this.anakList = [
+                { nama_lengkap: 'dr. Dimas Arya Mangoenkoesoemo, Sp.PD', nik: '3578011203820003', jenis_kelamin: 'L', tempat_tanggal_lahir: 'Surabaya, 12 Maret 1982', alamat: 'Jl. Manyar Kertoarjo IV No. 18, Surabaya' },
+                { nama_lengkap: 'Dian Anggraini Mangoenkoesoemo, S.E., M.B.A.', nik: '3578015807860004', jenis_kelamin: 'P', tempat_tanggal_lahir: 'Surabaya, 18 Juli 1986', alamat: 'Jl. Kertajaya Indah Timur No. 22, Surabaya' }
+            ];
+
+            this.$nextTick(() => {
+                const setVal = (id, val) => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.value = val;
+                        el.dispatchEvent(new Event('input', { bubbles: true }));
+                        el.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                };
+                setVal('jenis_dokumen_perkawinan', 'Buku Nikah');
+                setVal('nomor_dokumen_perkawinan', 'KUA.13.05/PW.01/1978');
+                setVal('tanggal_perkawinan', '1978-09-15');
+                setVal('tempat_perkawinan', 'Kota Surabaya');
+                setVal('instansi_penerbit_perkawinan', 'KUA Kecamatan Tegalsari, Kota Surabaya');
+            });
         }
     }">
         <!-- Breadcrumb / Back button -->
@@ -36,20 +99,32 @@
         </div>
 
         <!-- Header Title -->
-        <div class="mb-6">
-            <h2 class="text-2xl sm:text-[28px] font-bold text-[#0f172a] tracking-tight">
-                Form Pengajuan Wasiat Tertutup
-            </h2>
-            <p class="text-xs sm:text-sm text-gray-500 mt-1">
-                Lengkapi data di bawah ini untuk memulai proses pengajuan wasiat tertutup.
-            </p>
+        <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h2 class="text-2xl sm:text-[28px] font-bold text-[#0f172a] tracking-tight">
+                    Form Pengajuan Wasiat Tertutup
+                </h2>
+                <p class="text-xs sm:text-sm text-gray-500 mt-1">
+                    Lengkapi data di bawah ini untuk memulai proses pengajuan wasiat tertutup.
+                </p>
+            </div>
+            <div>
+                <button type="button" 
+                        @click="isiDataDummy()" 
+                        class="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold rounded-lg border border-purple-200 bg-purple-50 hover:bg-purple-100 text-[#4a1d84] shadow-xs transition cursor-pointer">
+                    <svg class="w-4 h-4 text-[#4a1d84]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    <span>Isi Otomatis Data Dummy</span>
+                </button>
+            </div>
         </div>
 
-        <!-- Stepper Progress Bar (Tahap 1, 2, 3) -->
+        <!-- Stepper Progress Bar (Tahap 1, 2, 3, 4) -->
         <div class="bg-white rounded-xl border border-gray-200/80 p-4 sm:p-5 mb-8 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-            <div class="grid grid-cols-3 items-center gap-2">
+            <div class="flex items-center justify-between gap-2" style="display: flex; flex-direction: row; width: 100%;">
                 <!-- Tahap 1 (Active) -->
-                <div class="flex items-center gap-3">
+                <div class="flex-1 flex items-center gap-3" style="flex: 1;">
                     <div class="w-8 h-8 rounded-full bg-[#1e1b4b] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm">
                         1
                     </div>
@@ -60,24 +135,35 @@
                 </div>
 
                 <!-- Tahap 2 (Inactive) -->
-                <div class="flex items-center gap-3 border-l border-gray-100 pl-4 sm:pl-8">
+                <div class="flex-1 flex items-center gap-3 border-l border-gray-100 pl-3 sm:pl-6" style="flex: 1; border-left: 1px solid #f3f4f6; padding-left: 1rem;">
                     <div class="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 text-gray-400 flex items-center justify-center font-bold text-xs flex-shrink-0">
                         2
                     </div>
                     <div>
                         <div class="text-xs font-semibold text-gray-400 leading-tight">Tahap 2</div>
-                        <div class="text-[11px] text-gray-400 hidden sm:block">Data Wasiat</div>
+                        <div class="text-[11px] text-gray-400 hidden sm:block">Upload Berkas</div>
                     </div>
                 </div>
 
                 <!-- Tahap 3 (Inactive) -->
-                <div class="flex items-center gap-3 border-l border-gray-100 pl-4 sm:pl-8">
+                <div class="flex-1 flex items-center gap-3 border-l border-gray-100 pl-3 sm:pl-6" style="flex: 1; border-left: 1px solid #f3f4f6; padding-left: 1rem;">
                     <div class="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 text-gray-400 flex items-center justify-center font-bold text-xs flex-shrink-0">
                         3
                     </div>
                     <div>
                         <div class="text-xs font-semibold text-gray-400 leading-tight">Tahap 3</div>
-                        <div class="text-[11px] text-gray-400 hidden sm:block">Dokumen</div>
+                        <div class="text-[11px] text-gray-400 hidden sm:block">Voucher PNBP</div>
+                    </div>
+                </div>
+
+                <!-- Tahap 4 (Inactive) -->
+                <div class="flex-1 flex items-center gap-3 border-l border-gray-100 pl-3 sm:pl-6" style="flex: 1; border-left: 1px solid #f3f4f6; padding-left: 1rem;">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 border border-gray-200 text-gray-400 flex items-center justify-center font-bold text-xs flex-shrink-0">
+                        4
+                    </div>
+                    <div>
+                        <div class="text-xs font-semibold text-gray-400 leading-tight">Tahap 4</div>
+                        <div class="text-[11px] text-gray-400 hidden sm:block">Preview Data</div>
                     </div>
                 </div>
             </div>
@@ -565,13 +651,15 @@
                                         Jenis Dokumen Perkawinan <span class="text-red-500">*</span>
                                     </label>
                                     <div class="relative">
-                                        <select name="jenis_dokumen_perkawinan" 
+                                        <select id="jenis_dokumen_perkawinan" 
+                                                name="jenis_dokumen_perkawinan" 
+                                                x-model="jenisDokumenPerkawinan"
                                                 :required="statusKawin === 'kawin'"
                                                 class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#4a1d84]/20 focus:border-[#4a1d84] transition appearance-none cursor-pointer">
-                                            <option value="" disabled {{ old('jenis_dokumen_perkawinan') ? '' : 'selected' }}>Pilih Jenis Dokumen</option>
-                                            <option value="Buku Nikah" {{ old('jenis_dokumen_perkawinan') === 'Buku Nikah' ? 'selected' : '' }}>Buku Nikah</option>
-                                            <option value="Akta Perkawinan" {{ old('jenis_dokumen_perkawinan') === 'Akta Perkawinan' ? 'selected' : '' }}>Akta Perkawinan</option>
-                                            <option value="Dokumen Perkawinan Lainnya" {{ old('jenis_dokumen_perkawinan') === 'Dokumen Perkawinan Lainnya' ? 'selected' : '' }}>Dokumen Perkawinan Lainnya</option>
+                                            <option value="" disabled>Pilih Jenis Dokumen</option>
+                                            <option value="Buku Nikah">Buku Nikah</option>
+                                            <option value="Akta Perkawinan">Akta Perkawinan</option>
+                                            <option value="Dokumen Perkawinan Lainnya">Dokumen Perkawinan Lainnya</option>
                                         </select>
                                         <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -588,9 +676,10 @@
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">
                                         Nomor Dokumen Perkawinan <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="text" 
+                                    <input id="nomor_dokumen_perkawinan" 
+                                           type="text" 
                                            name="nomor_dokumen_perkawinan" 
-                                           value="{{ old('nomor_dokumen_perkawinan') }}"
+                                           x-model="nomorDokumenPerkawinan"
                                            :required="statusKawin === 'kawin'"
                                            placeholder="Masukkan nomor dokumen perkawinan" 
                                            class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4a1d84]/20 focus:border-[#4a1d84] transition" />
@@ -606,9 +695,10 @@
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">
                                         Tanggal Perkawinan <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="date" 
+                                    <input id="tanggal_perkawinan" 
+                                           type="date" 
                                            name="tanggal_perkawinan" 
-                                           value="{{ old('tanggal_perkawinan') }}"
+                                           x-model="tanggalPerkawinan"
                                            :required="statusKawin === 'kawin'"
                                            placeholder="mm/dd/yyyy"
                                            class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4a1d84]/20 focus:border-[#4a1d84] transition" />
@@ -621,9 +711,10 @@
                                     <label class="block text-xs font-semibold text-gray-700 mb-1.5">
                                         Tempat Perkawinan
                                     </label>
-                                    <input type="text" 
+                                    <input id="tempat_perkawinan" 
+                                           type="text" 
                                            name="tempat_perkawinan" 
-                                           value="{{ old('tempat_perkawinan') }}"
+                                           x-model="tempatPerkawinan"
                                            placeholder="Masukkan kota/kabupaten perkawinan" 
                                            class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4a1d84]/20 focus:border-[#4a1d84] transition" />
                                     @error('tempat_perkawinan')
@@ -637,9 +728,10 @@
                                 <label class="block text-xs font-semibold text-gray-700 mb-1.5">
                                     Instansi Penerbit Dokumen
                                 </label>
-                                <input type="text" 
+                                <input id="instansi_penerbit_perkawinan" 
+                                       type="text" 
                                        name="instansi_penerbit_perkawinan" 
-                                       value="{{ old('instansi_penerbit_perkawinan') }}"
+                                       x-model="instansiPenerbitPerkawinan"
                                        placeholder="Contoh: Kantor Urusan Agama (KUA) / Disdukcapil" 
                                        class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4a1d84]/20 focus:border-[#4a1d84] transition" />
                                 @error('instansi_penerbit_perkawinan')

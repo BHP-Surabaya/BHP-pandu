@@ -9,6 +9,7 @@ use App\Models\Pewasiat;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class PermohonanWasiatController extends Controller
@@ -235,14 +236,21 @@ class PermohonanWasiatController extends Controller
     }
 
     /**
-     * Complete Tahap 3 and update status to menunggu_verifikasi.
+     * Complete Tahap 3 and proceed to Tahap 4 (Preview Data).
      */
     public function storeTahap3(Request $request, Permohonan $permohonan): RedirectResponse
     {
         abort_unless($permohonan->user_id === auth()->id(), 403);
 
         $request->validate([
-            'nomor_voucher' => ['nullable', 'string', 'max:100'],
+            'nomor_voucher' => [
+                'nullable',
+                'string',
+                'max:100',
+                Rule::unique('vouchers', 'nomor_voucher')->ignore($permohonan->voucher?->id),
+            ],
+        ], [
+            'nomor_voucher.unique' => 'Nomor voucher ini sudah terdaftar pada permohonan lain. Silakan gunakan nomor voucher yang berbeda atau gunakan tombol acak dummy unik.',
         ]);
 
         if ($request->filled('nomor_voucher')) {
@@ -250,11 +258,42 @@ class PermohonanWasiatController extends Controller
                 ['permohonan_id' => $permohonan->id],
                 [
                     'nomor_voucher' => trim($request->nomor_voucher),
-                    'status_pembayaran' => 'belum_bayar',
+                    'status_pembayaran' => $permohonan->voucher?->status_pembayaran ?? 'belum_bayar',
                     'tanggal_input' => now(),
                 ]
             );
         }
+
+        return redirect()->route('permohonan.tahap4', $permohonan->id)
+            ->with('status', 'Nomor voucher berhasil disimpan. Silakan periksa kembali seluruh data pengajuan pada Tahap 4 (Pratinjau Data).');
+    }
+
+    /**
+     * Show the preview of all data (Tahap 4: Pratinjau Semua Data).
+     */
+    public function tahap4(Permohonan $permohonan): View
+    {
+        abort_unless($permohonan->user_id === auth()->id(), 403);
+
+        $permohonan->load(['pewasiat.pasangans', 'pewasiat.ahliWaris', 'dokumens', 'voucher', 'user']);
+        $dokumens = $permohonan->dokumens->keyBy('jenis_dokumen');
+
+        return view('permohonan.tahap4', compact('permohonan', 'dokumens'));
+    }
+
+    /**
+     * Submit permohonan final at Tahap 4 and set status to menunggu_verifikasi.
+     */
+    public function storeTahap4(Request $request, Permohonan $permohonan): RedirectResponse
+    {
+        abort_unless($permohonan->user_id === auth()->id(), 403);
+
+        $request->validate([
+            'konfirmasi_kebenaran' => ['required', 'accepted'],
+        ], [
+            'konfirmasi_kebenaran.required' => 'Anda wajib menyetujui pernyataan kebenaran data dan keabsahan dokumen sebelum mengirim permohonan.',
+            'konfirmasi_kebenaran.accepted' => 'Anda wajib menyetujui pernyataan kebenaran data dan keabsahan dokumen sebelum mengirim permohonan.',
+        ]);
 
         if ($permohonan->status === 'draft') {
             $permohonan->update([
@@ -262,6 +301,7 @@ class PermohonanWasiatController extends Controller
             ]);
         }
 
-        return redirect()->route('permohonan.index')->with('status', 'Pengajuan Wasiat Tertutup berhasil dikirim! Silakan pantau status verifikasi berkas Anda.');
+        return redirect()->route('permohonan.index')
+            ->with('status', 'Pengajuan Wasiat Tertutup berhasil dikirim! Silakan pantau status verifikasi berkas Anda.');
     }
 }

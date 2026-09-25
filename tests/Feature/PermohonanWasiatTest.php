@@ -316,7 +316,7 @@ class PermohonanWasiatTest extends TestCase
         $response->assertStatus(403);
     }
 
-    public function test_user_can_finish_tahap_3_and_status_becomes_menunggu_verifikasi(): void
+    public function test_user_can_finish_tahap_3_and_proceed_to_tahap_4(): void
     {
         $user = User::factory()->create();
         $permohonan = Permohonan::create([
@@ -327,11 +327,11 @@ class PermohonanWasiatTest extends TestCase
 
         $response = $this->actingAs($user)->post(route('permohonan.tahap3.store', $permohonan->id));
 
-        $response->assertRedirect(route('permohonan.index'));
+        $response->assertRedirect(route('permohonan.tahap4', $permohonan->id));
 
         $this->assertDatabaseHas('permohonans', [
             'id' => $permohonan->id,
-            'status' => 'menunggu_verifikasi',
+            'status' => 'draft',
         ]);
     }
 
@@ -348,12 +348,140 @@ class PermohonanWasiatTest extends TestCase
             'nomor_voucher' => 'AHU-001008002-99887766',
         ]);
 
-        $response->assertRedirect(route('permohonan.index'));
+        $response->assertRedirect(route('permohonan.tahap4', $permohonan->id));
 
         $this->assertDatabaseHas('vouchers', [
             'permohonan_id' => $permohonan->id,
             'nomor_voucher' => 'AHU-001008002-99887766',
             'status_pembayaran' => 'belum_bayar',
+        ]);
+    }
+
+    public function test_tahap_3_validates_duplicate_nomor_voucher(): void
+    {
+        $user1 = User::factory()->create();
+        $permohonan1 = Permohonan::create([
+            'user_id' => $user1->id,
+            'nomor_permohonan' => 'WST-20260907-007A',
+            'status' => 'draft',
+        ]);
+        $permohonan1->voucher()->create([
+            'nomor_voucher' => 'AHU-001008002-DUPLICATE',
+            'status_pembayaran' => 'belum_bayar',
+        ]);
+
+        $user2 = User::factory()->create();
+        $permohonan2 = Permohonan::create([
+            'user_id' => $user2->id,
+            'nomor_permohonan' => 'WST-20260907-007B',
+            'status' => 'draft',
+        ]);
+
+        $response = $this->actingAs($user2)->post(route('permohonan.tahap3.store', $permohonan2->id), [
+            'nomor_voucher' => 'AHU-001008002-DUPLICATE',
+        ]);
+
+        $response->assertSessionHasErrors('nomor_voucher');
+    }
+
+    public function test_user_can_view_tahap_4_preview_page(): void
+    {
+        $user = User::factory()->create([
+            'name' => 'Bambang Hartono',
+            'nik' => '3578011234560001',
+        ]);
+        $permohonan = Permohonan::create([
+            'user_id' => $user->id,
+            'nomor_permohonan' => 'WST-20260907-008',
+            'status' => 'draft',
+        ]);
+        Pewasiat::create([
+            'permohonan_id' => $permohonan->id,
+            'nama_lengkap' => 'Almarhum Ahmad Subarjo',
+            'nik' => '3578011234560009',
+            'jenis_kelamin' => 'L',
+            'tempat_lahir' => 'Surabaya',
+            'tanggal_lahir' => '1955-08-17',
+            'tempat_tinggal_terakhir' => 'Jl. Darmo No. 45, Surabaya',
+            'tempat_kematian' => 'Surabaya',
+            'tanggal_kematian' => '2026-01-10',
+            'nomor_akta_kematian' => 'AK-2026-0012',
+            'tanggal_akta_kematian' => '2026-01-15',
+            'pejabat_pembuat_akta_kematian' => 'Kota Surabaya',
+            'nomor_surat_dpw' => 'AHU.2-00123/2026',
+            'tanggal_surat_dpw' => '2026-02-01',
+            'status_pencatatan' => 'Terdaftar',
+            'nomor_akta_penyimpanan' => 'WST-14/2020',
+            'tanggal_akta_penyimpanan' => '2020-05-12',
+            'nama_notaris' => 'Hendra Wijaya, S.H., M.Kn.',
+            'kedudukan_notaris' => 'Kota Surabaya',
+            'status_kawin' => 'tidak_kawin',
+        ]);
+
+        $response = $this->actingAs($user)->get(route('permohonan.tahap4', $permohonan->id));
+
+        $response->assertStatus(200);
+        $response->assertSee('Pratinjau Data Permohonan');
+        $response->assertSee('WST-20260907-008');
+        $response->assertSee('Almarhum Ahmad Subarjo');
+        $response->assertSee('3578011234560009');
+        $response->assertSee('Hendra Wijaya, S.H., M.Kn.');
+        $response->assertSee('Tahap 4');
+        $response->assertSee('Preview Data');
+        $response->assertSee('Kirim Permohonan Sekarang');
+    }
+
+    public function test_user_cannot_view_other_users_tahap_4(): void
+    {
+        $owner = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $permohonan = Permohonan::create([
+            'user_id' => $owner->id,
+            'nomor_permohonan' => 'WST-20260907-009',
+            'status' => 'draft',
+        ]);
+
+        $response = $this->actingAs($otherUser)->get(route('permohonan.tahap4', $permohonan->id));
+
+        $response->assertStatus(403);
+    }
+
+    public function test_user_must_accept_confirmation_to_submit_tahap_4(): void
+    {
+        $user = User::factory()->create();
+        $permohonan = Permohonan::create([
+            'user_id' => $user->id,
+            'nomor_permohonan' => 'WST-20260907-010',
+            'status' => 'draft',
+        ]);
+
+        $response = $this->actingAs($user)->post(route('permohonan.tahap4.store', $permohonan->id), []);
+
+        $response->assertSessionHasErrors('konfirmasi_kebenaran');
+        $this->assertDatabaseHas('permohonans', [
+            'id' => $permohonan->id,
+            'status' => 'draft',
+        ]);
+    }
+
+    public function test_user_can_submit_tahap_4_and_status_becomes_menunggu_verifikasi(): void
+    {
+        $user = User::factory()->create();
+        $permohonan = Permohonan::create([
+            'user_id' => $user->id,
+            'nomor_permohonan' => 'WST-20260907-011',
+            'status' => 'draft',
+        ]);
+
+        $response = $this->actingAs($user)->post(route('permohonan.tahap4.store', $permohonan->id), [
+            'konfirmasi_kebenaran' => '1',
+        ]);
+
+        $response->assertRedirect(route('permohonan.index'));
+
+        $this->assertDatabaseHas('permohonans', [
+            'id' => $permohonan->id,
+            'status' => 'menunggu_verifikasi',
         ]);
     }
 }
