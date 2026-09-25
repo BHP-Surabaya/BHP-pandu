@@ -48,6 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/permohonan/{permohonan}/tahap-2', [PermohonanWasiatController::class, 'storeTahap2'])->name('permohonan.tahap2.store');
     Route::get('/permohonan/{permohonan}/tahap-3', [PermohonanWasiatController::class, 'tahap3'])->name('permohonan.tahap3');
     Route::post('/permohonan/{permohonan}/tahap-3', [PermohonanWasiatController::class, 'storeTahap3'])->name('permohonan.tahap3.store');
+    Route::get('/permohonan/{permohonan}/tahap-4', [PermohonanWasiatController::class, 'tahap4'])->name('permohonan.tahap4');
+    Route::post('/permohonan/{permohonan}/tahap-4', [PermohonanWasiatController::class, 'storeTahap4'])->name('permohonan.tahap4.store');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

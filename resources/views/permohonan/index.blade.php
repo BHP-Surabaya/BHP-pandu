@@ -107,6 +107,10 @@
                                                class="px-2.5 py-1 text-[11px] font-bold rounded-md bg-purple-50 text-[#4a1d84] hover:bg-purple-100 transition">
                                                 Tahap 3
                                             </a>
+                                            <a href="{{ route('permohonan.tahap4', $p->id) }}" 
+                                               class="px-2.5 py-1 text-[11px] font-bold rounded-md bg-emerald-50 text-emerald-800 hover:bg-emerald-100 transition">
+                                                Tahap 4
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
