@@ -43,6 +43,38 @@ class ProfileTest extends TestCase
         $this->assertNull($user->email_verified_at);
     }
 
+    public function test_profile_custom_fields_can_be_updated(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->patch('/profile', [
+                'name' => 'Budi Santoso, S.H.',
+                'email' => $user->email,
+                'nik' => '3578012345678901',
+                'phone' => '081234567890',
+                'pekerjaan' => 'Notaris',
+                'alamat_kantor' => 'Jl. Diponegoro No. 10, Surabaya',
+                'alamat_ktp' => 'Jl. Kertajaya No. 1, Surabaya',
+                'alamat_domisili' => 'Jl. Kertajaya No. 1, Surabaya',
+            ]);
+
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/profile');
+
+        $user->refresh();
+
+        $this->assertSame('Budi Santoso, S.H.', $user->name);
+        $this->assertSame('3578012345678901', $user->nik);
+        $this->assertSame('081234567890', $user->phone);
+        $this->assertSame('Notaris', $user->pekerjaan);
+        $this->assertSame('Jl. Diponegoro No. 10, Surabaya', $user->alamat_kantor);
+        $this->assertSame('Jl. Kertajaya No. 1, Surabaya', $user->alamat_ktp);
+        $this->assertSame('Jl. Kertajaya No. 1, Surabaya', $user->alamat_domisili);
+    }
+
     public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
     {
         $user = User::factory()->create();

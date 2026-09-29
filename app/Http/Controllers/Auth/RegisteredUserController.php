@@ -40,7 +40,7 @@ class RegisteredUserController extends Controller
             'pekerjaan' => ['nullable', 'string', 'max:255'],
             'pekerjaan_select' => ['nullable', 'string', 'max:100'],
             'pekerjaan_custom' => ['nullable', 'required_if:pekerjaan_select,Lainnya', 'string', 'max:255'],
-            'sk_notaris' => [Rule::requiredIf($isNotaris), 'nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10240'],
+            'sk_notaris' => [Rule::requiredIf($isNotaris), 'nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:25600'],
             'alamat_kantor' => [Rule::requiredIf($isNotaris), 'nullable', 'string', 'max:1000'],
             'alamat_ktp' => ['nullable', 'string'],
             'alamat_domisili' => ['nullable', 'string'],
@@ -51,7 +51,8 @@ class RegisteredUserController extends Controller
             'sk_notaris.required' => 'Berkas SK Notaris wajib diunggah untuk pendaftar Notaris.',
             'sk_notaris.file' => 'Berkas SK Notaris harus berupa file dokumen valid.',
             'sk_notaris.mimes' => 'Format berkas SK Notaris harus berformat PDF, JPG, JPEG, atau PNG.',
-            'sk_notaris.max' => 'Ukuran berkas SK Notaris maksimal 10MB.',
+            'sk_notaris.max' => 'Ukuran berkas SK Notaris maksimal 25MB.',
+            'sk_notaris.uploaded' => 'Berkas SK Notaris gagal diunggah. Pastikan ukuran berkas di bawah 25MB dan file tidak rusak.',
             'alamat_kantor.required' => 'Alamat kantor notaris wajib diisi untuk pendaftar Notaris.',
         ]);
 

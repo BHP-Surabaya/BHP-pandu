@@ -62,6 +62,7 @@
                 selectedPekerjaan: '{{ old('pekerjaan_select', (old('pekerjaan') === 'Notaris' ? 'Notaris' : (old('pekerjaan') ? 'Lainnya' : ''))) }}',
                 customPekerjaan: '{{ old('pekerjaan_custom', (old('pekerjaan') !== 'Notaris' && old('pekerjaan') ? old('pekerjaan') : '')) }}',
                 skNotarisName: '',
+                skNotarisError: '',
                 alamatKtp: @js(old('alamat_ktp', '')),
                 domisiliSamaKtp: @js(old('domisili_sama_ktp') ? true : false),
                 alamatDomisili: @js(old('alamat_domisili', old('domisili_sama_ktp') ? old('alamat_ktp', '') : '')),
@@ -91,7 +92,14 @@
                     </p>
                 </div>
 
-                <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="space-y-6">
+                <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="space-y-6"
+                      @submit="
+                          if (selectedPekerjaan === 'Notaris' && !skNotarisName && !$refs.skNotarisInput?.files?.length) {
+                              $event.preventDefault();
+                              skNotarisError = 'Berkas SK Notaris wajib diunggah untuk pendaftar Notaris.';
+                              $refs.skNotarisContainer?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          }
+                      ">
                     @csrf
 
                     <!-- ================= BAGIAN 1: INFORMASI DATA DIRI & PROFESI ================= -->
@@ -268,16 +276,31 @@
                                     <label for="sk_notaris" class="block text-xs font-semibold text-gray-700 mb-1">
                                         Upload Berkas SK Notaris <span class="text-red-500">*</span>
                                     </label>
-                                    <div class="relative">
+                                    <div class="relative" x-ref="skNotarisContainer">
                                         <input id="sk_notaris" 
+                                               x-ref="skNotarisInput"
                                                name="sk_notaris" 
                                                type="file" 
                                                accept=".pdf,.jpg,.jpeg,.png"
-                                               :required="selectedPekerjaan === 'Notaris'"
-                                               @change="skNotarisName = $event.target.files[0] ? $event.target.files[0].name : ''"
+                                               @change="
+                                                   skNotarisError = '';
+                                                   const file = $event.target.files[0];
+                                                   if (file) {
+                                                       if (file.size > 25 * 1024 * 1024) {
+                                                           skNotarisError = 'Ukuran berkas (' + (file.size / (1024 * 1024)).toFixed(1) + ' MB) melebihi batas maksimal 25 MB. Silakan kompres atau pilih berkas lain.';
+                                                           $event.target.value = '';
+                                                           skNotarisName = '';
+                                                           return;
+                                                       }
+                                                       skNotarisName = file.name;
+                                                   } else {
+                                                       skNotarisName = '';
+                                                   }
+                                               "
                                                class="hidden" />
                                         <label for="sk_notaris" 
-                                               class="flex flex-col items-center justify-center px-4 py-3.5 border-2 border-dashed border-blue-300/90 hover:border-[#0066d6] bg-white rounded-xl cursor-pointer transition group text-center hover:bg-blue-50/40 @error('sk_notaris') border-red-500 @enderror">
+                                               class="flex flex-col items-center justify-center px-4 py-3.5 border-2 border-dashed border-blue-300/90 hover:border-[#0066d6] bg-white rounded-xl cursor-pointer transition group text-center hover:bg-blue-50/40 @error('sk_notaris') border-red-500 @enderror"
+                                               :class="{ '!border-red-500 bg-red-50/20': skNotarisError }">
                                             <div class="w-8 h-8 rounded-full bg-blue-100 text-[#0066d6] flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -292,9 +315,10 @@
                                                 </svg>
                                                 <span x-text="skNotarisName"></span>
                                             </div>
-                                            <span class="text-[10px] text-gray-400 mt-1">Format PDF, JPG, JPEG, PNG (Maks. 10MB)</span>
+                                            <span class="text-[10px] text-gray-400 mt-1">Format PDF, JPG, JPEG, PNG (Maks. 25MB)</span>
                                         </label>
                                     </div>
+                                    <p x-show="skNotarisError" x-text="skNotarisError" class="mt-1 text-xs text-red-600 font-medium" x-cloak></p>
                                     @error('sk_notaris')
                                         <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
                                     @enderror
