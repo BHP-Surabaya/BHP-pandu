@@ -1,58 +1,165 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Pandu BHP Surabaya (Modul Permohonan Wasiat Tertutup)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi portal permohonan layanan dan sistem administrasi Balai Harta Peninggalan (BHP) Surabaya, dengan fokus utama pada alur pendaftaran, penyerahan, dan verifikasi permohonan wasiat tertutup.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📌 Prasyarat Sistem
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Sebelum memulai instalasi, pastikan perangkat Anda sudah terpasang:
+- **PHP** `>= 8.3` (Disarankan PHP 8.3 - 8.5)
+  - Ekstensi PHP yang dibutuhkan: `pdo_mysql`, `openssl`, `mbstring`, `tokenizer`, `xml`, `ctype`, `json`, `curl`, `fileinfo`
+- **Composer** `2.x`
+- **Node.js** `>= 18.x` & **NPM**
+- **Database Server**: MySQL `>= 8.0` / MariaDB / TiDB Cloud
+- **Git**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚀 Panduan Instalasi & Setup Pertama Kali
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Ikuti langkah-langkah berikut secara berurutan:
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+### 1. Clone Repository
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/BHP-Surabaya/BHP-pandu.git
+cd BHP-pandu
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Install Dependensi PHP (Composer)
+```bash
+composer install
+```
 
-## Contributing
+### 3. Install Dependensi Frontend (NPM)
+```bash
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 4. Konfigurasi Environment (`.env`)
+Salin file template `.env.example` menjadi `.env`:
+```bash
+cp .env.example .env
+```
 
-## Code of Conduct
+Generate application key:
+```bash
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 5. Konfigurasi Koneksi Database
+Buka file `.env` di text editor Anda dan sesuaikan konfigurasi database:
 
-## Security Vulnerabilities
+#### A. Menggunakan MySQL Lokal (XAMPP / MySQL Service)
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=bhp_permohonan_wasiat
+DB_USERNAME=root
+DB_PASSWORD=
+```
+> **Catatan:** Pastikan database `bhp_permohonan_wasiat` sudah dibuat di MySQL/phpMyAdmin sebelum menjalankan migrasi.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### B. Menggunakan TiDB Cloud (SSL Connection)
+```env
+DB_CONNECTION=mysql
+DB_HOST=gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+DB_PORT=4000
+DB_DATABASE=bhp_permohonan_wasiat
+DB_USERNAME=your_username.root
+DB_PASSWORD=your_password
+MYSQL_ATTR_SSL_CA=/etc/ssl/certs/ca-certificates.crt
+MYSQL_ATTR_SSL_VERIFY_SERVER_CERT=true
+```
 
-## License
+### 6. Jalankan Migrasi & Database Seeder
+Jalankan migrasi tabel beserta data awal/demo:
+```bash
+php artisan migrate --seed
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 7. Buat Symbolic Link Storage (Untuk Upload Dokumen)
+Aplikasi membutuhkan symbolic link agar file dokumen yang diunggah pemohon dapat diakses oleh sistem:
+```bash
+php artisan storage:link
+```
+
+### 8. Compile Asset Frontend
+Kompilasi asset Vite (CSS & JS) untuk tampilan:
+```bash
+npm run build
+```
+
+### 9. Jalankan Aplikasi
+Jalankan development server Laravel:
+```bash
+php artisan serve
+```
+Buka browser dan akses: [http://localhost:8000](http://localhost:8000)
+
+> **Tips:** Anda juga dapat menggunakan perintah bawaan untuk menjalankan server Laravel dan Vite sekaligus:
+> ```bash
+> composer run dev
+> ```
+
+---
+
+## 👥 Akun Default (Hasil Seeder)
+
+Setelah menjalankan `php artisan db:seed` atau `migrate --seed`, Anda dapat masuk menggunakan akun demo berikut:
+
+| Peran (Role) | Email | Password | Keterangan |
+| :--- | :--- | :--- | :--- |
+| **Petugas BHP** | `petugas@bhp.test` | `password` | Mengakses dashboard verifikasi petugas |
+| **Pemohon** | `pemohon@bhp.test` | `password` | Mengakses portal pengajuan pemohon |
+| **Pengguna Demo** | `test@example.com` | `password` | Akun pemohon umum |
+
+---
+
+## 🔄 Cara Menarik Pembaruan (Git Pull / Sinkronisasi)
+
+Jika rekan tim memperbarui repository GitHub dan Anda ingin menyinkronkan laptop Anda:
+
+```bash
+# 1. Tarik pembaruan kode terbaru
+git pull origin main
+
+# 2. Update dependensi jika ada perubahan
+composer install
+npm install
+
+# 3. Jalankan migrasi jika ada struktur tabel baru
+php artisan migrate
+
+# 4. Bersihkan cache Laravel
+php artisan optimize:clear
+
+# 5. Rebuild asset frontend
+npm run build
+```
+
+---
+
+## 🧪 Menjalankan Automated Test
+
+Aplikasi ini dilengkapi pengujian fitur (Feature Tests) menggunakan PHPUnit:
+
+```bash
+# Menjalankan seluruh test
+php artisan test
+
+# Menjalankan pengujian tertentu (misal: pengujian profil)
+php artisan test --filter=ProfileTest
+```
+
+---
+
+## 📂 Struktur Utama Proyek
+
+- `app/Http/Controllers/` : Controller alur permohonan wasiat, profil, dan otentikasi.
+- `app/Models/` : Model Eloquent (`Permohonan`, `Pewasiat`, `Pasangan`, `AhliWaris`, `Dokumen`, `Voucher`, `User`).
+- `database/migrations/` : Skema struktur database permohonan dan pengguna.
+- `database/seeders/` : Seeder data awal pengguna dan permohonan.
+- `resources/views/` : Template antarmuka Blade (BHP Surabaya theme, Alpine.js & Tailwind CSS).
+- `routes/web.php` : Rute navigasi pemohon dan petugas.
