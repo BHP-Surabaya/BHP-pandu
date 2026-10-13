@@ -36,6 +36,27 @@ class ProfileController extends Controller
             $validated['sk_notaris'] = $request->file('sk_notaris')->store('sk_notaris', 'public');
         }
 
+        if ($request->hasFile('sk_ppat')) {
+            if ($request->user()->sk_ppat) {
+                Storage::disk('public')->delete($request->user()->sk_ppat);
+            }
+            $validated['sk_ppat'] = $request->file('sk_ppat')->store('sk_ppat', 'public');
+        }
+
+        if ($request->hasFile('berita_acara_sumpah')) {
+            if ($request->user()->berita_acara_sumpah) {
+                Storage::disk('public')->delete($request->user()->berita_acara_sumpah);
+            }
+            $validated['berita_acara_sumpah'] = $request->file('berita_acara_sumpah')->store('berita_acara_sumpah', 'public');
+        }
+
+        if ($request->hasFile('id_card_pengacara')) {
+            if ($request->user()->id_card_pengacara) {
+                Storage::disk('public')->delete($request->user()->id_card_pengacara);
+            }
+            $validated['id_card_pengacara'] = $request->file('id_card_pengacara')->store('id_card_pengacara', 'public');
+        }
+
         $request->user()->fill($validated);
 
         if ($request->user()->isDirty('email')) {

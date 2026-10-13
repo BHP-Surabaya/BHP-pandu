@@ -11,6 +11,9 @@
              alamatDomisili: @js(old('alamat_domisili', $user->alamat_domisili ?? '')),
              pekerjaan: @js(old('pekerjaan', $user->pekerjaan ?? '')),
              skFileName: '',
+             skPpatFileName: '',
+             baSumpahFileName: '',
+             idCardFileName: '',
              syncDomisili() {
                  if (this.domisiliSamaKtp) {
                      this.alamatDomisili = this.alamatKtp;
@@ -76,13 +79,20 @@
                         <h1 class="text-xl sm:text-2xl font-bold text-[#0c2a55] tracking-tight">
                             {{ $user->name }}
                         </h1>
-                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold {{ $user->pekerjaan === 'Notaris' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-blue-100 text-[#0066d6] border border-blue-200' }}">
-                            {{ $user->pekerjaan ?: 'Pemohon Layanan' }}
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold {{ $user->status_akun === 'notaris' ? 'bg-amber-100 text-amber-800 border border-amber-200' : ($user->status_akun === 'pengacara' ? 'bg-indigo-100 text-indigo-800 border border-indigo-200' : 'bg-blue-100 text-[#0066d6] border border-blue-200') }}">
+                            {{ $user->status_akun_label }}
                         </span>
-                        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                            Akun Aktif
-                        </span>
+                        @if ($user->isVerifikasiPending())
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1.5 shadow-xs">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                Menunggu Verifikasi Master Admin (Pengajuan {{ ucfirst($user->jenis_akun) }})
+                            </span>
+                        @else
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                Akun Aktif
+                            </span>
+                        @endif
                     </div>
 
                     <div class="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-xs text-gray-500">
@@ -106,6 +116,23 @@
                 </div>
             </div>
         </div>
+
+        @if ($user->isVerifikasiPending())
+            <!-- Banner Status Akun Perorangan Sebelum Verifikasi -->
+            <div class="p-4 bg-amber-50/90 border border-amber-200/90 rounded-2xl flex items-start gap-3 shadow-xs">
+                <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div class="space-y-1">
+                    <h4 class="text-xs sm:text-sm font-bold text-amber-950">Status Akun Anda Saat Ini: Akun Perorangan</h4>
+                    <p class="text-xs text-amber-900/90 leading-relaxed">
+                        Anda telah mendaftarkan pengajuan profesi <strong>{{ ucfirst($user->jenis_akun) }}</strong>. Pada saat akun belum diverifikasi oleh Master Admin, maka status akun Anda tetap sebagai <strong>Akun Perorangan</strong>. Dokumen Anda sedang dalam antrean verifikasi legalitas.
+                    </p>
+                </div>
+            </div>
+        @endif
 
         <!-- ================= NAVIGASI TAB MODEREN ================= -->
         <div class="flex border-b border-gray-200 gap-6 text-sm font-semibold">
@@ -239,7 +266,7 @@
                     </div>
 
                     <!-- Panel Khusus Notaris -->
-                    <div x-show="pekerjaan === 'Notaris' || {{ $user->pekerjaan === 'Notaris' ? 'true' : 'false' }}" 
+                    <div x-show="pekerjaan === 'Notaris' || {{ $user->isNotaris() ? 'true' : 'false' }}" 
                          class="p-5 bg-blue-50/60 border border-blue-200/80 rounded-2xl space-y-4">
                         <div class="flex items-center gap-2.5 pb-2 border-b border-blue-200">
                             <div class="w-7 h-7 rounded-lg bg-[#0066d6] text-white flex items-center justify-center shrink-0">
@@ -248,8 +275,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="text-xs sm:text-sm font-bold text-[#0c2a55]">Kelengkapan Berkas &amp; Kantor Notaris</h4>
-                                <p class="text-[11px] text-gray-500">Legalitas profesi Notaris untuk verifikasi penerbitan akta dan layanan wasiat.</p>
+                                <h4 class="text-xs sm:text-sm font-bold text-[#0c2a55]">Kelengkapan Berkas SK Notaris &amp; SK PPAT</h4>
+                                <p class="text-[11px] text-gray-500">Legalitas profesi Notaris &amp; PPAT untuk verifikasi penerbitan akta dan layanan wasiat.</p>
                             </div>
                         </div>
 
@@ -269,7 +296,7 @@
                                                 </svg>
                                             </div>
                                             <div class="min-w-0">
-                                                <p class="text-xs font-bold text-gray-800 truncate">SK Notaris Terverifikasi</p>
+                                                <p class="text-xs font-bold text-gray-800 truncate">SK Notaris Tersimpan</p>
                                                 <p class="text-[10px] text-gray-500">Berkas tersimpan aman</p>
                                             </div>
                                         </div>
@@ -308,17 +335,197 @@
                                 @enderror
                             </div>
 
-                            <!-- Alamat Kantor Notaris -->
+                            <!-- Berkas SK PPAT -->
                             <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Berkas SK PPAT
+                                </label>
+
+                                @if ($user->sk_ppat)
+                                    <div class="mb-3 p-3 bg-white rounded-xl border border-blue-200 flex items-center justify-between gap-3 shadow-xs">
+                                        <div class="flex items-center gap-2.5 min-w-0">
+                                            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <p class="text-xs font-bold text-gray-800 truncate">SK PPAT Tersimpan</p>
+                                                <p class="text-[10px] text-gray-500">Berkas tersimpan aman</p>
+                                            </div>
+                                        </div>
+                                        <a href="{{ asset('storage/' . $user->sk_ppat) }}" 
+                                           target="_blank" 
+                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0066d6] hover:bg-[#0055b8] text-white font-semibold text-xs transition shrink-0">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                            </svg>
+                                            <span>Buka Berkas</span>
+                                        </a>
+                                    </div>
+                                @endif
+
+                                <div class="relative">
+                                    <input id="sk_ppat" 
+                                           name="sk_ppat" 
+                                           type="file" 
+                                           accept=".pdf,.jpg,.jpeg,.png"
+                                           @change="skPpatFileName = $event.target.files[0] ? $event.target.files[0].name : ''"
+                                           class="hidden" />
+                                    <label for="sk_ppat" 
+                                           class="flex flex-col items-center justify-center px-4 py-3.5 border-2 border-dashed border-blue-300 hover:border-[#0066d6] bg-white rounded-xl cursor-pointer transition text-center hover:bg-blue-50/50">
+                                        <svg class="w-6 h-6 text-[#0066d6] mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                        </svg>
+                                        <span x-show="!skPpatFileName" class="text-xs font-semibold text-gray-700">
+                                            {{ $user->sk_ppat ? 'Unggah Berkas Baru Pengganti' : 'Pilih Berkas SK PPAT' }}
+                                        </span>
+                                        <span x-show="skPpatFileName" x-text="skPpatFileName" class="text-xs font-bold text-[#0066d6] break-all"></span>
+                                        <span class="text-[10px] text-gray-400 mt-1">Format PDF, JPG, PNG (Maks. 25MB)</span>
+                                    </label>
+                                </div>
+                                @error('sk_ppat')
+                                    <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Alamat Kantor Notaris -->
+                            <div class="sm:col-span-2">
                                 <label for="alamat_kantor" class="block text-xs font-semibold text-gray-700 mb-1">
                                     Alamat Kantor Notaris
                                 </label>
                                 <textarea id="alamat_kantor" 
                                           name="alamat_kantor" 
-                                          rows="4" 
+                                          rows="3" 
                                           placeholder="Alamat lengkap kantor notaris (Jalan, Nomor, Kecamatan, Kota/Kabupaten)"
                                           class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0066d6] focus:border-[#0066d6] transition resize-y @error('alamat_kantor') border-red-500 @enderror">{{ old('alamat_kantor', $user->alamat_kantor) }}</textarea>
                                 @error('alamat_kantor')
+                                    <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel Khusus Pengacara -->
+                    <div x-show="pekerjaan === 'Pengacara' || {{ $user->isPengacara() ? 'true' : 'false' }}" 
+                         class="p-5 bg-indigo-50/60 border border-indigo-200/80 rounded-2xl space-y-4">
+                        <div class="flex items-center gap-2.5 pb-2 border-b border-indigo-200">
+                            <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-xs sm:text-sm font-bold text-indigo-950">Kelengkapan Dokumen Pengacara / Advokat</h4>
+                                <p class="text-[11px] text-gray-500">Legalitas Berita Acara Sumpah PT dan Kartu Identitas Advokat untuk verifikasi.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <!-- Berkas Berita Acara Sumpah PT -->
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Berita Acara Sumpah Pengadilan Tinggi
+                                </label>
+
+                                @if ($user->berita_acara_sumpah)
+                                    <div class="mb-3 p-3 bg-white rounded-xl border border-indigo-200 flex items-center justify-between gap-3 shadow-xs">
+                                        <div class="flex items-center gap-2.5 min-w-0">
+                                            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <p class="text-xs font-bold text-gray-800 truncate">BA Sumpah PT Tersimpan</p>
+                                                <p class="text-[10px] text-gray-500">Berkas tersimpan aman</p>
+                                            </div>
+                                        </div>
+                                        <a href="{{ asset('storage/' . $user->berita_acara_sumpah) }}" 
+                                           target="_blank" 
+                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shrink-0">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                            </svg>
+                                            <span>Buka Berkas</span>
+                                        </a>
+                                    </div>
+                                @endif
+
+                                <div class="relative">
+                                    <input id="berita_acara_sumpah" 
+                                           name="berita_acara_sumpah" 
+                                           type="file" 
+                                           accept=".pdf,.jpg,.jpeg,.png"
+                                           @change="baSumpahFileName = $event.target.files[0] ? $event.target.files[0].name : ''"
+                                           class="hidden" />
+                                    <label for="berita_acara_sumpah" 
+                                           class="flex flex-col items-center justify-center px-4 py-3.5 border-2 border-dashed border-indigo-300 hover:border-indigo-600 bg-white rounded-xl cursor-pointer transition text-center hover:bg-indigo-50/50">
+                                        <svg class="w-6 h-6 text-indigo-600 mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                        </svg>
+                                        <span x-show="!baSumpahFileName" class="text-xs font-semibold text-gray-700">
+                                            {{ $user->berita_acara_sumpah ? 'Unggah Berkas Baru Pengganti' : 'Pilih Berkas BA Sumpah PT' }}
+                                        </span>
+                                        <span x-show="baSumpahFileName" x-text="baSumpahFileName" class="text-xs font-bold text-indigo-600 break-all"></span>
+                                        <span class="text-[10px] text-gray-400 mt-1">Format PDF, JPG, PNG (Maks. 25MB)</span>
+                                    </label>
+                                </div>
+                                @error('berita_acara_sumpah')
+                                    <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <!-- Berkas ID Card Pengacara -->
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">
+                                    ID Card Pengacara / Advokat
+                                </label>
+
+                                @if ($user->id_card_pengacara)
+                                    <div class="mb-3 p-3 bg-white rounded-xl border border-indigo-200 flex items-center justify-between gap-3 shadow-xs">
+                                        <div class="flex items-center gap-2.5 min-w-0">
+                                            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </div>
+                                            <div class="min-w-0">
+                                                <p class="text-xs font-bold text-gray-800 truncate">ID Card Tersimpan</p>
+                                                <p class="text-[10px] text-gray-500">Berkas tersimpan aman</p>
+                                            </div>
+                                        </div>
+                                        <a href="{{ asset('storage/' . $user->id_card_pengacara) }}" 
+                                           target="_blank" 
+                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shrink-0">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                            </svg>
+                                            <span>Buka Berkas</span>
+                                        </a>
+                                    </div>
+                                @endif
+
+                                <div class="relative">
+                                    <input id="id_card_pengacara" 
+                                           name="id_card_pengacara" 
+                                           type="file" 
+                                           accept=".pdf,.jpg,.jpeg,.png"
+                                           @change="idCardFileName = $event.target.files[0] ? $event.target.files[0].name : ''"
+                                           class="hidden" />
+                                    <label for="id_card_pengacara" 
+                                           class="flex flex-col items-center justify-center px-4 py-3.5 border-2 border-dashed border-indigo-300 hover:border-indigo-600 bg-white rounded-xl cursor-pointer transition text-center hover:bg-indigo-50/50">
+                                        <svg class="w-6 h-6 text-indigo-600 mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                                        </svg>
+                                        <span x-show="!idCardFileName" class="text-xs font-semibold text-gray-700">
+                                            {{ $user->id_card_pengacara ? 'Unggah Berkas Baru Pengganti' : 'Pilih Berkas ID Card' }}
+                                        </span>
+                                        <span x-show="idCardFileName" x-text="idCardFileName" class="text-xs font-bold text-indigo-600 break-all"></span>
+                                        <span class="text-[10px] text-gray-400 mt-1">Format PDF, JPG, PNG (Maks. 25MB)</span>
+                                    </label>
+                                </div>
+                                @error('id_card_pengacara')
                                     <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
                                 @enderror
                             </div>

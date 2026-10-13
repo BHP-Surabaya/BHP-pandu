@@ -1,5 +1,5 @@
 <x-guest-layout :full-bleed="true">
-    <div class="relative min-h-screen w-full flex items-center justify-center overflow-x-hidden bg-slate-900 py-10 px-4 sm:px-6">
+    <div class="relative min-h-screen w-full flex items-center justify-center overflow-x-hidden bg-slate-900 py-4 sm:py-6 lg:py-8 px-4 sm:px-6">
         <!-- Background Image of BHP Surabaya Building -->
         <div class="absolute inset-0 bg-cover bg-center sm:bg-[center_top_20%] bg-no-repeat transition-all duration-700" 
              style="background-image: url('{{ asset('images/bg-gedung-bhp-clean.jpg') }}');">
@@ -8,20 +8,20 @@
         <!-- Subtle Dark Overlay for contrast and readability -->
         <div class="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-900/50 to-slate-950/65"></div>
 
-        <!-- Registration Container Modal Card -->
-        <div class="relative z-10 w-full max-w-5xl bg-white rounded-2xl sm:rounded-[28px] shadow-[0_25px_70px_rgba(0,0,0,0.35)] border border-white/40 overflow-hidden flex flex-col lg:flex-row my-4 sm:my-8">
+        <!-- Registration Container Modal Card (Fixed consistent height) -->
+        <div class="relative z-10 w-full max-w-5xl bg-white rounded-2xl sm:rounded-[28px] shadow-[0_25px_70px_rgba(0,0,0,0.35)] border border-white/40 overflow-hidden flex flex-col lg:flex-row h-[94vh] lg:h-[780px] max-h-[820px] min-h-[580px]">
             
-            <!-- Left Side: Royal Blue Hero Banner -->
-            <div class="w-full lg:w-[340px] bg-gradient-to-b from-[#0c2a55] via-[#103873] to-[#0a1e3d] flex-shrink-0 flex flex-col justify-center items-center p-6 sm:p-10 text-white relative overflow-hidden">
+            <!-- Left Side: Royal Blue Hero Banner (Full Height) -->
+            <div class="w-full lg:w-[340px] bg-gradient-to-b from-[#0c2a55] via-[#103873] to-[#0a1e3d] flex-shrink-0 flex flex-col justify-between items-center p-6 sm:p-8 text-white relative overflow-hidden h-auto lg:h-full">
                 <!-- Decorative Glow Backgrounds -->
                 <div class="absolute -top-16 -left-16 w-48 h-48 bg-blue-400/15 rounded-full blur-2xl pointer-events-none"></div>
                 <div class="absolute -bottom-16 -right-16 w-48 h-48 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
 
-                <!-- Brand & Logo -->
-                <div class="flex flex-col items-center text-center relative z-10">
+                <!-- Brand & Logo (Anchored at Top) -->
+                <div class="flex flex-col items-center text-center relative z-10 w-full">
                     <!-- BHP Pillars Building Icon (Exact Vector Replica) -->
                     <div class="inline-flex items-center justify-center p-3 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/15 shadow-inner">
-                        <svg class="w-14 h-14 sm:w-16 sm:h-16 drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-12 h-12 sm:w-14 sm:h-14 drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <!-- Roof Pediment Triangle -->
                             <path d="M32 6L4 23H60L32 6Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
                             <!-- Inner Triangular Cutout -->
@@ -41,7 +41,7 @@
                     </div>
 
                     <!-- Title -->
-                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-5 leading-none drop-shadow-sm">
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-4 leading-none drop-shadow-sm">
                         <span class="text-white">Pandu</span><span class="text-[#FBBF24]">BHP</span>
                     </h1>
 
@@ -51,18 +51,52 @@
                     </p>
 
                     <!-- Yellow Accent Bar -->
-                    <div class="w-12 h-1 bg-[#FBBF24] rounded-full mt-4 shadow-sm"></div>
+                    <div class="w-12 h-1 bg-[#FBBF24] rounded-full mt-3 shadow-sm"></div>
+                </div>
+
+                <!-- Center Highlights (Keeps sidebar vertically stable & attractive) -->
+                <div class="hidden lg:flex flex-col gap-2.5 w-full my-auto py-4 relative z-10 bg-white/5 border border-white/10 rounded-2xl p-4 text-xs">
+                    <div class="flex items-center gap-2.5 text-blue-100">
+                        <div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                        </div>
+                        <span class="text-[11px] font-medium">Pendaftaran Wasiat Tertutup</span>
+                    </div>
+                    <div class="flex items-center gap-2.5 text-blue-100">
+                        <div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                        </div>
+                        <span class="text-[11px] font-medium">Akun Notaris &amp; Pengacara</span>
+                    </div>
+                    <div class="flex items-center gap-2.5 text-blue-100">
+                        <div class="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                        </div>
+                        <span class="text-[11px] font-medium">Layanan Perorangan Cepat</span>
+                    </div>
+                </div>
+
+                <!-- Bottom Footer Note -->
+                <div class="relative z-10 text-center mt-auto pt-2">
+                    <p class="text-[11px] text-blue-200/70 font-medium">
+                        Kementerian Hukum dan HAM RI
+                    </p>
                 </div>
             </div>
 
-            <!-- Right Side: Registration Form -->
-            <div class="flex-1 p-6 sm:p-10 bg-white" x-data="{ 
+            <!-- Right Side: Registration Form with Fixed Header & Scrollable Body -->
+            <div class="flex-1 flex flex-col h-full bg-white overflow-hidden" x-data="{ 
                 showPassword: false, 
                 showPasswordConfirm: false,
-                selectedPekerjaan: '{{ old('pekerjaan_select', (old('pekerjaan') === 'Notaris' ? 'Notaris' : (old('pekerjaan') ? 'Lainnya' : ''))) }}',
-                customPekerjaan: '{{ old('pekerjaan_custom', (old('pekerjaan') !== 'Notaris' && old('pekerjaan') ? old('pekerjaan') : '')) }}',
+                selectedPekerjaan: '{{ old('pekerjaan_select', (old('pekerjaan') === 'Notaris' ? 'Notaris' : (in_array(old('pekerjaan'), ['Pengacara', 'Advokat']) ? 'Pengacara' : (old('pekerjaan') === 'Perorangan' ? 'Perorangan' : '')))) }}',
                 skNotarisName: '',
                 skNotarisError: '',
+                skPpatName: '',
+                skPpatError: '',
+                baSumpahName: '',
+                baSumpahError: '',
+                idCardPengacaraName: '',
+                idCardPengacaraError: '',
                 alamatKtp: @js(old('alamat_ktp', '')),
                 domisiliSamaKtp: @js(old('domisili_sama_ktp') ? true : false),
                 alamatDomisili: @js(old('alamat_domisili', old('domisili_sama_ktp') ? old('alamat_ktp', '') : '')),
@@ -82,8 +116,8 @@
                     }
                 }
             }">
-                <!-- Form Title & Subtitle -->
-                <div class="mb-6 pb-4 border-b border-gray-100">
+                <!-- Form Title & Subtitle (Header - Fixed at Top) -->
+                <div class="px-6 py-5 sm:px-10 sm:py-6 border-b border-gray-100 flex-shrink-0 bg-white">
                     <h2 class="text-2xl sm:text-[26px] font-bold text-[#0c2a55] tracking-tight">
                         Daftar Akun Baru
                     </h2>
@@ -92,12 +126,37 @@
                     </p>
                 </div>
 
-                <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="space-y-6"
+                <!-- Scrollable Form Body with Custom Scrollbar -->
+                <div class="flex-1 overflow-y-auto px-6 py-6 sm:px-10 sm:py-8 custom-scrollbar">
+                    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="space-y-6"
                       @submit="
-                          if (selectedPekerjaan === 'Notaris' && !skNotarisName && !$refs.skNotarisInput?.files?.length) {
-                              $event.preventDefault();
-                              skNotarisError = 'Berkas SK Notaris wajib diunggah untuk pendaftar Notaris.';
-                              $refs.skNotarisContainer?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          if (selectedPekerjaan === 'Notaris') {
+                              if (!skNotarisName && !$refs.skNotarisInput?.files?.length) {
+                                  $event.preventDefault();
+                                  skNotarisError = 'Berkas SK Notaris wajib diunggah untuk pendaftar Notaris.';
+                                  $refs.skNotarisContainer?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                  return;
+                              }
+                              if (!skPpatName && !$refs.skPpatInput?.files?.length) {
+                                  $event.preventDefault();
+                                  skPpatError = 'Berkas SK PPAT wajib diunggah untuk pendaftar Notaris.';
+                                  $refs.skPpatContainer?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                  return;
+                              }
+                          }
+                          if (selectedPekerjaan === 'Pengacara') {
+                              if (!baSumpahName && !$refs.baSumpahInput?.files?.length) {
+                                  $event.preventDefault();
+                                  baSumpahError = 'Berkas Berita Acara Sumpah wajib diunggah untuk pendaftar Pengacara.';
+                                  $refs.baSumpahContainer?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                  return;
+                              }
+                              if (!idCardPengacaraName && !$refs.idCardPengacaraInput?.files?.length) {
+                                  $event.preventDefault();
+                                  idCardPengacaraError = 'Berkas ID Card Pengacara wajib diunggah untuk pendaftar Pengacara.';
+                                  $refs.idCardPengacaraContainer?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                  return;
+                              }
                           }
                       ">
                     @csrf
@@ -185,17 +244,20 @@
                             <!-- Pekerjaan / Profesi Dropdown -->
                             <div>
                                 <label for="pekerjaan_select" class="block text-xs font-semibold text-gray-700 mb-1">
-                                    Pekerjaan / Profesi
+                                    Jenis Akun / Pekerjaan <span class="text-red-500">*</span>
                                 </label>
                                 <div class="relative">
                                     <select id="pekerjaan_select" 
                                             name="pekerjaan_select" 
                                             x-model="selectedPekerjaan"
+                                            required
                                             class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0066d6]/20 focus:border-[#0066d6] transition appearance-none cursor-pointer @error('pekerjaan_select') border-red-500 @enderror @error('pekerjaan') border-red-500 @enderror">
-                                        <option value="" disabled :selected="!selectedPekerjaan">-- Pilih Pekerjaan --</option>
+                                        <option value="" disabled :selected="!selectedPekerjaan">-- Pilih Jenis Akun --</option>
                                         <option value="Notaris">Notaris</option>
-                                        <option value="Lainnya">Lainnya</option>
+                                        <option value="Pengacara">Pengacara</option>
+                                        <option value="Perorangan">Perorangan</option>
                                     </select>
+                                    <input type="hidden" name="pekerjaan" :value="selectedPekerjaan">
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -210,52 +272,72 @@
                                 @enderror
                             </div>
 
-                            <!-- Dynamic Kolom Pendamping Pekerjaan -->
+                            <!-- Kolom Keterangan Jenis Akun (Fixed Height h-[42px] to prevent row shifting) -->
                             <div>
-                                <!-- Input Jika Pilih Lainnya -->
-                                <div x-show="selectedPekerjaan === 'Lainnya'" 
-                                     x-transition:enter="transition ease-out duration-200"
-                                     x-transition:enter-start="opacity-0 -translate-y-1"
-                                     x-transition:enter-end="opacity-100 translate-y-0"
-                                     x-cloak>
-                                    <label for="pekerjaan_custom" class="block text-xs font-semibold text-gray-700 mb-1">
-                                        Sebutkan Pekerjaan <span class="text-red-500">*</span>
-                                    </label>
-                                    <input id="pekerjaan_custom" 
-                                           name="pekerjaan_custom" 
-                                           type="text" 
-                                           x-model="customPekerjaan"
-                                           :required="selectedPekerjaan === 'Lainnya'"
-                                           placeholder="Contoh: Advokat, Konsultan Hukum, Swasta, dll"
-                                           class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0066d6]/20 focus:border-[#0066d6] transition @error('pekerjaan_custom') border-red-500 @enderror" />
-                                    @error('pekerjaan_custom')
-                                        <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
-                                    @enderror
-                                </div>
+                                <label class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Keterangan Jenis Akun
+                                </label>
+                                <div class="h-[42px] flex items-center">
+                                    <!-- Badge Info Notaris -->
+                                    <div x-show="selectedPekerjaan === 'Notaris'" 
+                                         x-cloak 
+                                         class="w-full h-full px-3 py-2 bg-blue-50/90 border border-blue-200/80 rounded-lg text-xs text-blue-950 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[#0066d6] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="truncate">Wajib unggah <strong>SK Notaris</strong> &amp; <strong>SK PPAT</strong></span>
+                                    </div>
 
-                                <!-- Badge Info Notaris -->
-                                <div x-show="selectedPekerjaan === 'Notaris'" 
-                                     x-transition:enter="transition ease-out duration-200"
-                                     x-cloak 
-                                     class="p-2.5 bg-blue-50/80 border border-blue-200/70 rounded-lg text-xs text-blue-950 flex items-start gap-2 sm:mt-5">
-                                    <svg class="w-4 h-4 text-[#0066d6] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    <span>Akun terdaftar sebagai Notaris. Silakan lengkapi upload SK dan alamat kantor di bawah ini.</span>
-                                </div>
+                                    <!-- Badge Info Pengacara -->
+                                    <div x-show="selectedPekerjaan === 'Pengacara'" 
+                                         x-cloak 
+                                         class="w-full h-full px-3 py-2 bg-indigo-50/90 border border-indigo-200/80 rounded-lg text-xs text-indigo-950 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-indigo-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="truncate">Wajib unggah <strong>BA Sumpah PT</strong> &amp; <strong>ID Card</strong></span>
+                                    </div>
 
-                                <!-- Petunjuk awal jika belum memilih -->
-                                <div x-show="!selectedPekerjaan" class="hidden sm:flex items-center text-xs text-gray-400 italic pt-7">
-                                    <span>*Pilih pekerjaan/profesi untuk penyesuaian berkas permohonan.</span>
+                                    <!-- Badge Info Perorangan -->
+                                    <div x-show="selectedPekerjaan === 'Perorangan'" 
+                                         x-cloak 
+                                         class="w-full h-full px-3 py-2 bg-emerald-50/90 border border-emerald-200/80 rounded-lg text-xs text-emerald-950 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span class="truncate">Tanpa berkas profesi khusus (Akses langsung)</span>
+                                    </div>
+
+                                    <!-- Default Prompt -->
+                                    <div x-show="!selectedPekerjaan" 
+                                         class="w-full h-full px-3 py-2 bg-gray-50 border border-dashed border-gray-200 rounded-lg text-xs text-gray-400 flex items-center italic">
+                                        <span>*Pilih salah satu jenis akun di samping</span>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel Informasi Khusus Perorangan -->
+                        <div x-show="selectedPekerjaan === 'Perorangan'" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-cloak
+                             class="p-4 bg-emerald-50/70 border border-emerald-200/80 rounded-xl text-xs text-emerald-950 flex items-start gap-3 shadow-sm">
+                            <div class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm mt-0.5">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <div class="space-y-0.5">
+                                <h4 class="text-xs sm:text-sm font-bold text-emerald-950">Pendaftaran Akun Perorangan</h4>
+                                <p class="text-[11px] text-emerald-900/90 leading-relaxed">
+                                    Akun Perorangan tidak memerlukan dokumen legalitas khusus (SK Notaris / BA Sumpah). Anda dapat langsung melengkapi data alamat tinggal dan kata sandi di bawah.
+                                </p>
                             </div>
                         </div>
 
                         <!-- Panel Kelengkapan Berkas & Kantor Khusus Notaris -->
                         <div x-show="selectedPekerjaan === 'Notaris'" 
-                             x-transition:enter="transition ease-out duration-300"
-                             x-transition:enter-start="opacity-0 -translate-y-2"
-                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:enter="transition ease-out duration-200"
                              x-cloak
                              class="p-4 sm:p-5 bg-gradient-to-br from-blue-50/90 via-slate-50 to-blue-50/50 border border-blue-200/80 rounded-xl sm:rounded-2xl space-y-4 shadow-sm">
                             <div class="flex items-center gap-2.5 pb-2 border-b border-blue-100">
@@ -265,8 +347,21 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h4 class="text-xs sm:text-sm font-bold text-[#0c2a55]">Kelengkapan Data Notaris</h4>
-                                    <p class="text-[11px] text-gray-500">Lampirkan SK Pengangkatan Notaris dan Alamat Kantor untuk verifikasi legalitas akun.</p>
+                                    <h4 class="text-xs sm:text-sm font-bold text-[#0c2a55]">Kelengkapan Dokumen Notaris &amp; PPAT</h4>
+                                    <p class="text-[11px] text-gray-500">Wajib melampirkan SK Notaris, SK PPAT, dan Alamat Kantor untuk verifikasi legalitas akun.</p>
+                                </div>
+                            </div>
+
+                            <!-- Alert Informasi Status Akun Perorangan Sebelum Verifikasi -->
+                            <div class="p-3 bg-amber-50/90 border border-amber-200/80 rounded-xl text-xs text-amber-900 flex items-start gap-2.5">
+                                <svg class="w-4 h-4 text-amber-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                <div class="space-y-0.5">
+                                    <p class="font-bold text-amber-950">Status Akun Belum Terverifikasi:</p>
+                                    <p class="text-[11px] leading-relaxed text-amber-900/90">
+                                        Pada saat akun belum diverifikasi oleh Master Admin, maka status akun Anda tetap sebagai <strong>Akun Perorangan</strong>. Status akan diperbarui otomatis menjadi <strong>Akun Notaris</strong> setelah seluruh berkas disetujui.
+                                    </p>
                                 </div>
                             </div>
 
@@ -287,10 +382,10 @@
                                                    const file = $event.target.files[0];
                                                    if (file) {
                                                        if (file.size > 25 * 1024 * 1024) {
-                                                           skNotarisError = 'Ukuran berkas (' + (file.size / (1024 * 1024)).toFixed(1) + ' MB) melebihi batas maksimal 25 MB. Silakan kompres atau pilih berkas lain.';
-                                                           $event.target.value = '';
-                                                           skNotarisName = '';
-                                                           return;
+                                                            skNotarisError = 'Ukuran berkas (' + (file.size / (1024 * 1024)).toFixed(1) + ' MB) melebihi batas maksimal 25 MB.';
+                                                            $event.target.value = '';
+                                                            skNotarisName = '';
+                                                            return;
                                                        }
                                                        skNotarisName = file.name;
                                                    } else {
@@ -307,7 +402,7 @@
                                                 </svg>
                                             </div>
                                             <span x-show="!skNotarisName" class="text-xs font-medium text-gray-700 group-hover:text-[#0066d6]">
-                                                Pilih atau Tarik File SK ke Sini
+                                                Upload File SK Notaris
                                             </span>
                                             <div x-show="skNotarisName" class="text-xs font-bold text-[#0066d6] break-all px-2 flex items-center gap-1.5">
                                                 <svg class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -315,7 +410,7 @@
                                                 </svg>
                                                 <span x-text="skNotarisName"></span>
                                             </div>
-                                            <span class="text-[10px] text-gray-400 mt-1">Format PDF, JPG, JPEG, PNG (Maks. 25MB)</span>
+                                            <span class="text-[10px] text-gray-400 mt-1">Format PDF, JPG, PNG (Maks. 25MB)</span>
                                         </label>
                                     </div>
                                     <p x-show="skNotarisError" x-text="skNotarisError" class="mt-1 text-xs text-red-600 font-medium" x-cloak></p>
@@ -324,21 +419,227 @@
                                     @enderror
                                 </div>
 
-                                <!-- Alamat Kantor Notaris -->
+                                <!-- Upload SK PPAT -->
                                 <div>
-                                    <label for="alamat_kantor" class="block text-xs font-semibold text-gray-700 mb-1">
-                                        Alamat Kantor Notaris <span class="text-red-500">*</span>
+                                    <label for="sk_ppat" class="block text-xs font-semibold text-gray-700 mb-1">
+                                        Upload Berkas SK PPAT <span class="text-red-500">*</span>
                                     </label>
-                                    <textarea id="alamat_kantor" 
-                                              name="alamat_kantor" 
-                                              rows="3" 
-                                              :required="selectedPekerjaan === 'Notaris'"
-                                              placeholder="Alamat lengkap kantor notaris (Jalan, Nomor, Kelurahan/Desa, Kecamatan, Kota/Kabupaten, Kode Pos)"
-                                              class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0066d6]/20 focus:border-[#0066d6] transition resize-y @error('alamat_kantor') border-red-500 @enderror">{{ old('alamat_kantor') }}</textarea>
-                                    @error('alamat_kantor')
+                                    <div class="relative" x-ref="skPpatContainer">
+                                        <input id="sk_ppat" 
+                                               x-ref="skPpatInput"
+                                               name="sk_ppat" 
+                                               type="file" 
+                                               accept=".pdf,.jpg,.jpeg,.png"
+                                               @change="
+                                                   skPpatError = '';
+                                                   const file = $event.target.files[0];
+                                                   if (file) {
+                                                       if (file.size > 25 * 1024 * 1024) {
+                                                            skPpatError = 'Ukuran berkas (' + (file.size / (1024 * 1024)).toFixed(1) + ' MB) melebihi batas maksimal 25 MB.';
+                                                            $event.target.value = '';
+                                                            skPpatName = '';
+                                                            return;
+                                                       }
+                                                       skPpatName = file.name;
+                                                   } else {
+                                                       skPpatName = '';
+                                                   }
+                                               "
+                                               class="hidden" />
+                                        <label for="sk_ppat" 
+                                               class="flex flex-col items-center justify-center px-4 py-3.5 border-2 border-dashed border-blue-300/90 hover:border-[#0066d6] bg-white rounded-xl cursor-pointer transition group text-center hover:bg-blue-50/40 @error('sk_ppat') border-red-500 @enderror"
+                                               :class="{ '!border-red-500 bg-red-50/20': skPpatError }">
+                                            <div class="w-8 h-8 rounded-full bg-blue-100 text-[#0066d6] flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                </svg>
+                                            </div>
+                                            <span x-show="!skPpatName" class="text-xs font-medium text-gray-700 group-hover:text-[#0066d6]">
+                                                Upload File SK PPAT
+                                            </span>
+                                            <div x-show="skPpatName" class="text-xs font-bold text-[#0066d6] break-all px-2 flex items-center gap-1.5">
+                                                <svg class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                <span x-text="skPpatName"></span>
+                                            </div>
+                                            <span class="text-[10px] text-gray-400 mt-1">Format PDF, JPG, PNG (Maks. 25MB)</span>
+                                        </label>
+                                    </div>
+                                    <p x-show="skPpatError" x-text="skPpatError" class="mt-1 text-xs text-red-600 font-medium" x-cloak></p>
+                                    @error('sk_ppat')
                                         <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+
+                            <!-- Alamat Kantor Notaris -->
+                            <div>
+                                <label for="alamat_kantor" class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Alamat Kantor Notaris <span class="text-red-500">*</span>
+                                </label>
+                                <textarea id="alamat_kantor" 
+                                          name="alamat_kantor" 
+                                          rows="2" 
+                                          :disabled="selectedPekerjaan !== 'Notaris'"
+                                          :required="selectedPekerjaan === 'Notaris'"
+                                          placeholder="Alamat lengkap kantor notaris (Jalan, Nomor, Kelurahan/Desa, Kecamatan, Kota/Kabupaten, Kode Pos)"
+                                          class="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0066d6]/20 focus:border-[#0066d6] transition resize-y @error('alamat_kantor') border-red-500 @enderror">{{ old('alamat_kantor') }}</textarea>
+                                @error('alamat_kantor')
+                                    <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- Panel Kelengkapan Berkas Khusus Pengacara -->
+                        <div x-show="selectedPekerjaan === 'Pengacara'" 
+                             x-transition:enter="transition ease-out duration-200"
+                             x-cloak
+                             class="p-4 sm:p-5 bg-gradient-to-br from-indigo-50/90 via-slate-50 to-indigo-50/50 border border-indigo-200/80 rounded-xl sm:rounded-2xl space-y-4 shadow-sm">
+                            <div class="flex items-center gap-2.5 pb-2 border-b border-indigo-100">
+                                <div class="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs sm:text-sm font-bold text-indigo-950">Kelengkapan Dokumen Pengacara / Advokat</h4>
+                                    <p class="text-[11px] text-gray-500">Wajib melampirkan Berita Acara Sumpah PT dan ID Card Pengacara untuk verifikasi legalitas akun.</p>
+                                </div>
+                            </div>
+
+                            <!-- Alert Informasi Status Akun Perorangan Sebelum Verifikasi -->
+                            <div class="p-3 bg-amber-50/90 border border-amber-200/80 rounded-xl text-xs text-amber-900 flex items-start gap-2.5">
+                                <svg class="w-4 h-4 text-amber-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                <div class="space-y-0.5">
+                                    <p class="font-bold text-amber-950">Status Akun Belum Terverifikasi:</p>
+                                    <p class="text-[11px] leading-relaxed text-amber-900/90">
+                                        Pada saat akun belum diverifikasi oleh Master Admin, maka status akun Anda tetap sebagai <strong>Akun Perorangan</strong>. Status akan diperbarui otomatis menjadi <strong>Akun Pengacara</strong> setelah seluruh berkas disetujui.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <!-- Upload Berita Acara Sumpah PT -->
+                                <div>
+                                    <label for="berita_acara_sumpah" class="block text-xs font-semibold text-gray-700 mb-1">
+                                        Upload Berita Acara Sumpah Pengadilan Tinggi <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative" x-ref="baSumpahContainer">
+                                        <input id="berita_acara_sumpah" 
+                                               x-ref="baSumpahInput"
+                                               name="berita_acara_sumpah" 
+                                               type="file" 
+                                               accept=".pdf,.jpg,.jpeg,.png"
+                                               @change="
+                                                   baSumpahError = '';
+                                                   const file = $event.target.files[0];
+                                                   if (file) {
+                                                       if (file.size > 25 * 1024 * 1024) {
+                                                           baSumpahError = 'Ukuran berkas (' + (file.size / (1024 * 1024)).toFixed(1) + ' MB) melebihi batas maksimal 25 MB.';
+                                                           $event.target.value = '';
+                                                           baSumpahName = '';
+                                                           return;
+                                                       }
+                                                       baSumpahName = file.name;
+                                                   } else {
+                                                       baSumpahName = '';
+                                                   }
+                                               "
+                                               class="hidden" />
+                                        <label for="berita_acara_sumpah" 
+                                               class="flex flex-col items-center justify-center px-4 py-3.5 border-2 border-dashed border-indigo-300/90 hover:border-indigo-600 bg-white rounded-xl cursor-pointer transition group text-center hover:bg-indigo-50/40 @error('berita_acara_sumpah') border-red-500 @enderror"
+                                               :class="{ '!border-red-500 bg-red-50/20': baSumpahError }">
+                                            <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                </svg>
+                                            </div>
+                                            <span x-show="!baSumpahName" class="text-xs font-medium text-gray-700 group-hover:text-indigo-600">
+                                                Upload BA Sumpah PT
+                                            </span>
+                                            <div x-show="baSumpahName" class="text-xs font-bold text-indigo-600 break-all px-2 flex items-center gap-1.5">
+                                                <svg class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                <span x-text="baSumpahName"></span>
+                                            </div>
+                                            <span class="text-[10px] text-gray-400 mt-1">Format PDF, JPG, PNG (Maks. 25MB)</span>
+                                        </label>
+                                    </div>
+                                    <p x-show="baSumpahError" x-text="baSumpahError" class="mt-1 text-xs text-red-600 font-medium" x-cloak></p>
+                                    @error('berita_acara_sumpah')
+                                        <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <!-- Upload ID Card Pengacara -->
+                                <div>
+                                    <label for="id_card_pengacara" class="block text-xs font-semibold text-gray-700 mb-1">
+                                        Upload ID Card Pengacara <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="relative" x-ref="idCardPengacaraContainer">
+                                        <input id="id_card_pengacara" 
+                                               x-ref="idCardPengacaraInput"
+                                               name="id_card_pengacara" 
+                                               type="file" 
+                                               accept=".pdf,.jpg,.jpeg,.png"
+                                               @change="
+                                                   idCardPengacaraError = '';
+                                                   const file = $event.target.files[0];
+                                                   if (file) {
+                                                       if (file.size > 25 * 1024 * 1024) {
+                                                           idCardPengacaraError = 'Ukuran berkas (' + (file.size / (1024 * 1024)).toFixed(1) + ' MB) melebihi batas maksimal 25 MB.';
+                                                           $event.target.value = '';
+                                                           idCardPengacaraName = '';
+                                                           return;
+                                                       }
+                                                       idCardPengacaraName = file.name;
+                                                   } else {
+                                                       idCardPengacaraName = '';
+                                                   }
+                                               "
+                                               class="hidden" />
+                                        <label for="id_card_pengacara" 
+                                               class="flex flex-col items-center justify-center px-4 py-3.5 border-2 border-dashed border-indigo-300/90 hover:border-indigo-600 bg-white rounded-xl cursor-pointer transition group text-center hover:bg-indigo-50/40 @error('id_card_pengacara') border-red-500 @enderror"
+                                               :class="{ '!border-red-500 bg-red-50/20': idCardPengacaraError }">
+                                            <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center mb-1.5 group-hover:scale-110 transition-transform">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                                                </svg>
+                                            </div>
+                                            <span x-show="!idCardPengacaraName" class="text-xs font-medium text-gray-700 group-hover:text-indigo-600">
+                                                Upload ID Card Pengacara
+                                            </span>
+                                            <div x-show="idCardPengacaraName" class="text-xs font-bold text-indigo-600 break-all px-2 flex items-center gap-1.5">
+                                                <svg class="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                <span x-text="idCardPengacaraName"></span>
+                                            </div>
+                                            <span class="text-[10px] text-gray-400 mt-1">Format PDF, JPG, PNG (Maks. 25MB)</span>
+                                        </label>
+                                    </div>
+                                    <p x-show="idCardPengacaraError" x-text="idCardPengacaraError" class="mt-1 text-xs text-red-600 font-medium" x-cloak></p>
+                                    @error('id_card_pengacara')
+                                        <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Alamat Kantor Pengacara / Law Firm -->
+                            <div>
+                                <label for="alamat_kantor_pengacara" class="block text-xs font-semibold text-gray-700 mb-1">
+                                    Alamat Kantor Pengacara / Law Firm <span class="text-gray-400 font-normal">(Opsional)</span>
+                                </label>
+                                <textarea id="alamat_kantor_pengacara" 
+                                          name="alamat_kantor" 
+                                          rows="2" 
+                                          :disabled="selectedPekerjaan !== 'Pengacara'"
+                                          placeholder="Alamat kantor pengacara / firma hukum (Jalan, Nomor, Kota/Kabupaten)"
+                                          class="w-full px-3.5 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition resize-y">{{ old('alamat_kantor') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -525,4 +826,5 @@
             </div>
         </div>
     </div>
+</div>
 </x-guest-layout>
