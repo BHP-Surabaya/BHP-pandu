@@ -71,6 +71,31 @@
             </div>
         </div>
 
+        @if (Auth::user()?->isVerifikasiPending())
+            <!-- Banner Status Akun Perorangan Menunggu Verifikasi -->
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/90 rounded-2xl flex items-start gap-3.5 shadow-xs">
+                <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div class="flex-1 space-y-1">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <h3 class="text-sm font-bold text-amber-950">Status Akun Saat Ini: Akun Perorangan</h3>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-200/70 text-amber-900 uppercase tracking-wider">
+                            Menunggu Verifikasi Master Admin
+                        </span>
+                    </div>
+                    <p class="text-xs text-amber-900/90 leading-relaxed">
+                        Anda mendaftar sebagai <strong>{{ ucfirst(Auth::user()->jenis_akun) }}</strong>. Selama berkas legalitas belum diverifikasi oleh Master Admin, akun Anda tetap berstatus dan dapat digunakan sebagai <strong>Akun Perorangan</strong>.
+                    </p>
+                </div>
+                <a href="{{ route('profile.edit') }}" class="shrink-0 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs rounded-lg transition shadow-xs">
+                    Lihat Berkas
+                </a>
+            </div>
+        @endif
+
         <!-- ================= PENCARIAN CEPAT & FILTER KATEGORI ================= -->
         <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-4">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

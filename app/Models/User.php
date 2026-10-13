@@ -10,7 +10,27 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'nik', 'phone', 'pekerjaan', 'alamat_ktp', 'alamat_domisili', 'sk_notaris', 'alamat_kantor', 'password', 'role'])]
+#[Fillable([
+    'name',
+    'email',
+    'nik',
+    'phone',
+    'pekerjaan',
+    'jenis_akun',
+    'status_akun',
+    'status_verifikasi',
+    'verified_at',
+    'catatan_verifikasi',
+    'alamat_ktp',
+    'alamat_domisili',
+    'sk_notaris',
+    'sk_ppat',
+    'berita_acara_sumpah',
+    'id_card_pengacara',
+    'alamat_kantor',
+    'password',
+    'role',
+])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -31,6 +51,62 @@ class User extends Authenticatable
     public function isPemohon(): bool
     {
         return $this->role === 'pemohon';
+    }
+
+    /**
+     * Check if the user registered as Notaris.
+     */
+    public function isNotaris(): bool
+    {
+        return $this->jenis_akun === 'notaris' || $this->pekerjaan === 'Notaris';
+    }
+
+    /**
+     * Check if the user registered as Pengacara.
+     */
+    public function isPengacara(): bool
+    {
+        return $this->jenis_akun === 'pengacara' || in_array($this->pekerjaan, ['Pengacara', 'Advokat']);
+    }
+
+    /**
+     * Check if the account has pending verification from Master Admin.
+     */
+    public function isVerifikasiPending(): bool
+    {
+        return $this->status_verifikasi === 'menunggu_verifikasi';
+    }
+
+    /**
+     * Check if the account is verified by Master Admin.
+     */
+    public function isTerverifikasi(): bool
+    {
+        return $this->status_verifikasi === 'terverifikasi';
+    }
+
+    /**
+     * Check if current active status is perorangan.
+     */
+    public function isPerorangan(): bool
+    {
+        return $this->status_akun === 'perorangan' || empty($this->status_akun);
+    }
+
+    /**
+     * Get label for user account status.
+     */
+    public function getStatusAkunLabelAttribute(): string
+    {
+        if ($this->status_akun === 'notaris') {
+            return 'Akun Notaris';
+        }
+
+        if ($this->status_akun === 'pengacara') {
+            return 'Akun Pengacara';
+        }
+
+        return 'Akun Perorangan';
     }
 
     /**
@@ -63,6 +139,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'verified_at' => 'datetime',
             'password' => 'hashed',
         ];
     }

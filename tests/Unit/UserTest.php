@@ -35,4 +35,36 @@ class UserTest extends TestCase
         $this->assertSame('BS', $twoWords->initials);
         $this->assertSame('BP', $multipleWords->initials);
     }
+
+    /**
+     * Test account status and verification helpers.
+     */
+    public function test_user_account_status_and_verification_helpers(): void
+    {
+        $unverifiedNotaris = new User([
+            'jenis_akun' => 'notaris',
+            'pekerjaan' => 'Notaris',
+            'status_akun' => 'perorangan',
+            'status_verifikasi' => 'menunggu_verifikasi',
+        ]);
+
+        $this->assertTrue($unverifiedNotaris->isNotaris());
+        $this->assertTrue($unverifiedNotaris->isVerifikasiPending());
+        $this->assertFalse($unverifiedNotaris->isTerverifikasi());
+        $this->assertTrue($unverifiedNotaris->isPerorangan());
+        $this->assertSame('Akun Perorangan', $unverifiedNotaris->status_akun_label);
+
+        $verifiedPengacara = new User([
+            'jenis_akun' => 'pengacara',
+            'pekerjaan' => 'Pengacara',
+            'status_akun' => 'pengacara',
+            'status_verifikasi' => 'terverifikasi',
+        ]);
+
+        $this->assertTrue($verifiedPengacara->isPengacara());
+        $this->assertFalse($verifiedPengacara->isVerifikasiPending());
+        $this->assertTrue($verifiedPengacara->isTerverifikasi());
+        $this->assertFalse($verifiedPengacara->isPerorangan());
+        $this->assertSame('Akun Pengacara', $verifiedPengacara->status_akun_label);
+    }
 }

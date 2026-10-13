@@ -33,6 +33,9 @@ class ProfileUpdateRequest extends FormRequest
             'alamat_ktp' => ['nullable', 'string'],
             'alamat_domisili' => ['nullable', 'string'],
             'sk_notaris' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:25600'],
+            'sk_ppat' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:25600'],
+            'berita_acara_sumpah' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:25600'],
+            'id_card_pengacara' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:25600'],
         ];
     }
 }
