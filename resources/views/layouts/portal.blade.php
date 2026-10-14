@@ -56,33 +56,62 @@
 
                     <!-- Navigation Links -->
                     <nav class="p-4 space-y-2">
-                        <!-- Layanan (Replaces Dashboard) -->
-                        <a href="{{ route('dashboard') }}" 
-                           class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('dashboard') ? 'bg-[#1d68d8] text-white shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
-                            <!-- Home / Layanan icon -->
-                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                            </svg>
-                            <span>Layanan</span>
-                        </a>
+                        @if (Auth::user()?->isMasterAdmin())
+                            <!-- Menu Khusus Master Admin: Verifikasi Akun -->
+                            <a href="{{ Route::has('admin.verifikasi.index') ? route('admin.verifikasi.index') : url('/admin/verifikasi') }}" 
+                               class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.verifikasi.*') ? 'bg-[#1d68d8] text-white shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                                <!-- Shield check icon -->
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                                </svg>
+                                <span>Verifikasi Berkas Akun</span>
+                                @php
+                                    $pendingUsersCount = \App\Models\User::where('status_verifikasi', 'menunggu_verifikasi')->count();
+                                @endphp
+                                @if ($pendingUsersCount > 0)
+                                    <span class="ms-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-amber-400 text-amber-950 shadow-sm">
+                                        {{ $pendingUsersCount }}
+                                    </span>
+                                @endif
+                            </a>
 
-                        <!-- Histori Permohonan (Combined Permohonan Saya & Riwayat) -->
-                        <a href="{{ route('permohonan.index') }}" 
-                           class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('permohonan.*') ? 'bg-[#1d68d8] text-white font-semibold shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
-                            <!-- Clock / History icon -->
-                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>Histori Permohonan</span>
-                            @php
-                                $badgeCount = Auth::user()?->permohonans()->count() ?? 0;
-                            @endphp
-                            @if ($badgeCount > 0)
-                                <span class="ms-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-white/20 text-white">
-                                    {{ $badgeCount }}
-                                </span>
-                            @endif
-                        </a>
+                            <!-- Monitoring Permohonan -->
+                            <a href="{{ route('permohonan.index') }}" 
+                               class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('permohonan.*') ? 'bg-[#1d68d8] text-white font-semibold shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>Data Permohonan</span>
+                            </a>
+                        @else
+                            <!-- Layanan (Replaces Dashboard) -->
+                            <a href="{{ route('dashboard') }}" 
+                               class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('dashboard') ? 'bg-[#1d68d8] text-white shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                                <!-- Home / Layanan icon -->
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                                </svg>
+                                <span>Layanan</span>
+                            </a>
+
+                            <!-- Histori Permohonan (Combined Permohonan Saya & Riwayat) -->
+                            <a href="{{ route('permohonan.index') }}" 
+                               class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('permohonan.*') ? 'bg-[#1d68d8] text-white font-semibold shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                                <!-- Clock / History icon -->
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>Histori Permohonan</span>
+                                @php
+                                    $badgeCount = Auth::user()?->permohonans()->count() ?? 0;
+                                @endphp
+                                @if ($badgeCount > 0)
+                                    <span class="ms-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-white/20 text-white">
+                                        {{ $badgeCount }}
+                                    </span>
+                                @endif
+                            </a>
+                        @endif
 
                         <!-- Profil Akun -->
                         <a href="{{ route('profile.edit') }}" 

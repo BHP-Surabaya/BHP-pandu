@@ -12,14 +12,21 @@ class UserTest extends TestCase
      */
     public function test_user_role_helpers(): void
     {
+        $admin = new User(['role' => 'master_admin']);
         $petugas = new User(['role' => 'petugas']);
         $pemohon = new User(['role' => 'pemohon']);
 
+        $this->assertTrue($admin->isMasterAdmin());
+        $this->assertFalse($admin->isPetugas());
+        $this->assertFalse($admin->isPemohon());
+
         $this->assertTrue($petugas->isPetugas());
+        $this->assertFalse($petugas->isMasterAdmin());
         $this->assertFalse($petugas->isPemohon());
 
         $this->assertTrue($pemohon->isPemohon());
-        $this->assertFalse($petugas->isPemohon());
+        $this->assertFalse($pemohon->isMasterAdmin());
+        $this->assertFalse($pemohon->isPetugas());
     }
 
     /**

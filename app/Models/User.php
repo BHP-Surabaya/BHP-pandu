@@ -38,6 +38,14 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
+     * Check if the user is a Master Admin.
+     */
+    public function isMasterAdmin(): bool
+    {
+        return $this->role === 'master_admin';
+    }
+
+    /**
      * Check if the user is a BHP petugas (staff).
      */
     public function isPetugas(): bool
@@ -98,6 +106,10 @@ class User extends Authenticatable
      */
     public function getStatusAkunLabelAttribute(): string
     {
+        if ($this->isMasterAdmin()) {
+            return 'Master Admin';
+        }
+
         if ($this->status_akun === 'notaris') {
             return 'Akun Notaris';
         }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\PermohonanWasiatController;
 use App\Http\Controllers\ProfileController;
@@ -11,6 +12,10 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
+    if (auth()->user()->isMasterAdmin()) {
+        return redirect()->route('admin.verifikasi.index');
+    }
+
     if (auth()->user()->isPetugas()) {
         return redirect()->route('petugas.dashboard');
     }
@@ -33,6 +38,14 @@ Route::get('/dashboard', function () {
 
     return view('dashboard', compact('userPermohonans', 'stats', 'permohonanPerluTindakan', 'permohonanSiapSidang'));
 })->middleware(['auth'])->name('dashboard');
+
+Route::middleware(['auth', 'role:master_admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/verifikasi', [UserVerificationController::class, 'index'])->name('verifikasi.index');
+    Route::get('/verifikasi/{user}', [UserVerificationController::class, 'show'])->name('verifikasi.show');
+    Route::post('/verifikasi/{user}/setujui', [UserVerificationController::class, 'approve'])->name('verifikasi.approve');
+    Route::post('/verifikasi/{user}/tolak', [UserVerificationController::class, 'reject'])->name('verifikasi.reject');
+    Route::post('/verifikasi/{user}/ubah-status', [UserVerificationController::class, 'updateStatus'])->name('verifikasi.update-status');
+});
 
 Route::middleware(['auth', 'role:petugas'])->group(function () {
     Route::get('/petugas/dashboard', function () {
