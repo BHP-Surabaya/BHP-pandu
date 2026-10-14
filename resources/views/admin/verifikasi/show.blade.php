@@ -7,6 +7,7 @@
         approveModalOpen: false, 
         rejectModalOpen: false,
         switchModalOpen: false,
+        deleteModalOpen: false,
         targetStatus: '{{ $user->status_akun ?: 'perorangan' }}',
         catatanTolak: '',
         previewModalOpen: false,
@@ -93,6 +94,15 @@
                         class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-md transition">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
                     <span>Setujui Profesi</span>
+                </button>
+
+                <!-- Tombol Hapus Akun -->
+                <button type="button" 
+                        @click="deleteModalOpen = true"
+                        class="px-3.5 py-2.5 rounded-xl bg-red-700 hover:bg-red-800 active:bg-red-900 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm transition cursor-pointer"
+                        title="Hapus Akun Pengguna">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    <span>Hapus Akun</span>
                 </button>
             </div>
         </div>
@@ -592,6 +602,52 @@
                         <button type="submit" 
                                 class="flex-1 py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-900/10 transition">
                             Tolak Berkas
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ================= MODAL HAPUS AKUN ================= -->
+        <div x-show="deleteModalOpen" 
+             x-cloak
+             class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 space-y-4" @click.outside="deleteModalOpen = false">
+                <div class="flex items-center gap-3 pb-3 border-b border-gray-100">
+                    <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="text-base font-bold text-gray-900">Hapus Akun Pengguna</h3>
+                        <p class="text-xs text-red-600 font-medium">Tindakan ini permanen dan tidak dapat dibatalkan</p>
+                    </div>
+                </div>
+
+                <div class="bg-red-50/70 border border-red-200/80 rounded-xl p-3.5 space-y-1.5">
+                    <p class="text-xs text-gray-700">
+                        Apakah Anda yakin ingin menghapus akun <strong>{{ $user->name }}</strong> ({{ $user->email }})?
+                    </p>
+                    <p class="text-[11px] text-gray-500 mt-2 pt-2 border-t border-red-100">
+                        Seluruh data permohonan, riwayat, dan dokumen berkas terkait akun ini akan dihapus secara permanen dari sistem.
+                    </p>
+                </div>
+
+                <form method="POST" action="{{ route('admin.verifikasi.destroy', $user) }}" class="space-y-4">
+                    @csrf
+                    @method('DELETE')
+
+                    <div class="flex items-center gap-3 pt-2">
+                        <button type="button" 
+                                @click="deleteModalOpen = false"
+                                class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200 text-gray-700 text-xs font-semibold hover:bg-gray-50 transition cursor-pointer">
+                            Batal
+                        </button>
+                        <button type="submit" 
+                                class="flex-1 py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-500/20 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            <span>Ya, Hapus Akun</span>
                         </button>
                     </div>
                 </form>

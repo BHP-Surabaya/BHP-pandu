@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class UserVerificationTest extends TestCase
@@ -228,5 +229,50 @@ class UserVerificationTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('status_akun');
+    }
+
+    public function test_master_admin_can_delete_user_account_and_related_files(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('sk_notaris/sample.pdf', 'content');
+
+        $admin = $this->createMasterAdmin();
+        $user = User::factory()->create([
+            'role' => 'pemohon',
+            'sk_notaris' => 'sk_notaris/sample.pdf',
+        ]);
+
+        $response = $this->actingAs($admin)->delete(route('admin.verifikasi.destroy', $user));
+
+        $response->assertRedirect(route('admin.verifikasi.index'));
+        $response->assertSessionHas('status');
+
+        $this->assertDatabaseMissing('users', ['id' => $user->id]);
+        Storage::disk('public')->assertMissing('sk_notaris/sample.pdf');
+    }
+
+    public function test_master_admin_cannot_delete_themselves_or_other_master_admin(): void
+    {
+        $admin = $this->createMasterAdmin();
+        $otherAdmin = $this->createMasterAdmin();
+
+        $responseSelf = $this->actingAs($admin)->delete(route('admin.verifikasi.destroy', $admin));
+        $responseSelf->assertSessionHas('error');
+        $this->assertDatabaseHas('users', ['id' => $admin->id]);
+
+        $responseOther = $this->actingAs($admin)->delete(route('admin.verifikasi.destroy', $otherAdmin));
+        $responseOther->assertSessionHas('error');
+        $this->assertDatabaseHas('users', ['id' => $otherAdmin->id]);
+    }
+
+    public function test_non_admin_cannot_delete_user_account(): void
+    {
+        $pemohon = User::factory()->create(['role' => 'pemohon']);
+        $targetUser = User::factory()->create(['role' => 'pemohon']);
+
+        $response = $this->actingAs($pemohon)->delete(route('admin.verifikasi.destroy', $targetUser));
+
+        $response->assertForbidden();
+        $this->assertDatabaseHas('users', ['id' => $targetUser->id]);
     }
 }

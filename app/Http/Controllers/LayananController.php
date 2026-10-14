@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class LayananController extends Controller
@@ -139,8 +140,18 @@ class LayananController extends Controller
     /**
      * Tampilkan halaman status tahap pengembangan layanan.
      */
-    public function show(string $slug): View
+    public function show(string $slug): View|RedirectResponse
     {
+        if ($slug === 'pendaftaran-wasiat' && ! auth()->user()?->canAccessNotarisServices()) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Layanan Pendaftaran Wasiat hanya dapat diakses oleh akun Notaris yang telah terverifikasi.');
+        }
+
+        if ($slug === 'kepailitan' && ! auth()->user()?->canAccessPengacaraServices()) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Layanan Kepailitan hanya dapat diakses oleh akun Pengacara yang telah terverifikasi.');
+        }
+
         $layanan = $this->layananList[$slug] ?? [
             'slug' => $slug,
             'nama' => 'Layanan Balai Harta Peninggalan',

@@ -30,8 +30,13 @@ class PermohonanWasiatController extends Controller
     /**
      * Show the form for creating a new permohonan (Tahap 1: Data Pewasiat).
      */
-    public function create(): View
+    public function create(): View|RedirectResponse
     {
+        if (! auth()->user()->canAccessNotarisServices()) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Layanan Pembukaan Wasiat hanya dapat diakses oleh akun Notaris yang telah terverifikasi.');
+        }
+
         return view('permohonan.create');
     }
 
@@ -40,6 +45,11 @@ class PermohonanWasiatController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        if (! auth()->user()->canAccessNotarisServices()) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Layanan Pembukaan Wasiat hanya dapat diakses oleh akun Notaris yang telah terverifikasi.');
+        }
+
         $validated = $request->validate([
             // Seksi I: Informasi Pewasiat
             'nama_lengkap' => ['required', 'string', 'max:255'],
@@ -168,8 +178,13 @@ class PermohonanWasiatController extends Controller
     /**
      * Show the form for Tahap 2: Upload Berkas.
      */
-    public function tahap2(Permohonan $permohonan): View
+    public function tahap2(Permohonan $permohonan): View|RedirectResponse
     {
+        if (! auth()->user()->canAccessNotarisServices()) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Layanan Pembukaan Wasiat hanya dapat diakses oleh akun Notaris yang telah terverifikasi.');
+        }
+
         abort_unless($permohonan->user_id === auth()->id(), 403);
 
         $permohonan->load(['dokumens', 'pewasiat']);
@@ -183,6 +198,11 @@ class PermohonanWasiatController extends Controller
      */
     public function storeTahap2(Request $request, Permohonan $permohonan): RedirectResponse
     {
+        if (! auth()->user()->canAccessNotarisServices()) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Layanan Pembukaan Wasiat hanya dapat diakses oleh akun Notaris yang telah terverifikasi.');
+        }
+
         abort_unless($permohonan->user_id === auth()->id(), 403);
 
         $request->validate([
@@ -226,8 +246,13 @@ class PermohonanWasiatController extends Controller
     /**
      * Show the form for Tahap 3: Panduan Pemesanan di SIMPADHU AHU.
      */
-    public function tahap3(Permohonan $permohonan): View
+    public function tahap3(Permohonan $permohonan): View|RedirectResponse
     {
+        if (! auth()->user()->canAccessNotarisServices()) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Layanan Pembukaan Wasiat hanya dapat diakses oleh akun Notaris yang telah terverifikasi.');
+        }
+
         abort_unless($permohonan->user_id === auth()->id(), 403);
 
         $user = auth()->user();
@@ -240,6 +265,11 @@ class PermohonanWasiatController extends Controller
      */
     public function storeTahap3(Request $request, Permohonan $permohonan): RedirectResponse
     {
+        if (! auth()->user()->canAccessNotarisServices()) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Layanan Pembukaan Wasiat hanya dapat diakses oleh akun Notaris yang telah terverifikasi.');
+        }
+
         abort_unless($permohonan->user_id === auth()->id(), 403);
 
         $request->validate([
@@ -271,8 +301,13 @@ class PermohonanWasiatController extends Controller
     /**
      * Show the preview of all data (Tahap 4: Pratinjau Semua Data).
      */
-    public function tahap4(Permohonan $permohonan): View
+    public function tahap4(Permohonan $permohonan): View|RedirectResponse
     {
+        if (! auth()->user()->canAccessNotarisServices()) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Layanan Pembukaan Wasiat hanya dapat diakses oleh akun Notaris yang telah terverifikasi.');
+        }
+
         abort_unless($permohonan->user_id === auth()->id(), 403);
 
         $permohonan->load(['pewasiat.pasangans', 'pewasiat.ahliWaris', 'dokumens', 'voucher', 'user']);
@@ -286,6 +321,11 @@ class PermohonanWasiatController extends Controller
      */
     public function storeTahap4(Request $request, Permohonan $permohonan): RedirectResponse
     {
+        if (! auth()->user()->canAccessNotarisServices()) {
+            return redirect()->route('dashboard')
+                ->with('error', 'Layanan Pembukaan Wasiat hanya dapat diakses oleh akun Notaris yang telah terverifikasi.');
+        }
+
         abort_unless($permohonan->user_id === auth()->id(), 403);
 
         $request->validate([

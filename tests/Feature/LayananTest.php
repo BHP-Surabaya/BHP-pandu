@@ -33,9 +33,9 @@ class LayananTest extends TestCase
         $response->assertSee('Loket PTSP BHP Surabaya:');
     }
 
-    public function test_dashboard_contains_link_to_layanan_pengembangan(): void
+    public function test_dashboard_contains_link_to_layanan_pengembangan_for_notaris(): void
     {
-        $user = User::factory()->create([
+        $user = User::factory()->notaris()->create([
             'role' => 'pemohon',
         ]);
 
@@ -45,5 +45,65 @@ class LayananTest extends TestCase
         $response->assertSee(route('layanan.pengembangan', 'perwalian'));
         $response->assertSee(route('layanan.pengembangan', 'pendaftaran-wasiat'));
         $response->assertSee(route('layanan.pengembangan', 'skhw'));
+    }
+
+    public function test_notaris_can_access_pendaftaran_wasiat_page(): void
+    {
+        $user = User::factory()->notaris()->create();
+
+        $response = $this->actingAs($user)->get(route('layanan.pengembangan', 'pendaftaran-wasiat'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Pendaftaran Wasiat');
+    }
+
+    public function test_perorangan_cannot_access_pendaftaran_wasiat_page(): void
+    {
+        $user = User::factory()->perorangan()->create();
+
+        $response = $this->actingAs($user)->get(route('layanan.pengembangan', 'pendaftaran-wasiat'));
+
+        $response->assertRedirect(route('dashboard'));
+        $response->assertSessionHas('error');
+    }
+
+    public function test_pengacara_cannot_access_pendaftaran_wasiat_page(): void
+    {
+        $user = User::factory()->pengacara()->create();
+
+        $response = $this->actingAs($user)->get(route('layanan.pengembangan', 'pendaftaran-wasiat'));
+
+        $response->assertRedirect(route('dashboard'));
+        $response->assertSessionHas('error');
+    }
+
+    public function test_pengacara_can_access_kepailitan_page(): void
+    {
+        $user = User::factory()->pengacara()->create();
+
+        $response = $this->actingAs($user)->get(route('layanan.pengembangan', 'kepailitan'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Kepailitan');
+    }
+
+    public function test_perorangan_cannot_access_kepailitan_page(): void
+    {
+        $user = User::factory()->perorangan()->create();
+
+        $response = $this->actingAs($user)->get(route('layanan.pengembangan', 'kepailitan'));
+
+        $response->assertRedirect(route('dashboard'));
+        $response->assertSessionHas('error');
+    }
+
+    public function test_notaris_cannot_access_kepailitan_page(): void
+    {
+        $user = User::factory()->notaris()->create();
+
+        $response = $this->actingAs($user)->get(route('layanan.pengembangan', 'kepailitan'));
+
+        $response->assertRedirect(route('dashboard'));
+        $response->assertSessionHas('error');
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class UserVerificationController extends Controller
@@ -147,5 +148,34 @@ class UserVerificationController extends Controller
         $user->update($updatePayload);
 
         return back()->with('status', "Status akun {$user->name} berhasil dipindahkan dari {$oldStatusLabel} menjadi {$user->status_akun_label}.");
+    }
+
+    /**
+     * Delete the specified user account and associated documents.
+     */
+    public function destroy(User $user): RedirectResponse
+    {
+        if ($user->isMasterAdmin() || $user->id === auth()->id()) {
+            return back()->with('error', 'Akun Master Admin tidak dapat dihapus.');
+        }
+
+        $userName = $user->name;
+
+        // Clean up stored files if any
+        $filesToDelete = array_filter([
+            $user->sk_notaris,
+            $user->sk_ppat,
+            $user->berita_acara_sumpah,
+            $user->id_card_pengacara,
+        ]);
+
+        foreach ($filesToDelete as $filePath) {
+            Storage::disk('public')->delete($filePath);
+        }
+
+        $user->delete();
+
+        return redirect()->route('admin.verifikasi.index')
+            ->with('status', "Akun {$userName} berhasil dihapus dari sistem.");
     }
 }
