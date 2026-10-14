@@ -15,6 +15,34 @@
              }
          }">
         
+        @if (session('error'))
+            <div class="p-4 rounded-2xl bg-red-50 border border-red-200 text-red-900 text-sm flex items-start gap-3 shadow-sm" x-data="{ show: true }" x-show="show">
+                <svg class="w-5 h-5 text-red-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div class="flex-1 font-medium leading-relaxed">
+                    {{ session('error') }}
+                </div>
+                <button type="button" @click="show = false" class="text-red-700 hover:text-red-900 cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+        @endif
+
+        @if (session('status'))
+            <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm flex items-start gap-3 shadow-sm" x-data="{ show: true }" x-show="show">
+                <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div class="flex-1 font-medium leading-relaxed">
+                    {{ session('status') }}
+                </div>
+                <button type="button" @click="show = false" class="text-emerald-700 hover:text-emerald-900 cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+        @endif
+
         <!-- ================= HERO BANNER EKSEKUTIF ================= -->
         <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#071d40] via-[#0b2e66] to-[#0a234c] p-6 sm:p-9 text-white shadow-xl border border-blue-800/40">
             <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
@@ -130,19 +158,28 @@
                 </div>
             </div>
 
+        <!-- Tab Filter Kategori & Search Bar -->
+        @php
+            $canNotaris = Auth::user()?->canAccessNotarisServices() ?? false;
+            $canPengacara = Auth::user()?->canAccessPengacaraServices() ?? false;
+            $wasiatCount = 1 + ($canNotaris ? 2 : 0);
+            $hartaCount = 3 + ($canPengacara ? 1 : 0);
+            $totalServices = 2 + $wasiatCount + $hartaCount;
+        @endphp
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <!-- Filter Tabs -->
             <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs font-semibold no-scrollbar">
                 <button type="button" 
                         @click="activeTab = 'all'" 
                         :class="activeTab === 'all' ? 'bg-[#0b2e66] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
                         class="px-3.5 py-1.5 rounded-lg transition shrink-0">
-                    Semua Layanan (9)
+                    Semua Layanan ({{ $totalServices }})
                 </button>
                 <button type="button" 
                         @click="activeTab = 'wasiat'" 
                         :class="activeTab === 'wasiat' ? 'bg-[#0b2e66] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
                         class="px-3.5 py-1.5 rounded-lg transition shrink-0">
-                    Wasiat &amp; Waris (3)
+                    Wasiat &amp; Waris ({{ $wasiatCount }})
                 </button>
                 <button type="button" 
                         @click="activeTab = 'perlindungan'" 
@@ -154,15 +191,16 @@
                         @click="activeTab = 'harta'" 
                         :class="activeTab === 'harta' ? 'bg-[#0b2e66] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
                         class="px-3.5 py-1.5 rounded-lg transition shrink-0">
-                    Pengurusan Harta &amp; Kepailitan (4)
+                    Pengurusan Harta &amp; Kepailitan ({{ $hartaCount }})
                 </button>
             </div>
         </div>
 
-        <!-- ================= KATALOG 9 LAYANAN (GRID 3x3 SIMETRIS SEMPURNA) ================= -->
+        <!-- ================= KATALOG LAYANAN ================= -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            <!-- 1. Pembukaan Wasiat (LAYANAN UTAMA - AKTIF ONLINE) -->
+            {{-- 1. Pembukaan Wasiat (LAYANAN KHUSUS NOTARIS) --}}
+            @if ($canNotaris)
             <div x-show="matches('Pembukaan Wasiat akta wasiat tertutup terbuka ahli waris notaris', 'wasiat')" 
                  x-transition
                  class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
@@ -205,8 +243,10 @@
                     </a>
                 </div>
             </div>
+            @endif
 
-            <!-- 2. Pendaftaran Wasiat -->
+            {{-- 2. Pendaftaran Wasiat (LAYANAN KHUSUS NOTARIS) --}}
+            @if ($canNotaris)
             <div x-show="matches('Pendaftaran Wasiat register akta notaris lapor', 'wasiat')" 
                  x-transition
                  class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
@@ -245,6 +285,7 @@
                     </a>
                 </div>
             </div>
+            @endif
 
             <!-- 3. Perwalian -->
             <div x-show="matches('Perwalian anak belum dewasa harta waris wali', 'perlindungan')" 
@@ -479,7 +520,8 @@
                 </div>
             </div>
 
-            <!-- 9. Layanan Kepailitan -->
+            {{-- 9. Layanan Kepailitan (LAYANAN KHUSUS PENGACARA) --}}
+            @if ($canPengacara)
             <div x-show="matches('Layanan Kepailitan kurator negara pengadilan niaga pailit insolvensi', 'harta')" 
                  x-transition
                  class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
@@ -518,6 +560,7 @@
                     </a>
                 </div>
             </div>
+            @endif
 
         </div>
 

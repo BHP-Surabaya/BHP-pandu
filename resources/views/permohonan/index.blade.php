@@ -15,14 +15,25 @@
                 </p>
             </div>
 
-            <a href="{{ route('permohonan.create') }}" 
-               class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#0066d6] hover:bg-[#0055b8] text-white font-semibold text-xs sm:text-sm rounded-xl shadow-sm transition">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                <span>Ajukan Permohonan Baru</span>
-            </a>
+            @if (Auth::user()?->canAccessNotarisServices())
+                <a href="{{ route('permohonan.create') }}" 
+                   class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#0066d6] hover:bg-[#0055b8] text-white font-semibold text-xs sm:text-sm rounded-xl shadow-sm transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <span>Ajukan Permohonan Baru</span>
+                </a>
+            @endif
         </div>
+
+        @if (session('error'))
+            <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-sm font-medium text-red-800 flex items-center gap-3">
+                <svg class="w-5 h-5 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <span>{{ session('error') }}</span>
+            </div>
+        @endif
 
         @if (session('status'))
             <div class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-sm font-medium text-emerald-800 flex items-center gap-3">
@@ -44,15 +55,21 @@
                     </div>
                     <h3 class="text-base font-bold text-gray-800">Belum ada permohonan</h3>
                     <p class="text-xs text-gray-500 max-w-sm mx-auto mt-1 mb-6">
-                        Anda belum pernah membuat pengajuan permohonan pembukaan wasiat tertutup. Klik tombol di bawah untuk mulai.
+                        @if (Auth::user()?->canAccessNotarisServices())
+                            Anda belum pernah membuat pengajuan permohonan pembukaan wasiat tertutup. Klik tombol di bawah untuk mulai.
+                        @else
+                            Anda belum memiliki riwayat pengajuan permohonan di sistem.
+                        @endif
                     </p>
-                    <a href="{{ route('permohonan.create') }}" 
-                       class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0066d6] hover:bg-[#0055b8] text-white font-bold text-xs rounded-xl shadow-sm transition">
-                        <svg class="w-4 h-4 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                        </svg>
-                        <span>Mulai Pengajuan Baru</span>
-                    </a>
+                    @if (Auth::user()?->canAccessNotarisServices())
+                        <a href="{{ route('permohonan.create') }}" 
+                           class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0066d6] hover:bg-[#0055b8] text-white font-bold text-xs rounded-xl shadow-sm transition">
+                            <svg class="w-4 h-4 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            <span>Mulai Pengajuan Baru</span>
+                        </a>
+                    @endif
                 </div>
             @else
                 <div class="overflow-x-auto">

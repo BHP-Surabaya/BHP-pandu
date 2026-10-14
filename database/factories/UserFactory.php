@@ -42,4 +42,43 @@ class UserFactory extends Factory
             'email_verified_at' => null,
         ]);
     }
+
+    /**
+     * Indicate that the user is a verified Notaris.
+     */
+    public function notaris(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status_akun' => 'notaris',
+            'jenis_akun' => 'notaris',
+            'pekerjaan' => 'Notaris',
+            'status_verifikasi' => 'terverifikasi',
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a verified Pengacara.
+     */
+    public function pengacara(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status_akun' => 'pengacara',
+            'jenis_akun' => 'pengacara',
+            'pekerjaan' => 'Pengacara',
+            'status_verifikasi' => 'terverifikasi',
+        ]);
+    }
+
+    /**
+     * Indicate that the user is an Akun Perorangan.
+     */
+    public function perorangan(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status_akun' => 'perorangan',
+            'jenis_akun' => 'perorangan',
+            'pekerjaan' => 'Perorangan',
+            'status_verifikasi' => 'terverifikasi',
+        ]);
+    }
 }

@@ -5,14 +5,21 @@
 
     <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6" x-data="{
         switchModalOpen: false,
+        deleteModalOpen: false,
         selectedUser: null,
         targetStatus: 'perorangan',
         actionUrl: '',
+        deleteActionUrl: '',
         openSwitchModal(user) {
             this.selectedUser = user;
             this.targetStatus = user.status_akun || 'perorangan';
             this.actionUrl = '/admin/verifikasi/' + user.id + '/ubah-status';
             this.switchModalOpen = true;
+        },
+        openDeleteModal(user) {
+            this.selectedUser = user;
+            this.deleteActionUrl = '/admin/verifikasi/' + user.id;
+            this.deleteModalOpen = true;
         }
     }">
         <!-- Header Page -->
@@ -35,6 +42,20 @@
                     {{ session('status') }}
                 </div>
                 <button type="button" @click="show = false" class="text-emerald-700 hover:text-emerald-900">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-900 text-sm flex items-start gap-3 shadow-sm" x-data="{ show: true }" x-show="show">
+                <svg class="w-5 h-5 text-red-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div class="flex-1 font-medium leading-relaxed">
+                    {{ session('error') }}
+                </div>
+                <button type="button" @click="show = false" class="text-red-700 hover:text-red-900">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
             </div>
@@ -230,7 +251,7 @@
                                 <!-- Pengajuan Awal -->
                                 <td class="py-4 px-4 text-xs font-medium text-gray-700">
                                     <span class="capitalize">{{ $userItem->jenis_akun ?: 'Perorangan' }}</span>
-                                    @if ($userItem->pekerjaan && $userItem->pekerjaan !== $userItem->jenis_akun)
+                                    @if ($userItem->pekerjaan && !in_array(strtolower($userItem->pekerjaan), [strtolower($userItem->jenis_akun), 'perorangan', 'notaris', 'pengacara']))
                                         <span class="block text-[11px] text-gray-400 font-normal">({{ $userItem->pekerjaan }})</span>
                                     @endif
                                 </td>
@@ -238,14 +259,14 @@
                                 <!-- Dokumen Berkas -->
                                 <td class="py-4 px-4">
                                     <div class="flex flex-wrap gap-1.5 text-[11px]">
-                                        @if ($userItem->isNotaris() || $userItem->status_akun === 'notaris')
+                                        @if ($userItem->isNotaris())
                                             <span class="px-2 py-0.5 rounded-md {{ $userItem->sk_notaris ? 'bg-blue-50 text-blue-700 font-semibold border border-blue-200' : 'bg-gray-100 text-gray-400' }}">
                                                 {{ $userItem->sk_notaris ? '✓ SK Notaris' : '✗ SK Notaris' }}
                                             </span>
                                             <span class="px-2 py-0.5 rounded-md {{ $userItem->sk_ppat ? 'bg-blue-50 text-blue-700 font-semibold border border-blue-200' : 'bg-gray-100 text-gray-400' }}">
                                                 {{ $userItem->sk_ppat ? '✓ SK PPAT' : '✗ SK PPAT' }}
                                             </span>
-                                        @elseif ($userItem->isPengacara() || $userItem->status_akun === 'pengacara')
+                                        @elseif ($userItem->isPengacara())
                                             <span class="px-2 py-0.5 rounded-md {{ $userItem->berita_acara_sumpah ? 'bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200' : 'bg-gray-100 text-gray-400' }}">
                                                 {{ $userItem->berita_acara_sumpah ? '✓ BA Sumpah PT' : '✗ BA Sumpah' }}
                                             </span>
@@ -301,6 +322,20 @@
                                             <span>Tinjau</span>
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                                         </a>
+
+                                        <!-- Tombol Hapus Akun -->
+                                        <button type="button" 
+                                                @click="openDeleteModal({{ json_encode([
+                                                    'id' => $userItem->id,
+                                                    'name' => $userItem->name,
+                                                    'email' => $userItem->email,
+                                                    'status_akun_label' => $userItem->status_akun_label,
+                                                ]) }})"
+                                                class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-xs transition cursor-pointer"
+                                                title="Hapus Akun Pengguna">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                            <span>Hapus</span>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -406,6 +441,59 @@
                         <button type="submit" 
                                 class="flex-1 py-2.5 px-4 rounded-xl bg-[#0c2a55] hover:bg-[#103873] text-white text-xs font-bold shadow-md transition">
                             Simpan Perubahan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ================= MODAL HAPUS AKUN ================= -->
+        <div x-show="deleteModalOpen" 
+             x-cloak
+             class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-gray-100 space-y-4" 
+                 @click.outside="deleteModalOpen = false">
+                
+                <div class="flex items-center gap-3 pb-3 border-b border-gray-100">
+                    <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </div>
+                    <div class="min-w-0">
+                        <h3 class="text-base font-bold text-gray-900">Hapus Akun Pengguna</h3>
+                        <p class="text-xs text-red-600 font-medium">Tindakan ini permanen dan tidak dapat dibatalkan</p>
+                    </div>
+                </div>
+
+                <div class="bg-red-50/70 border border-red-200/80 rounded-xl p-3.5 space-y-1.5">
+                    <p class="text-xs text-gray-700">
+                        Apakah Anda yakin ingin menghapus akun pengguna berikut?
+                    </p>
+                    <p class="text-xs font-bold text-gray-900 flex items-center gap-1.5">
+                        <span class="inline-block w-2 h-2 rounded-full bg-red-500"></span>
+                        <span x-text="selectedUser ? selectedUser.name : ''"></span>
+                    </p>
+                    <p class="text-[11px] text-gray-500 font-mono" x-text="selectedUser ? selectedUser.email : ''"></p>
+                    <p class="text-[11px] text-gray-500 mt-2 pt-2 border-t border-red-100">
+                        Seluruh data permohonan, riwayat, dan berkas yang terhubung dengan akun ini akan ikut terhapus dari sistem.
+                    </p>
+                </div>
+
+                <form method="POST" :action="deleteActionUrl" class="space-y-4">
+                    @csrf
+                    @method('DELETE')
+
+                    <div class="flex items-center gap-3 pt-2">
+                        <button type="button" 
+                                @click="deleteModalOpen = false"
+                                class="flex-1 py-2.5 px-4 rounded-xl border border-gray-200 text-gray-700 text-xs font-semibold hover:bg-gray-50 transition cursor-pointer">
+                            Batal
+                        </button>
+                        <button type="submit" 
+                                class="flex-1 py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-md shadow-red-500/20 transition flex items-center justify-center gap-1.5 cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            <span>Ya, Hapus Akun</span>
                         </button>
                     </div>
                 </form>

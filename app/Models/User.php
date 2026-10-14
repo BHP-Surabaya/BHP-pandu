@@ -66,7 +66,7 @@ class User extends Authenticatable
      */
     public function isNotaris(): bool
     {
-        return $this->jenis_akun === 'notaris' || $this->pekerjaan === 'Notaris';
+        return $this->status_akun === 'notaris' || $this->jenis_akun === 'notaris';
     }
 
     /**
@@ -74,7 +74,7 @@ class User extends Authenticatable
      */
     public function isPengacara(): bool
     {
-        return $this->jenis_akun === 'pengacara' || in_array($this->pekerjaan, ['Pengacara', 'Advokat']);
+        return $this->status_akun === 'pengacara' || $this->jenis_akun === 'pengacara';
     }
 
     /**
@@ -99,6 +99,22 @@ class User extends Authenticatable
     public function isPerorangan(): bool
     {
         return $this->status_akun === 'perorangan' || empty($this->status_akun);
+    }
+
+    /**
+     * Check if the user is authorized to access Notaris services (Pembukaan Wasiat, Pendaftaran Wasiat).
+     */
+    public function canAccessNotarisServices(): bool
+    {
+        return $this->isMasterAdmin() || $this->isPetugas() || $this->status_akun === 'notaris';
+    }
+
+    /**
+     * Check if the user is authorized to access Pengacara services (Layanan Kepailitan).
+     */
+    public function canAccessPengacaraServices(): bool
+    {
+        return $this->isMasterAdmin() || $this->isPetugas() || $this->status_akun === 'pengacara';
     }
 
     /**

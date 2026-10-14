@@ -45,6 +45,7 @@ Route::middleware(['auth', 'role:master_admin'])->prefix('admin')->name('admin.'
     Route::post('/verifikasi/{user}/setujui', [UserVerificationController::class, 'approve'])->name('verifikasi.approve');
     Route::post('/verifikasi/{user}/tolak', [UserVerificationController::class, 'reject'])->name('verifikasi.reject');
     Route::post('/verifikasi/{user}/ubah-status', [UserVerificationController::class, 'updateStatus'])->name('verifikasi.update-status');
+    Route::delete('/verifikasi/{user}', [UserVerificationController::class, 'destroy'])->name('verifikasi.destroy');
 });
 
 Route::middleware(['auth', 'role:petugas'])->group(function () {

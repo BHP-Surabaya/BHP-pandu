@@ -24,7 +24,7 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_authenticated_user_can_view_permohonan_create_page(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notaris()->create();
 
         $response = $this->actingAs($user)->get('/permohonan/buat');
 
@@ -38,9 +38,29 @@ class PermohonanWasiatTest extends TestCase
         $response->assertSee('Informasi Anak Pewasiat');
     }
 
+    public function test_perorangan_user_cannot_access_permohonan_create(): void
+    {
+        $user = User::factory()->perorangan()->create();
+
+        $response = $this->actingAs($user)->get('/permohonan/buat');
+
+        $response->assertRedirect('/dashboard');
+        $response->assertSessionHas('error');
+    }
+
+    public function test_pengacara_user_cannot_access_permohonan_create(): void
+    {
+        $user = User::factory()->pengacara()->create();
+
+        $response = $this->actingAs($user)->get('/permohonan/buat');
+
+        $response->assertRedirect('/dashboard');
+        $response->assertSessionHas('error');
+    }
+
     public function test_user_can_submit_permohonan_tahap_1_single_no_children(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notaris()->create();
 
         $payload = [
             'nama_lengkap' => 'Almarhum Ahmad Subarjo',
@@ -84,7 +104,7 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_user_can_submit_permohonan_tahap_1_with_spouse_and_children(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notaris()->create();
 
         $payload = [
             'nama_lengkap' => 'Bambang Hartono',
@@ -207,7 +227,7 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_user_can_view_tahap_2_form(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notaris()->create();
         $permohonan = Permohonan::create([
             'user_id' => $user->id,
             'nomor_permohonan' => 'WST-20260907-001',
@@ -229,8 +249,8 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_user_cannot_view_other_users_tahap_2(): void
     {
-        $owner = User::factory()->create();
-        $otherUser = User::factory()->create();
+        $owner = User::factory()->notaris()->create();
+        $otherUser = User::factory()->notaris()->create();
         $permohonan = Permohonan::create([
             'user_id' => $owner->id,
             'nomor_permohonan' => 'WST-20260907-002',
@@ -246,7 +266,7 @@ class PermohonanWasiatTest extends TestCase
     {
         Storage::fake('public');
 
-        $user = User::factory()->create();
+        $user = User::factory()->notaris()->create();
         $permohonan = Permohonan::create([
             'user_id' => $user->id,
             'nomor_permohonan' => 'WST-20260907-003',
@@ -280,7 +300,7 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_user_can_view_tahap_3_guide(): void
     {
-        $user = User::factory()->create([
+        $user = User::factory()->notaris()->create([
             'name' => 'Bambang Hartono',
             'nik' => '3578011234560001',
             'phone' => '08123456789',
@@ -303,8 +323,8 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_user_cannot_view_other_users_tahap_3(): void
     {
-        $owner = User::factory()->create();
-        $otherUser = User::factory()->create();
+        $owner = User::factory()->notaris()->create();
+        $otherUser = User::factory()->notaris()->create();
         $permohonan = Permohonan::create([
             'user_id' => $owner->id,
             'nomor_permohonan' => 'WST-20260907-005',
@@ -318,7 +338,7 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_user_can_finish_tahap_3_and_proceed_to_tahap_4(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notaris()->create();
         $permohonan = Permohonan::create([
             'user_id' => $user->id,
             'nomor_permohonan' => 'WST-20260907-006',
@@ -337,7 +357,7 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_user_can_submit_nomor_voucher_in_tahap_3(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notaris()->create();
         $permohonan = Permohonan::create([
             'user_id' => $user->id,
             'nomor_permohonan' => 'WST-20260907-007',
@@ -359,7 +379,7 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_tahap_3_validates_duplicate_nomor_voucher(): void
     {
-        $user1 = User::factory()->create();
+        $user1 = User::factory()->notaris()->create();
         $permohonan1 = Permohonan::create([
             'user_id' => $user1->id,
             'nomor_permohonan' => 'WST-20260907-007A',
@@ -370,7 +390,7 @@ class PermohonanWasiatTest extends TestCase
             'status_pembayaran' => 'belum_bayar',
         ]);
 
-        $user2 = User::factory()->create();
+        $user2 = User::factory()->notaris()->create();
         $permohonan2 = Permohonan::create([
             'user_id' => $user2->id,
             'nomor_permohonan' => 'WST-20260907-007B',
@@ -386,7 +406,7 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_user_can_view_tahap_4_preview_page(): void
     {
-        $user = User::factory()->create([
+        $user = User::factory()->notaris()->create([
             'name' => 'Bambang Hartono',
             'nik' => '3578011234560001',
         ]);
@@ -433,8 +453,8 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_user_cannot_view_other_users_tahap_4(): void
     {
-        $owner = User::factory()->create();
-        $otherUser = User::factory()->create();
+        $owner = User::factory()->notaris()->create();
+        $otherUser = User::factory()->notaris()->create();
         $permohonan = Permohonan::create([
             'user_id' => $owner->id,
             'nomor_permohonan' => 'WST-20260907-009',
@@ -448,7 +468,7 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_user_must_accept_confirmation_to_submit_tahap_4(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notaris()->create();
         $permohonan = Permohonan::create([
             'user_id' => $user->id,
             'nomor_permohonan' => 'WST-20260907-010',
@@ -466,7 +486,7 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_user_can_submit_tahap_4_and_status_becomes_menunggu_verifikasi(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->notaris()->create();
         $permohonan = Permohonan::create([
             'user_id' => $user->id,
             'nomor_permohonan' => 'WST-20260907-011',
