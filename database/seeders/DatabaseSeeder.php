@@ -17,23 +17,48 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Akun Master Admin BHP
+        User::firstOrCreate(
+            ['email' => 'admin@pandubhp.go.id'],
+            [
+                'name' => 'Master Admin BHP',
+                'password' => bcrypt('password'),
+                'role' => 'master_admin',
+                'pekerjaan' => 'Master Admin',
+                'jenis_akun' => 'master_admin',
+                'status_akun' => 'master_admin',
+                'status_verifikasi' => 'terverifikasi',
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Akun Petugas BHP
-        User::factory()->create([
-            'name' => 'Petugas BHP',
-            'email' => 'petugas@bhp.test',
-            'role' => 'petugas',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'petugas@bhp.test'],
+            [
+                'name' => 'Petugas BHP',
+                'password' => bcrypt('password'),
+                'role' => 'petugas',
+                'pekerjaan' => 'Petugas BHP',
+                'status_akun' => 'petugas',
+                'status_verifikasi' => 'terverifikasi',
+                'email_verified_at' => now(),
+            ]
+        );
 
         // Contoh akun Pemohon
-        User::factory()->create([
-            'name' => 'Contoh Pemohon',
-            'email' => 'pemohon@bhp.test',
-            'role' => 'pemohon',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'pemohon@bhp.test'],
+            [
+                'name' => 'Contoh Pemohon',
+                'password' => bcrypt('password'),
+                'role' => 'pemohon',
+                'pekerjaan' => 'Wiraswasta',
+                'jenis_akun' => 'perorangan',
+                'status_akun' => 'perorangan',
+                'status_verifikasi' => 'terverifikasi',
+                'email_verified_at' => now(),
+            ]
+        );
     }
 }

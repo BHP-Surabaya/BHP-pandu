@@ -8,8 +8,8 @@
         <!-- Subtle Dark Overlay for contrast and readability -->
         <div class="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-900/50 to-slate-950/65"></div>
 
-        <!-- Registration Container Modal Card (Fixed consistent height) -->
-        <div class="relative z-10 w-full max-w-5xl bg-white rounded-2xl sm:rounded-[28px] shadow-[0_25px_70px_rgba(0,0,0,0.35)] border border-white/40 overflow-hidden flex flex-col lg:flex-row h-[94vh] lg:h-[780px] max-h-[820px] min-h-[580px]">
+        <!-- Registration Container Modal Card (Consistent responsive height with internal scroll) -->
+        <div class="relative z-10 w-full max-w-5xl bg-white rounded-2xl sm:rounded-[28px] shadow-[0_25px_70px_rgba(0,0,0,0.35)] border border-white/40 overflow-hidden flex flex-col lg:flex-row h-[94vh] lg:h-[88vh] max-h-[800px] min-h-[540px]">
             
             <!-- Left Side: Royal Blue Hero Banner (Full Height) -->
             <div class="w-full lg:w-[340px] bg-gradient-to-b from-[#0c2a55] via-[#103873] to-[#0a1e3d] flex-shrink-0 flex flex-col justify-between items-center p-6 sm:p-8 text-white relative overflow-hidden h-auto lg:h-full">
@@ -85,7 +85,7 @@
             </div>
 
             <!-- Right Side: Registration Form with Fixed Header & Scrollable Body -->
-            <div class="flex-1 flex flex-col h-full bg-white overflow-hidden" x-data="{ 
+            <div class="flex-1 min-h-0 flex flex-col h-full bg-white overflow-hidden" x-data="{ 
                 showPassword: false, 
                 showPasswordConfirm: false,
                 selectedPekerjaan: '{{ old('pekerjaan_select', (old('pekerjaan') === 'Notaris' ? 'Notaris' : (in_array(old('pekerjaan'), ['Pengacara', 'Advokat']) ? 'Pengacara' : (old('pekerjaan') === 'Perorangan' ? 'Perorangan' : '')))) }}',
@@ -127,7 +127,7 @@
                 </div>
 
                 <!-- Scrollable Form Body with Custom Scrollbar -->
-                <div class="flex-1 overflow-y-auto px-6 py-6 sm:px-10 sm:py-8 custom-scrollbar">
+                <div class="flex-1 min-h-0 overflow-y-auto px-6 py-6 sm:px-10 sm:py-8 custom-scrollbar">
                     <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="space-y-6"
                       @submit="
                           if (selectedPekerjaan === 'Notaris') {
