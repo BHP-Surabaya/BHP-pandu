@@ -147,8 +147,8 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         $statusMsg = ($isNotaris || $isPengacara)
-            ? 'Registrasi berhasil! Akun Anda aktif sebagai Akun Perorangan. Pengajuan verifikasi profesi '.ucfirst($jenisAkun).' akan ditinjau oleh Master Admin.'
-            : 'Registrasi berhasil! Silakan masuk ke akun Anda.';
+            ? 'Registrasi berhasil! Tautan aktivasi akun telah dikirimkan ke email '.$user->email.'. Silakan aktifkan email Anda. Pengajuan verifikasi profesi '.ucfirst($jenisAkun).' akan ditinjau oleh Master Admin.'
+            : 'Registrasi berhasil! Tautan aktivasi akun telah dikirimkan ke email '.$user->email.'. Silakan periksa kotak masuk atau spam email Anda untuk mengaktifkan akun.';
 
         return redirect()->route('login')->with('status', $statusMsg);
     }

@@ -37,7 +37,7 @@ Route::get('/dashboard', function () {
     $permohonanSiapSidang = $userPermohonans->firstWhere('status', 'selesai');
 
     return view('dashboard', compact('userPermohonans', 'stats', 'permohonanPerluTindakan', 'permohonanSiapSidang'));
-})->middleware(['auth'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'role:master_admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/verifikasi', [UserVerificationController::class, 'index'])->name('verifikasi.index');
@@ -54,7 +54,7 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
     })->name('petugas.dashboard');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/permohonan', [PermohonanWasiatController::class, 'index'])->name('permohonan.index');
     Route::get('/permohonan/buat', [PermohonanWasiatController::class, 'create'])->name('permohonan.create');
     Route::post('/permohonan/buat', [PermohonanWasiatController::class, 'store'])->name('permohonan.store');
