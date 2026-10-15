@@ -19,7 +19,7 @@ class VerifyEmailController extends Controller
      */
     public function __invoke(Request $request): RedirectResponse
     {
-        $user = $request->user() ?? User::find($request->route('id'));
+        $user = User::find($request->route('id'));
 
         if (! $user) {
             throw new AuthorizationException('Pengguna tidak ditemukan.');
@@ -34,7 +34,7 @@ class VerifyEmailController extends Controller
         }
 
         if ($user->hasVerifiedEmail()) {
-            if (Auth::check()) {
+            if (Auth::check() && Auth::id() === $user->id) {
                 return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
             }
 
@@ -45,8 +45,14 @@ class VerifyEmailController extends Controller
             event(new Verified($user));
         }
 
-        if (Auth::check()) {
+        if (Auth::check() && Auth::id() === $user->id) {
             return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+        }
+
+        if (Auth::check() && Auth::id() !== $user->id) {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         }
 
         return redirect()->route('login')->with('status', 'Aktivasi akun berhasil! Email Anda telah terverifikasi. Silakan masuk ke akun Anda.');

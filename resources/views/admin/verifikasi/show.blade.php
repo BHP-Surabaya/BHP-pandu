@@ -53,6 +53,23 @@
             </div>
         </div>
 
+        @if (!$user->hasVerifiedEmail())
+            <!-- Warning Banner: Email Belum Diaktivasi -->
+            <div class="p-4 sm:p-5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 flex items-start gap-3.5 shadow-sm">
+                <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+                <div class="text-xs sm:text-sm">
+                    <h4 class="font-bold text-amber-900">Perhatian: Pengguna Belum Mengaktivasi Email</h4>
+                    <p class="text-amber-800 mt-1 leading-relaxed">
+                        Tautan aktivasi telah dikirimkan ke <strong>{{ $user->email }}</strong>, namun pengguna belum melakukan aktivasi akun. Seluruh akses fitur aplikasi pengguna masih terkunci oleh sistem sampai tautan email berhasil diklik.
+                    </p>
+                </div>
+            </div>
+        @endif
+
         <!-- User Identity Header Banner -->
         <div class="bg-gradient-to-r from-[#0c2a55] via-[#103873] to-[#0a1e3d] rounded-2xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="flex items-center gap-4 relative z-10">
@@ -140,7 +157,20 @@
 
                         <div>
                             <p class="text-gray-400 font-medium">Alamat Email</p>
-                            <p class="font-bold text-gray-800 mt-0.5">{{ $user->email }}</p>
+                            <div class="flex items-center gap-2 mt-0.5 flex-wrap">
+                                <p class="font-bold text-gray-800">{{ $user->email }}</p>
+                                @if ($user->hasVerifiedEmail())
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                        <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                        Terverifikasi ({{ $user->email_verified_at->format('d/m/Y H:i') }})
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-300">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                        Belum Aktivasi Email
+                                    </span>
+                                @endif
+                            </div>
                         </div>
 
                         <div>
