@@ -32,10 +32,26 @@ class ProfileUpdateRequest extends FormRequest
             'alamat_kantor' => ['nullable', 'string', 'max:1000'],
             'alamat_ktp' => ['nullable', 'string'],
             'alamat_domisili' => ['nullable', 'string'],
+            'foto_profil' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
+            'hapus_foto_profil' => ['nullable', 'boolean'],
             'sk_notaris' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:25600'],
             'sk_ppat' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:25600'],
             'berita_acara_sumpah' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:25600'],
             'id_card_pengacara' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:25600'],
+        ];
+    }
+
+    /**
+     * Get custom error messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'foto_profil.image' => 'File foto profil harus berupa gambar.',
+            'foto_profil.mimes' => 'Format foto profil harus JPG, JPEG, PNG, atau WEBP.',
+            'foto_profil.max' => 'Ukuran foto profil maksimal 5MB.',
         ];
     }
 }

@@ -215,9 +215,13 @@
                                 <!-- User Info -->
                                 <td class="py-4 px-4 sm:px-6">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full bg-blue-100 text-[#0066d6] font-bold text-xs flex items-center justify-center shrink-0 shadow-inner">
-                                            {{ $userItem->initials }}
-                                        </div>
+                                        @if ($userItem->foto_profil_url)
+                                            <img src="{{ $userItem->foto_profil_url }}" alt="{{ $userItem->name }}" class="w-10 h-10 rounded-full object-cover shrink-0 shadow-inner" />
+                                        @else
+                                            <div class="w-10 h-10 rounded-full bg-blue-100 text-[#0066d6] font-bold text-xs flex items-center justify-center shrink-0 shadow-inner">
+                                                {{ $userItem->initials }}
+                                            </div>
+                                        @endif
                                         <div class="min-w-0">
                                             <p class="font-bold text-gray-900 truncate">{{ $userItem->name }}</p>
                                             <p class="text-xs text-gray-500 truncate">{{ $userItem->email }}</p>

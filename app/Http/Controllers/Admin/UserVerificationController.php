@@ -80,14 +80,22 @@ class UserVerificationController extends Controller
      */
     public function approve(Request $request, User $user): RedirectResponse
     {
-        $targetStatusAkun = in_array($user->jenis_akun, ['notaris', 'pengacara']) ? $user->jenis_akun : 'perorangan';
+        $targetStatusAkun = in_array($user->jenis_akun, ['notaris', 'pengacara'], true) ? $user->jenis_akun : 'perorangan';
 
-        $user->update([
+        $updatePayload = [
             'status_akun' => $targetStatusAkun,
             'status_verifikasi' => 'terverifikasi',
             'verified_at' => now(),
             'catatan_verifikasi' => $request->input('catatan_verifikasi', 'Pengajuan verifikasi disetujui oleh Master Admin.'),
-        ]);
+        ];
+
+        if ($targetStatusAkun === 'notaris' && ($user->pekerjaan === 'Perorangan' || blank($user->pekerjaan))) {
+            $updatePayload['pekerjaan'] = 'Notaris';
+        } elseif ($targetStatusAkun === 'pengacara' && ($user->pekerjaan === 'Perorangan' || blank($user->pekerjaan))) {
+            $updatePayload['pekerjaan'] = 'Pengacara';
+        }
+
+        $user->update($updatePayload);
 
         return redirect()->route('admin.verifikasi.index')
             ->with('status', "Akun {$user->name} berhasil disetujui dan ditingkatkan menjadi {$user->status_akun_label}.");
@@ -140,9 +148,15 @@ class UserVerificationController extends Controller
             $updatePayload['jenis_akun'] = $targetStatus;
             $updatePayload['status_verifikasi'] = 'terverifikasi';
             $updatePayload['verified_at'] = now();
+            if ($user->pekerjaan === 'Perorangan' || blank($user->pekerjaan)) {
+                $updatePayload['pekerjaan'] = ucfirst($targetStatus);
+            }
         } else {
             // Perorangan
             $updatePayload['status_verifikasi'] = 'terverifikasi';
+            if (in_array($user->pekerjaan, ['Notaris', 'Pengacara'], true)) {
+                $updatePayload['pekerjaan'] = 'Perorangan';
+            }
         }
 
         $user->update($updatePayload);
