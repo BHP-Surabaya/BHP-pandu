@@ -73,9 +73,13 @@
         <!-- User Identity Header Banner -->
         <div class="bg-gradient-to-r from-[#0c2a55] via-[#103873] to-[#0a1e3d] rounded-2xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="flex items-center gap-4 relative z-10">
-                <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-extrabold text-xl flex items-center justify-center shadow-inner shrink-0">
-                    {{ $user->initials }}
-                </div>
+                @if ($user->foto_profil_url)
+                    <img src="{{ $user->foto_profil_url }}" alt="{{ $user->name }}" class="w-16 h-16 rounded-2xl object-cover border border-white/20 shadow-inner shrink-0" />
+                @else
+                    <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-extrabold text-xl flex items-center justify-center shadow-inner shrink-0">
+                        {{ $user->initials }}
+                    </div>
+                @endif
                 <div>
                     <div class="flex items-center gap-2 flex-wrap">
                         <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white">{{ $user->name }}</h1>

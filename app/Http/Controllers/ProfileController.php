@@ -29,6 +29,18 @@ class ProfileController extends Controller
     {
         $validated = $request->validated();
 
+        if ($request->hasFile('foto_profil')) {
+            if ($request->user()->foto_profil) {
+                Storage::disk('public')->delete($request->user()->foto_profil);
+            }
+            $validated['foto_profil'] = $request->file('foto_profil')->store('foto_profil', 'public');
+        } elseif ($request->boolean('hapus_foto_profil')) {
+            if ($request->user()->foto_profil) {
+                Storage::disk('public')->delete($request->user()->foto_profil);
+            }
+            $validated['foto_profil'] = null;
+        }
+
         if ($request->hasFile('sk_notaris')) {
             if ($request->user()->sk_notaris) {
                 Storage::disk('public')->delete($request->user()->sk_notaris);

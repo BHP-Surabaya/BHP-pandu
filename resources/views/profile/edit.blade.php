@@ -6,14 +6,108 @@
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6"
          x-data="{ 
              activeTab: 'profile',
+             photoPreview: null,
+             hapusFoto: false,
              alamatKtp: @js(old('alamat_ktp', $user->alamat_ktp ?? '')),
              domisiliSamaKtp: @js($user->alamat_ktp && $user->alamat_ktp === $user->alamat_domisili ? true : false),
              alamatDomisili: @js(old('alamat_domisili', $user->alamat_domisili ?? '')),
-             pekerjaan: @js(old('pekerjaan', $user->pekerjaan ?? '')),
+             pekerjaan: @js(old('pekerjaan', ($user->status_akun === 'notaris' && (!$user->pekerjaan || strcasecmp($user->pekerjaan, 'perorangan') === 0)) ? 'Notaris' : (($user->status_akun === 'pengacara' && (!$user->pekerjaan || strcasecmp($user->pekerjaan, 'perorangan') === 0)) ? 'Pengacara' : ($user->pekerjaan ?? '')))),
              skFileName: '',
              skPpatFileName: '',
              baSumpahFileName: '',
              idCardFileName: '',
+             cropModalOpen: false,
+             cropperInstance: null,
+             rawPhotoSource: null,
+             handlePhotoUpload(event) {
+                 const file = event.target.files[0];
+                 if (!file) return;
+                 this.hapusFoto = false;
+                 const reader = new FileReader();
+                 reader.onload = (e) => {
+                     this.rawPhotoSource = e.target.result;
+                     this.cropModalOpen = true;
+                     this.$nextTick(() => {
+                         this.initCropper();
+                     });
+                 };
+                 reader.readAsDataURL(file);
+             },
+             initCropper() {
+                 const image = this.$refs.cropperImage;
+                 if (!image) return;
+                 if (this.cropperInstance) {
+                     this.cropperInstance.destroy();
+                 }
+                 if (window.Cropper) {
+                     this.cropperInstance = new window.Cropper(image, {
+                         aspectRatio: 1,
+                         viewMode: 1,
+                         dragMode: 'move',
+                         autoCropArea: 0.9,
+                         restore: false,
+                         guides: true,
+                         center: true,
+                         highlight: false,
+                         cropBoxMovable: true,
+                         cropBoxResizable: true,
+                         toggleDragModeOnDblclick: false,
+                         preview: '.crop-preview-circle, .crop-preview-square'
+                     });
+                 }
+             },
+             zoomIn() {
+                 if (this.cropperInstance) this.cropperInstance.zoom(0.1);
+             },
+             zoomOut() {
+                 if (this.cropperInstance) this.cropperInstance.zoom(-0.1);
+             },
+             rotateLeft() {
+                 if (this.cropperInstance) this.cropperInstance.rotate(-90);
+             },
+             rotateRight() {
+                 if (this.cropperInstance) this.cropperInstance.rotate(90);
+             },
+             resetCrop() {
+                 if (this.cropperInstance) this.cropperInstance.reset();
+             },
+             applyCrop() {
+                 if (!this.cropperInstance) return;
+                 const canvas = this.cropperInstance.getCroppedCanvas({
+                     width: 600,
+                     height: 600,
+                     imageSmoothingQuality: 'high'
+                 });
+                 if (!canvas) return;
+                 this.photoPreview = canvas.toDataURL('image/jpeg', 0.9);
+                 canvas.toBlob((blob) => {
+                     if (blob && this.$refs.photoInput) {
+                         const file = new File([blob], 'avatar_' + Date.now() + '.jpg', { type: 'image/jpeg' });
+                         const dataTransfer = new DataTransfer();
+                         dataTransfer.items.add(file);
+                         this.$refs.photoInput.files = dataTransfer.files;
+                     }
+                 }, 'image/jpeg', 0.9);
+                 this.closeCropModal();
+             },
+             closeCropModal() {
+                 this.cropModalOpen = false;
+                 if (this.cropperInstance) {
+                     this.cropperInstance.destroy();
+                     this.cropperInstance = null;
+                 }
+                 this.rawPhotoSource = null;
+                 if (!this.photoPreview && this.$refs.photoInput) {
+                     this.$refs.photoInput.value = '';
+                 }
+             },
+             removePhoto() {
+                 this.photoPreview = null;
+                 this.hapusFoto = true;
+                 if (this.$refs.photoInput) {
+                     this.$refs.photoInput.value = '';
+                 }
+             },
              syncDomisili() {
                  if (this.domisiliSamaKtp) {
                      this.alamatDomisili = this.alamatKtp;
@@ -69,9 +163,19 @@
         <!-- ================= KARTU IDENTITAS HEADER PROFIL ================= -->
         <div class="bg-white rounded-2xl border border-gray-200/80 shadow-xs p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
             <div class="flex flex-col sm:flex-row items-center sm:items-center gap-5 text-center sm:text-left w-full sm:w-auto">
-                <!-- Avatar Initials -->
-                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#0c2a55] text-amber-300 font-extrabold text-2xl sm:text-3xl flex items-center justify-center shadow-md ring-4 ring-blue-50 shrink-0">
-                    {{ $user->initials ?? 'US' }}
+                <!-- Avatar Initials / Photo with live preview -->
+                <div class="relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-md ring-4 ring-blue-50 bg-[#0c2a55] flex items-center justify-center">
+                    <template x-if="photoPreview">
+                        <img :src="photoPreview" alt="{{ $user->name }}" class="w-full h-full object-cover" />
+                    </template>
+                    <template x-if="!photoPreview && !hapusFoto && @js($user->foto_profil_url ? true : false)">
+                        <img src="{{ $user->foto_profil_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover" />
+                    </template>
+                    <template x-if="(!photoPreview && hapusFoto) || (!photoPreview && !hapusFoto && @js(!$user->foto_profil_url))">
+                        <span class="text-amber-300 font-extrabold text-2xl sm:text-3xl">
+                            {{ $user->initials ?? 'US' }}
+                        </span>
+                    </template>
                 </div>
 
                 <div class="space-y-1.5 min-w-0">
@@ -180,6 +284,95 @@
                 <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" class="p-6 sm:p-8 space-y-6">
                     @csrf
                     @method('patch')
+
+                    <!-- Foto Profil Upload Section -->
+                    <div class="p-5 bg-gradient-to-r from-blue-50/60 via-slate-50/60 to-indigo-50/40 border border-blue-100 rounded-2xl flex flex-col sm:flex-row items-center gap-5 shadow-xs">
+                        <!-- Preview Box -->
+                        <div class="relative group shrink-0">
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden shrink-0 shadow-sm ring-4 ring-white border border-gray-200 bg-[#0c2a55] flex items-center justify-center">
+                                <template x-if="photoPreview">
+                                    <img :src="photoPreview" alt="Preview Foto Profil" class="w-full h-full object-cover" />
+                                </template>
+                                <template x-if="!photoPreview && !hapusFoto && @js($user->foto_profil_url ? true : false)">
+                                    <img src="{{ $user->foto_profil_url }}" alt="{{ $user->name }}" class="w-full h-full object-cover" />
+                                </template>
+                                <template x-if="(!photoPreview && hapusFoto) || (!photoPreview && !hapusFoto && @js(!$user->foto_profil_url))">
+                                    <span class="text-amber-300 font-extrabold text-2xl sm:text-3xl">
+                                        {{ $user->initials ?? 'US' }}
+                                    </span>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Info & Action Buttons -->
+                        <div class="flex-1 space-y-2.5 text-center sm:text-left w-full">
+                            <div>
+                                <h4 class="text-xs sm:text-sm font-bold text-[#0c2a55] flex items-center justify-center sm:justify-start gap-2">
+                                    <span>Foto Profil Pengguna</span>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full font-medium bg-blue-100 text-[#0066d6]">Opsional</span>
+                                </h4>
+                                <p class="text-[11px] sm:text-xs text-gray-500 mt-0.5">
+                                    Unggah foto formal Anda untuk identitas akun. Dilengkapi fitur crop &amp; penyesuaian posisi foto.
+                                </p>
+                            </div>
+
+                            <!-- Hidden File Input -->
+                            <input type="file" 
+                                   id="foto_profil" 
+                                   name="foto_profil" 
+                                   accept="image/jpeg,image/png,image/jpg,image/webp" 
+                                   class="hidden" 
+                                   x-ref="photoInput"
+                                   @change="handlePhotoUpload($event)" />
+                            <input type="hidden" name="hapus_foto_profil" :value="hapusFoto ? '1' : '0'" />
+
+                            <!-- Buttons -->
+                            <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
+                                <button type="button" 
+                                        @click="$refs.photoInput.click()" 
+                                        class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-gray-50 border border-gray-300 hover:border-gray-400 text-gray-700 text-xs font-semibold rounded-xl shadow-xs transition cursor-pointer">
+                                    <svg class="w-4 h-4 text-[#0066d6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    <span x-text="photoPreview || (@js($user->foto_profil_url ? true : false) && !hapusFoto) ? 'Ganti Foto' : 'Pilih Foto'">Pilih Foto</span>
+                                </button>
+
+                                <button type="button" 
+                                        x-show="rawPhotoSource && photoPreview"
+                                        @click="cropModalOpen = true; $nextTick(() => { initCropper(); })" 
+                                        class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-[#0066d6] text-xs font-semibold rounded-xl shadow-xs transition cursor-pointer">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <span>Sesuaikan / Crop Ulang</span>
+                                </button>
+
+                                <button type="button" 
+                                        x-show="photoPreview || (@js($user->foto_profil_url ? true : false) && !hapusFoto)"
+                                        @click="removePhoto()" 
+                                        class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-red-50 border border-red-200 hover:border-red-300 text-red-600 text-xs font-semibold rounded-xl shadow-xs transition cursor-pointer">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    <span>Hapus Foto</span>
+                                </button>
+
+                                <span x-show="photoPreview" class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                    Foto siap disimpan
+                                </span>
+                                <span x-show="hapusFoto && !photoPreview" class="text-[11px] text-amber-600 font-semibold flex items-center gap-1">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                    Foto akan dihapus saat disimpan
+                                </span>
+                            </div>
+
+                            @error('foto_profil')
+                                <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
 
                     <!-- Grid Data Diri Pokok -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -698,6 +891,160 @@
             </div>
         </div>
 
+        <!-- ================= MODAL CROP & PENYESUAIAN FOTO PROFIL ================= -->
+        <div x-show="cropModalOpen" 
+             x-cloak 
+             class="fixed inset-0 z-50 overflow-y-auto" 
+             aria-labelledby="modal-crop-title" 
+             role="dialog" 
+             aria-modal="true">
+            <!-- Backdrop -->
+            <div x-show="cropModalOpen" 
+                 x-transition:enter="ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 bg-[#0c2a55]/80 backdrop-blur-xs transition-opacity"></div>
+
+            <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+                <div x-show="cropModalOpen" 
+                     x-transition:enter="ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                     x-transition:leave="ease-in duration-200"
+                     x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                     x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 w-full sm:max-w-2xl border border-gray-200">
+                    
+                    <!-- Modal Header -->
+                    <div class="px-6 py-4 border-b border-gray-100 bg-gray-50/70 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-blue-100 text-[#0066d6] flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 id="modal-crop-title" class="text-base font-bold text-[#0c2a55]">
+                                    Sesuaikan &amp; Potong Foto Profil
+                                </h3>
+                                <p class="text-xs text-gray-500">
+                                    Geser area kotak, perbesar, atau putar foto agar posisinya pas di dalam bingkai.
+                                </p>
+                            </div>
+                        </div>
+                        <button type="button" 
+                                @click="closeCropModal()" 
+                                class="text-gray-400 hover:text-gray-600 p-1.5 rounded-lg hover:bg-gray-100 transition cursor-pointer">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="p-6 space-y-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 items-center">
+                            <!-- Cropper Canvas Container -->
+                            <div class="sm:col-span-2">
+                                <div class="w-full h-72 sm:h-80 bg-slate-900 rounded-2xl overflow-hidden flex items-center justify-center relative shadow-inner">
+                                    <template x-if="rawPhotoSource">
+                                        <img x-ref="cropperImage" 
+                                             :src="rawPhotoSource" 
+                                             alt="Gambar untuk dipotong" 
+                                             class="max-w-full block" 
+                                             style="max-height: 320px;" />
+                                    </template>
+                                </div>
+                                <p class="text-[11px] text-gray-500 text-center mt-2">
+                                    Gunakan mouse / sentuhan untuk menggeser foto, atau scroll untuk zoom in / out.
+                                </p>
+                            </div>
+
+                            <!-- Live Previews -->
+                            <div class="flex flex-col items-center justify-center space-y-4 bg-slate-50/90 p-5 rounded-2xl border border-slate-200/80">
+                                <span class="text-xs font-bold text-[#0c2a55] tracking-wide uppercase">
+                                    Preview Hasil
+                                </span>
+
+                                <!-- Circle Preview -->
+                                <div class="text-center space-y-1.5">
+                                    <div class="crop-preview-circle w-24 h-24 rounded-full overflow-hidden mx-auto shadow-md ring-4 ring-white border-2 border-blue-400 bg-gray-200"></div>
+                                    <p class="text-[11px] text-gray-600 font-medium">Bentuk Lingkaran</p>
+                                </div>
+
+                                <!-- Square Preview -->
+                                <div class="text-center space-y-1.5">
+                                    <div class="crop-preview-square w-16 h-16 rounded-2xl overflow-hidden mx-auto shadow-sm ring-2 ring-white border border-gray-300 bg-gray-200"></div>
+                                    <p class="text-[11px] text-gray-400">Bentuk Persegi</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tool Buttons (Zoom & Rotate) -->
+                        <div class="flex flex-wrap items-center justify-between gap-3 p-3 bg-gray-50 rounded-xl border border-gray-200">
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-xs font-semibold text-gray-600 mr-1">Zoom:</span>
+                                <button type="button" 
+                                        @click="zoomIn()" 
+                                        title="Perbesar" 
+                                        class="p-2 bg-white hover:bg-gray-100 border border-gray-200 rounded-lg text-gray-700 shadow-2xs transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                                </button>
+                                <button type="button" 
+                                        @click="zoomOut()" 
+                                        title="Perkecil" 
+                                        class="p-2 bg-white hover:bg-gray-100 border border-gray-200 rounded-lg text-gray-700 shadow-2xs transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+                                </button>
+                            </div>
+
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-xs font-semibold text-gray-600 mr-1">Putar:</span>
+                                <button type="button" 
+                                        @click="rotateLeft()" 
+                                        title="Putar Kiri 90°" 
+                                        class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-gray-100 border border-gray-200 rounded-lg text-xs font-medium text-gray-700 shadow-2xs transition">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a5 5 0 015 5v2m0 0l-3-3m3 3l3-3M3 10l3-3M3 10l3 3"/></svg>
+                                    -90°
+                                </button>
+                                <button type="button" 
+                                        @click="rotateRight()" 
+                                        title="Putar Kanan 90°" 
+                                        class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-white hover:bg-gray-100 border border-gray-200 rounded-lg text-xs font-medium text-gray-700 shadow-2xs transition">
+                                    +90°
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10H11a5 5 0 00-5 5v2m0 0l3-3m-3 3l-3-3m17-7l-3-3m3 3l-3 3"/></svg>
+                                </button>
+                            </div>
+
+                            <div>
+                                <button type="button" 
+                                        @click="resetCrop()" 
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 bg-white hover:bg-gray-100 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 shadow-2xs transition">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                    Reset Posisi
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-end gap-3">
+                        <button type="button" 
+                                @click="closeCropModal()" 
+                                class="px-4 py-2.5 rounded-xl text-xs font-semibold text-gray-700 bg-white hover:bg-gray-100 border border-gray-300 transition cursor-pointer">
+                            Batal
+                        </button>
+                        <button type="button" 
+                                @click="applyCrop()" 
+                                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold text-white bg-[#0066d6] hover:bg-[#0052b3] shadow-md shadow-blue-500/20 transition cursor-pointer">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                            <span>Terapkan &amp; Gunakan Foto</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Modal Konfirmasi Hapus Akun -->

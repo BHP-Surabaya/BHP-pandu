@@ -160,6 +160,7 @@ class UserVerificationTest extends TestCase
         $admin = $this->createMasterAdmin();
         $user = User::factory()->create([
             'role' => 'pemohon',
+            'pekerjaan' => 'Perorangan',
             'status_akun' => 'perorangan',
             'jenis_akun' => 'perorangan',
         ]);
@@ -175,6 +176,7 @@ class UserVerificationTest extends TestCase
         $user->refresh();
         $this->assertSame('notaris', $user->status_akun);
         $this->assertSame('notaris', $user->jenis_akun);
+        $this->assertSame('Notaris', $user->pekerjaan);
         $this->assertSame('terverifikasi', $user->status_verifikasi);
         $this->assertNotNull($user->verified_at);
     }
@@ -184,6 +186,7 @@ class UserVerificationTest extends TestCase
         $admin = $this->createMasterAdmin();
         $user = User::factory()->create([
             'role' => 'pemohon',
+            'pekerjaan' => 'Perorangan',
             'status_akun' => 'perorangan',
             'jenis_akun' => 'perorangan',
         ]);
@@ -197,6 +200,7 @@ class UserVerificationTest extends TestCase
         $user->refresh();
         $this->assertSame('pengacara', $user->status_akun);
         $this->assertSame('pengacara', $user->jenis_akun);
+        $this->assertSame('Pengacara', $user->pekerjaan);
         $this->assertSame('terverifikasi', $user->status_verifikasi);
     }
 
@@ -205,6 +209,7 @@ class UserVerificationTest extends TestCase
         $admin = $this->createMasterAdmin();
         $user = User::factory()->create([
             'role' => 'pemohon',
+            'pekerjaan' => 'Notaris',
             'status_akun' => 'notaris',
             'jenis_akun' => 'notaris',
         ]);
@@ -217,6 +222,7 @@ class UserVerificationTest extends TestCase
 
         $user->refresh();
         $this->assertSame('perorangan', $user->status_akun);
+        $this->assertSame('Perorangan', $user->pekerjaan);
     }
 
     public function test_master_admin_cannot_switch_to_invalid_status(): void

@@ -4,11 +4,87 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ProfileTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_user_can_upload_profile_photo(): void
+    {
+        Storage::fake('public');
+
+        $user = User::factory()->create();
+
+        $photo = UploadedFile::fake()->image('profile.jpg', 400, 400);
+
+        $response = $this
+            ->actingAs($user)
+            ->patch('/profile', [
+                'name' => $user->name,
+                'email' => $user->email,
+                'foto_profil' => $photo,
+            ]);
+
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/profile');
+
+        $user->refresh();
+        $this->assertNotNull($user->foto_profil);
+        Storage::disk('public')->assertExists($user->foto_profil);
+        $this->assertStringContainsString('storage/'.$user->foto_profil, $user->foto_profil_url);
+    }
+
+    public function test_user_can_remove_profile_photo(): void
+    {
+        Storage::fake('public');
+
+        $oldPhoto = UploadedFile::fake()->image('old_profile.jpg');
+        $storedPath = $oldPhoto->store('foto_profil', 'public');
+
+        $user = User::factory()->create([
+            'foto_profil' => $storedPath,
+        ]);
+
+        Storage::disk('public')->assertExists($storedPath);
+
+        $response = $this
+            ->actingAs($user)
+            ->patch('/profile', [
+                'name' => $user->name,
+                'email' => $user->email,
+                'hapus_foto_profil' => '1',
+            ]);
+
+        $response
+            ->assertSessionHasNoErrors()
+            ->assertRedirect('/profile');
+
+        $user->refresh();
+        $this->assertNull($user->foto_profil);
+        $this->assertNull($user->foto_profil_url);
+        Storage::disk('public')->assertMissing($storedPath);
+    }
+
+    public function test_profile_photo_must_be_valid_image(): void
+    {
+        $user = User::factory()->create();
+
+        $invalidFile = UploadedFile::fake()->create('document.pdf', 100, 'application/pdf');
+
+        $response = $this
+            ->actingAs($user)
+            ->patch('/profile', [
+                'name' => $user->name,
+                'email' => $user->email,
+                'foto_profil' => $invalidFile,
+            ]);
+
+        $response->assertSessionHasErrors('foto_profil');
+    }
 
     public function test_profile_page_is_displayed(): void
     {
