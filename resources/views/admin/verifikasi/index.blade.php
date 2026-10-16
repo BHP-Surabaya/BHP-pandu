@@ -196,35 +196,36 @@
         </div>
 
         <!-- Users Table -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="bg-white rounded-2xl border border-gray-200/90 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-gray-600">
-                    <thead class="bg-gray-50/80 border-b border-gray-100 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                <table class="w-full text-left text-sm text-gray-600 border-collapse">
+                    <thead class="bg-slate-50/90 border-b border-gray-200 text-[11px] font-bold text-gray-600 uppercase tracking-wider">
                         <tr>
-                            <th class="py-3.5 px-4 sm:px-6">Pengguna</th>
-                            <th class="py-3.5 px-4">Status Akun Aktif</th>
-                            <th class="py-3.5 px-4">Pengajuan Awal</th>
-                            <th class="py-3.5 px-4">Dokumen Terlampir</th>
-                            <th class="py-3.5 px-4">Verifikasi</th>
-                            <th class="py-3.5 px-4 sm:px-6 text-right">Tindakan Master Admin</th>
+                            <th class="py-3.5 px-4 sm:px-5 border-r border-gray-200/80">Pengguna</th>
+                            <th class="py-3.5 px-3 text-center border-r border-gray-200/80">Status Akun Aktif</th>
+                            <th class="py-3.5 px-3 text-center border-r border-gray-200/80">Aktivasi Email</th>
+                            <th class="py-3.5 px-3 text-center border-r border-gray-200/80">Pengajuan Awal</th>
+                            <th class="py-3.5 px-3 text-center border-r border-gray-200/80">Dokumen Terlampir</th>
+                            <th class="py-3.5 px-3 text-center border-r border-gray-200/80">Verifikasi Berkas</th>
+                            <th class="py-3.5 px-4 text-center">Tindakan Master Admin</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @forelse ($users as $userItem)
-                            <tr class="hover:bg-slate-50/80 transition">
+                            <tr class="hover:bg-blue-50/30 transition">
                                 <!-- User Info -->
-                                <td class="py-4 px-4 sm:px-6">
+                                <td class="py-3.5 px-4 sm:px-5 border-r border-gray-100/90 align-middle">
                                     <div class="flex items-center gap-3">
                                         @if ($userItem->foto_profil_url)
-                                            <img src="{{ $userItem->foto_profil_url }}" alt="{{ $userItem->name }}" class="w-10 h-10 rounded-full object-cover shrink-0 shadow-inner" />
+                                            <img src="{{ $userItem->foto_profil_url }}" alt="{{ $userItem->name }}" class="w-9 h-9 rounded-full object-cover shrink-0 shadow-inner" />
                                         @else
-                                            <div class="w-10 h-10 rounded-full bg-blue-100 text-[#0066d6] font-bold text-xs flex items-center justify-center shrink-0 shadow-inner">
+                                            <div class="w-9 h-9 rounded-full bg-blue-100 text-[#0066d6] font-bold text-xs flex items-center justify-center shrink-0 shadow-inner">
                                                 {{ $userItem->initials }}
                                             </div>
                                         @endif
                                         <div class="min-w-0">
                                             <p class="font-bold text-gray-900 truncate">{{ $userItem->name }}</p>
-                                            <p class="text-xs text-gray-500 truncate">{{ $userItem->email }}</p>
+                                            <p class="text-xs text-gray-500 truncate mt-0.5">{{ $userItem->email }}</p>
                                             @if ($userItem->nik)
                                                 <p class="text-[10px] text-gray-400 font-mono mt-0.5">NIK: {{ $userItem->nik }}</p>
                                             @endif
@@ -233,79 +234,104 @@
                                 </td>
 
                                 <!-- Status Akun Aktif Saat Ini -->
-                                <td class="py-4 px-4">
+                                <td class="py-3.5 px-3 text-center border-r border-gray-100/90 align-middle">
                                     @if ($userItem->status_akun === 'notaris')
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-800 border border-blue-200 text-xs font-extrabold shadow-xs">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 text-blue-800 border border-blue-200 text-xs font-bold shadow-2xs">
                                             <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
                                             Akun Notaris
                                         </span>
                                     @elseif ($userItem->status_akun === 'pengacara')
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-800 border border-indigo-200 text-xs font-extrabold shadow-xs">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-800 border border-indigo-200 text-xs font-bold shadow-2xs">
                                             <span class="w-1.5 h-1.5 rounded-full bg-indigo-600"></span>
                                             Akun Pengacara
                                         </span>
                                     @else
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-extrabold shadow-xs">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold shadow-2xs">
                                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
                                             Akun Perorangan
                                         </span>
                                     @endif
                                 </td>
 
+                                <!-- Status Aktivasi Email (Kolom Khusus) -->
+                                <td class="py-3.5 px-3 text-center border-r border-gray-100/90 align-middle">
+                                    @if ($userItem->hasVerifiedEmail())
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold shadow-2xs" title="Email terverifikasi pada {{ $userItem->email_verified_at->format('d/m/Y H:i') }}">
+                                            <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                                            Teraktivasi
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-900 border border-amber-300 text-xs font-bold shadow-2xs" title="Pengguna belum mengklik tautan aktivasi email">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                            Belum Aktivasi
+                                        </span>
+                                    @endif
+                                </td>
+
                                 <!-- Pengajuan Awal -->
-                                <td class="py-4 px-4 text-xs font-medium text-gray-700">
-                                    <span class="capitalize">{{ $userItem->jenis_akun ?: 'Perorangan' }}</span>
+                                <td class="py-3.5 px-3 text-center border-r border-gray-100/90 align-middle">
+                                    <span class="inline-block px-2.5 py-0.5 rounded-md bg-gray-100 text-gray-700 text-xs font-semibold capitalize">
+                                        {{ $userItem->jenis_akun ?: 'Perorangan' }}
+                                    </span>
                                     @if ($userItem->pekerjaan && !in_array(strtolower($userItem->pekerjaan), [strtolower($userItem->jenis_akun), 'perorangan', 'notaris', 'pengacara']))
-                                        <span class="block text-[11px] text-gray-400 font-normal">({{ $userItem->pekerjaan }})</span>
+                                        <span class="block text-[11px] text-gray-400 font-normal mt-0.5">({{ $userItem->pekerjaan }})</span>
                                     @endif
                                 </td>
 
                                 <!-- Dokumen Berkas -->
-                                <td class="py-4 px-4">
-                                    <div class="flex flex-wrap gap-1.5 text-[11px]">
-                                        @if ($userItem->isNotaris())
+                                <td class="py-3.5 px-3 text-center border-r border-gray-100/90 align-middle">
+                                    @if ($userItem->isNotaris())
+                                        <div class="inline-flex flex-wrap justify-center gap-1 text-[11px]">
                                             <span class="px-2 py-0.5 rounded-md {{ $userItem->sk_notaris ? 'bg-blue-50 text-blue-700 font-semibold border border-blue-200' : 'bg-gray-100 text-gray-400' }}">
                                                 {{ $userItem->sk_notaris ? '✓ SK Notaris' : '✗ SK Notaris' }}
                                             </span>
                                             <span class="px-2 py-0.5 rounded-md {{ $userItem->sk_ppat ? 'bg-blue-50 text-blue-700 font-semibold border border-blue-200' : 'bg-gray-100 text-gray-400' }}">
                                                 {{ $userItem->sk_ppat ? '✓ SK PPAT' : '✗ SK PPAT' }}
                                             </span>
-                                        @elseif ($userItem->isPengacara())
+                                        </div>
+                                    @elseif ($userItem->isPengacara())
+                                        <div class="inline-flex flex-wrap justify-center gap-1 text-[11px]">
                                             <span class="px-2 py-0.5 rounded-md {{ $userItem->berita_acara_sumpah ? 'bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200' : 'bg-gray-100 text-gray-400' }}">
-                                                {{ $userItem->berita_acara_sumpah ? '✓ BA Sumpah PT' : '✗ BA Sumpah' }}
+                                                {{ $userItem->berita_acara_sumpah ? '✓ BA Sumpah' : '✗ BA Sumpah' }}
                                             </span>
                                             <span class="px-2 py-0.5 rounded-md {{ $userItem->id_card_pengacara ? 'bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200' : 'bg-gray-100 text-gray-400' }}">
                                                 {{ $userItem->id_card_pengacara ? '✓ ID Card' : '✗ ID Card' }}
                                             </span>
-                                        @else
-                                            <span class="text-gray-400 italic">Tanpa berkas khusus</span>
-                                        @endif
-                                    </div>
+                                        </div>
+                                    @else
+                                        <span class="text-xs text-gray-400 italic">Tanpa berkas khusus</span>
+                                    @endif
                                 </td>
 
-                                <!-- Status Verifikasi -->
-                                <td class="py-4 px-4">
-                                    @if ($userItem->isVerifikasiPending())
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-200 text-xs font-bold">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
-                                            Menunggu
-                                        </span>
-                                    @elseif ($userItem->isTerverifikasi())
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-bold">
-                                            <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
-                                            Terverifikasi
-                                        </span>
-                                    @elseif ($userItem->status_verifikasi === 'ditolak')
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-100 text-red-900 border border-red-200 text-xs font-bold">
-                                            <svg class="w-3.5 h-3.5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
-                                            Ditolak
+                                <!-- Verifikasi Berkas -->
+                                <td class="py-3.5 px-3 text-center border-r border-gray-100/90 align-middle">
+                                    @if ($userItem->isNotaris() || $userItem->isPengacara())
+                                        @if ($userItem->isVerifikasiPending())
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-200 text-xs font-bold">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                                                Menunggu Berkas
+                                            </span>
+                                        @elseif ($userItem->isTerverifikasi())
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-200 text-xs font-bold">
+                                                <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                                                Berkas Disetujui
+                                            </span>
+                                        @elseif ($userItem->status_verifikasi === 'ditolak')
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-100 text-red-900 border border-red-200 text-xs font-bold">
+                                                <svg class="w-3.5 h-3.5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" /></svg>
+                                                Ditolak
+                                            </span>
+                                        @endif
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 text-xs font-medium border border-slate-200">
+                                            Tanpa Berkas
                                         </span>
                                     @endif
                                 </td>
 
-                                <!-- Aksi -->
-                                <td class="py-4 px-4 sm:px-6 text-right">
-                                    <div class="inline-flex items-center gap-2">
+                                <!-- Tindakan Master Admin (Toolbar Ringkas & Rapi) -->
+                                <td class="py-3.5 px-4 text-center align-middle">
+                                    <div class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
                                         <!-- Tombol Pindah Status (Modal) -->
                                         <button type="button" 
                                                 @click="openSwitchModal({{ json_encode([
@@ -315,16 +341,18 @@
                                                     'status_akun' => $userItem->status_akun ?: 'perorangan',
                                                     'status_akun_label' => $userItem->status_akun_label,
                                                 ]) }})"
-                                                class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-xs transition cursor-pointer">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
-                                            <span>Pindah Status</span>
+                                                class="inline-flex items-center gap-1 px-2.5 h-8 rounded-lg border border-amber-300 bg-amber-50 hover:bg-amber-100 active:bg-amber-200/80 text-amber-800 text-xs font-bold transition cursor-pointer shadow-2xs whitespace-nowrap"
+                                                title="Ubah Status Akun Pengguna">
+                                            <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                                            <span>Ubah Status</span>
                                         </button>
 
                                         <!-- Tombol Tinjau Detail -->
                                         <a href="{{ route('admin.verifikasi.show', $userItem) }}" 
-                                           class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[#0066d6] hover:bg-[#0055b8] text-white text-xs font-semibold shadow-xs transition">
+                                           class="inline-flex items-center gap-1 px-3 h-8 rounded-lg bg-[#0066d6] hover:bg-[#0055b8] active:bg-[#00479e] text-white text-xs font-semibold shadow-xs transition"
+                                           title="Tinjau Detail Berkas Pengguna">
                                             <span>Tinjau</span>
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
                                         </a>
 
                                         <!-- Tombol Hapus Akun -->
@@ -335,17 +363,16 @@
                                                     'email' => $userItem->email,
                                                     'status_akun_label' => $userItem->status_akun_label,
                                                 ]) }})"
-                                                class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold shadow-xs transition cursor-pointer"
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 active:bg-red-200 text-red-600 transition cursor-pointer shadow-2xs"
                                                 title="Hapus Akun Pengguna">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                            <span>Hapus</span>
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="py-12 px-4 text-center">
+                                <td colspan="7" class="py-12 px-4 text-center">
                                     <div class="w-16 h-16 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center mx-auto mb-3">
                                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                                     </div>
