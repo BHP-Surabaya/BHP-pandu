@@ -17,6 +17,7 @@ use Illuminate\Notifications\Notifiable;
     'email_verified_at',
     'nik',
     'phone',
+    'foto_profil',
     'pekerjaan',
     'jenis_akun',
     'status_akun',
@@ -157,6 +158,18 @@ class User extends Authenticatable implements MustVerifyEmail
     public function permohonans(): HasMany
     {
         return $this->hasMany(Permohonan::class);
+    }
+
+    /**
+     * Get the URL to the user's profile photo, or null.
+     */
+    public function getFotoProfilUrlAttribute(): ?string
+    {
+        if ($this->foto_profil) {
+            return asset('storage/'.$this->foto_profil);
+        }
+
+        return null;
     }
 
     /**

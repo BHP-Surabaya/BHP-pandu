@@ -156,17 +156,33 @@
             <div class="p-4 border-t border-white/10 space-y-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3 min-w-0">
-                        <div class="w-9 h-9 rounded-full bg-white/15 border border-white/25 flex items-center justify-center text-white shrink-0">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                            </svg>
-                        </div>
+                        @if (Auth::user()?->foto_profil_url)
+                            <img src="{{ Auth::user()->foto_profil_url }}" alt="{{ Auth::user()->name }}" class="w-9 h-9 rounded-full object-cover border border-white/30 shrink-0 shadow-xs" />
+                        @else
+                            <div class="w-9 h-9 rounded-full bg-white/15 border border-white/25 flex items-center justify-center text-white shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                </svg>
+                            </div>
+                        @endif
                         <div class="min-w-0">
                             <p class="text-xs font-bold text-white truncate">
                                 {{ Auth::user()->name ?? 'Pengguna' }}
                             </p>
                             <p class="text-[10px] text-blue-200/80 font-medium truncate">
-                                {{ Auth::user()->pekerjaan ?: (Auth::user()->isKasi() ? 'Kepala Seksi' : 'Pemohon Layanan') }}
+                                @if (Auth::user()->isMasterAdmin())
+                                    Master Admin
+                                @elseif (Auth::user()->isKasi())
+                                    Kepala Seksi
+                                @elseif (Auth::user()->isPetugas())
+                                    Petugas BHP
+                                @elseif (Auth::user()->status_akun === 'notaris')
+                                    {{ Auth::user()->pekerjaan && strcasecmp(Auth::user()->pekerjaan, 'perorangan') !== 0 ? Auth::user()->pekerjaan : 'Akun Notaris' }}
+                                @elseif (Auth::user()->status_akun === 'pengacara')
+                                    {{ Auth::user()->pekerjaan && strcasecmp(Auth::user()->pekerjaan, 'perorangan') !== 0 ? Auth::user()->pekerjaan : 'Akun Pengacara' }}
+                                @else
+                                    {{ Auth::user()->pekerjaan ?: 'Akun Perorangan' }}
+                                @endif
                             </p>
                         </div>
                     </div>
@@ -201,6 +217,9 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
+                    @if (Auth::user()?->foto_profil_url)
+                        <img src="{{ Auth::user()->foto_profil_url }}" alt="{{ Auth::user()->name }}" class="w-7 h-7 rounded-full object-cover border border-gray-200 shadow-xs" />
+                    @endif
                     <span class="text-xs font-semibold text-gray-700">{{ Auth::user()->name ?? 'Pengguna' }}</span>
                 </div>
             </div>
