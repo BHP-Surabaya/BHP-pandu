@@ -119,21 +119,6 @@ class KasiDashboardController extends Controller
             'batas_waktu' => '5 Jun 2025',
             'tipe_badge' => 'purple',
         ],
-        [
-            'id' => 4,
-            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.09-00015',
-            'jenis_layanan' => 'SKHW',
-            'detail_layanan' => 'Permohonan SKHW',
-            'pemohon' => 'Budi Santoso',
-            'tanggal_disposisi' => '22 Mei 2025',
-            'pic' => ['Fajar', 'Dewi'],
-            'sla_hari' => 5,
-            'sla_label' => 'Hari ke-5',
-            'sla_status' => 'NORMAL',
-            'sla_level' => 'normal', // 1-7 hari
-            'batas_waktu' => '12 Jun 2025',
-            'tipe_badge' => 'sky',
-        ],
     ];
 
     /**
@@ -318,7 +303,12 @@ class KasiDashboardController extends Controller
     public function index(Request $request): View
     {
         $layananBaru = session('kasi_layanan_baru', $this->defaultLayananBaru);
-        $pemantauanSla = session('kasi_pemantauan_sla', $this->defaultPemantauanSla);
+        $rawPemantauan = session('kasi_pemantauan_sla', $this->defaultPemantauanSla);
+        $pemantauanSla = collect($rawPemantauan)
+            ->reject(fn ($item) => ($item['sla_level'] ?? '') === 'normal' || (int) ($item['sla_hari'] ?? 0) <= 7)
+            ->values()
+            ->all();
+        session(['kasi_pemantauan_sla' => $pemantauanSla]);
 
         // Ambil permohonan dinamis dari database jika ada
         $dbPermohonans = Permohonan::with(['user', 'pewasiat'])

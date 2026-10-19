@@ -96,91 +96,105 @@
         @endif
 
         <!-- ======================================================== -->
-        <!-- KOMPONEN BAR RINGKASAN DISPOSISI & SLA (SEJAJAR KESAMPING) -->
+        <!-- KARTU RINGKASAN DISPOSISI & SLA (MODEL SEJAJAR RAPI) -->
         <!-- ======================================================== -->
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-xs p-2.5 sm:p-3">
-            <div class="grid grid-cols-4 divide-x divide-gray-100">
-                <!-- Item 1: Perlu Disposisi -->
-                <div @click="scrollToSection('layanan-baru')" 
-                     class="flex items-center gap-3 px-3 sm:px-4 py-1.5 rounded-xl hover:bg-emerald-50/50 transition group cursor-pointer">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                        </svg>
-                    </div>
-                    <div class="flex items-baseline gap-2 min-w-0">
-                        <span class="text-2xl font-black text-gray-900 leading-none">
-                            {{ $stats['perlu_disposisi'] ?? $totalLayananBaru }}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+            <!-- Card 1: Perlu Disposisi -->
+            <div @click="scrollToSection('layanan-baru')" 
+                 class="bg-white rounded-2xl border border-gray-100 p-4 sm:p-4.5 shadow-xs hover:shadow-md hover:border-emerald-200 hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer flex items-center gap-3.5 sm:gap-4">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                    </svg>
+                </div>
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <span class="text-3xl sm:text-4xl font-black text-gray-900 leading-none shrink-0 tracking-tight">
+                        {{ $stats['perlu_disposisi'] ?? $totalLayananBaru }}
+                    </span>
+                    <div class="min-w-0 flex flex-col justify-center">
+                        <span class="text-xs sm:text-sm font-bold text-gray-800 leading-snug truncate">
+                            Perlu Disposisi
                         </span>
-                        <div class="min-w-0">
-                            <span class="block text-xs font-bold text-gray-800 leading-tight truncate">Perlu Disposisi</span>
-                            <span class="block text-[10px] text-emerald-600 font-medium leading-tight truncate">Layanan Baru</span>
-                        </div>
+                        <span class="text-[11px] sm:text-xs font-semibold text-emerald-600 leading-snug truncate">
+                            Layanan Baru
+                        </span>
                     </div>
                 </div>
+            </div>
 
-                <!-- Item 2: SLA Berjalan -->
-                <div @click="filterSla = 'all'; scrollToSection('pemantauan-sla')" 
-                     class="flex items-center gap-3 px-3 sm:px-4 py-1.5 rounded-xl hover:bg-blue-50/50 transition group cursor-pointer">
-                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <div class="flex items-baseline gap-2 min-w-0">
-                        <span class="text-2xl font-black text-gray-900 leading-none">
-                            {{ $stats['sla_berjalan'] ?? $totalSla }}
+            <!-- Card 2: SLA Berjalan -->
+            <div @click="filterSla = 'all'; scrollToSection('pemantauan-sla')" 
+                 class="bg-white rounded-2xl border border-gray-100 p-4 sm:p-4.5 shadow-xs hover:shadow-md hover:border-blue-200 hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer flex items-center gap-3.5 sm:gap-4">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-blue-50 text-blue-600 border border-blue-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <span class="text-3xl sm:text-4xl font-black text-gray-900 leading-none shrink-0 tracking-tight">
+                        {{ $stats['sla_berjalan'] ?? $totalSla }}
+                    </span>
+                    <div class="min-w-0 flex flex-col justify-center">
+                        <span class="text-xs sm:text-sm font-bold text-gray-800 leading-snug truncate">
+                            SLA Berjalan
                         </span>
-                        <div class="min-w-0">
-                            <span class="block text-xs font-bold text-gray-800 leading-tight truncate">SLA Berjalan</span>
-                            <span class="block text-[10px] text-blue-600 font-medium leading-tight truncate">Proses PIC</span>
-                        </div>
+                        <span class="text-[11px] sm:text-xs font-semibold text-blue-600 leading-snug truncate">
+                            Proses PIC
+                        </span>
                     </div>
                 </div>
+            </div>
 
-                <!-- Item 3: SLA Mendesak -->
-                <div @click="filterSla = 'danger'; scrollToSection('pemantauan-sla')" 
-                     class="flex items-center gap-3 px-3 sm:px-4 py-1.5 rounded-xl hover:bg-rose-50/50 transition group cursor-pointer">
-                    <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 border border-rose-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                        </svg>
-                    </div>
-                    <div class="flex items-baseline gap-2 min-w-0">
-                        <span class="text-2xl font-black text-rose-600 leading-none">
-                            {{ $stats['sla_mendesak'] ?? 0 }}
+            <!-- Card 3: SLA Perhatian -->
+            <div @click="filterSla = 'warning'; scrollToSection('pemantauan-sla')" 
+                 class="bg-white rounded-2xl border border-gray-100 p-4 sm:p-4.5 shadow-xs hover:shadow-md hover:border-amber-200 hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer flex items-center gap-3.5 sm:gap-4">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-amber-50 text-amber-600 border border-amber-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    </svg>
+                </div>
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <span class="text-3xl sm:text-4xl font-black text-amber-600 leading-none shrink-0 tracking-tight">
+                        {{ $stats['sla_perhatian'] ?? 0 }}
+                    </span>
+                    <div class="min-w-0 flex flex-col justify-center">
+                        <span class="text-xs sm:text-sm font-bold text-gray-800 leading-snug truncate">
+                            SLA Perhatian
                         </span>
-                        <div class="min-w-0">
-                            <div class="flex items-center gap-1.5">
-                                <span class="block text-xs font-bold text-gray-800 leading-tight truncate">SLA Mendesak</span>
-                                @if (($stats['sla_mendesak'] ?? 0) > 0)
-                                    <span class="relative flex h-1.5 w-1.5 shrink-0">
-                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                                        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-rose-500"></span>
-                                    </span>
-                                @endif
-                            </div>
-                            <span class="block text-[10px] text-rose-600 font-bold leading-tight truncate">Hari 13-14</span>
-                        </div>
+                        <span class="text-[11px] sm:text-xs font-bold text-amber-600 leading-snug truncate">
+                            Hari 8-12
+                        </span>
                     </div>
                 </div>
+            </div>
 
-                <!-- Item 4: SLA Terkendali -->
-                <div @click="filterSla = 'normal'; scrollToSection('pemantauan-sla')" 
-                     class="flex items-center gap-3 px-3 sm:px-4 py-1.5 rounded-xl hover:bg-teal-50/50 transition group cursor-pointer">
-                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 border border-teal-100 flex items-center justify-center shrink-0 group-hover:scale-105 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                        </svg>
-                    </div>
-                    <div class="flex items-baseline gap-2 min-w-0">
-                        <span class="text-2xl font-black text-emerald-700 leading-none">
-                            {{ ($stats['sla_normal'] ?? 0) + ($stats['sla_perhatian'] ?? 0) }}
-                        </span>
-                        <div class="min-w-0">
-                            <span class="block text-xs font-bold text-gray-800 leading-tight truncate">SLA Terkendali</span>
-                            <span class="block text-[10px] text-emerald-600 font-medium leading-tight truncate">Hari 1-12</span>
+            <!-- Card 4: SLA Mendesak -->
+            <div @click="filterSla = 'danger'; scrollToSection('pemantauan-sla')" 
+                 class="bg-white rounded-2xl border border-gray-100 p-4 sm:p-4.5 shadow-xs hover:shadow-md hover:border-rose-200 hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer flex items-center gap-3.5 sm:gap-4">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-rose-50 text-rose-600 border border-rose-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
+                </div>
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <span class="text-3xl sm:text-4xl font-black text-rose-600 leading-none shrink-0 tracking-tight">
+                        {{ $stats['sla_mendesak'] ?? 0 }}
+                    </span>
+                    <div class="min-w-0 flex flex-col justify-center">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs sm:text-sm font-bold text-gray-800 leading-snug truncate">
+                                SLA Mendesak
+                            </span>
+                            @if (($stats['sla_mendesak'] ?? 0) > 0)
+                                <span class="relative flex h-2 w-2 shrink-0">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                                </span>
+                            @endif
                         </div>
+                        <span class="text-[11px] sm:text-xs font-bold text-rose-600 leading-snug truncate">
+                            Hari 13-14
+                        </span>
                     </div>
                 </div>
             </div>
@@ -334,7 +348,7 @@
                     </p>
                 </div>
 
-                <!-- SLA Legend & Quick Filter Buttons (Wireframe Match + Interactive) -->
+                <!-- SLA Legend & Quick Filter Buttons (Tanpa Kategori Hijau 1-7 Hari) -->
                 <div class="flex flex-wrap items-center gap-1.5 p-1 bg-gray-50/90 rounded-xl border border-gray-100 text-xs">
                     <button type="button" 
                             @click="filterSla = 'all'"
@@ -343,20 +357,12 @@
                         Semua ({{ $totalSla }})
                     </button>
                     <button type="button" 
-                            @click="filterSla = (filterSla === 'normal' ? 'all' : 'normal')"
-                            :class="filterSla === 'normal' ? 'bg-emerald-50 text-emerald-800 font-bold border-emerald-200 shadow-2xs' : 'text-gray-600 hover:text-gray-900 border-transparent'"
-                            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border text-[11px] transition cursor-pointer">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
-                        <span>1-7 hari</span>
-                        <span class="text-[10px] text-gray-400 font-normal">({{ $stats['sla_normal'] ?? 0 }})</span>
-                    </button>
-                    <button type="button" 
                             @click="filterSla = (filterSla === 'warning' ? 'all' : 'warning')"
                             :class="filterSla === 'warning' ? 'bg-amber-50 text-amber-800 font-bold border-amber-200 shadow-2xs' : 'text-gray-600 hover:text-gray-900 border-transparent'"
                             class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border text-[11px] transition cursor-pointer">
                         <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0"></span>
                         <span>8-12 hari</span>
-                        <span class="text-[10px] text-gray-400 font-normal">({{ $stats['sla_perhatian'] ?? 0 }})</span>
+                        <span class="text-[10px] text-amber-700 font-bold">({{ $stats['sla_perhatian'] ?? 0 }})</span>
                     </button>
                     <button type="button" 
                             @click="filterSla = (filterSla === 'danger' ? 'all' : 'danger')"
@@ -402,6 +408,7 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-xs">
                         @forelse ($pemantauanSla as $sla)
+                            @continue(($sla['sla_level'] ?? '') === 'normal')
                             <tr class="hover:bg-gray-50/60 transition group"
                                 x-show="filterSla === 'all' || filterSla === '{{ $sla['sla_level'] }}'">
                                 <!-- Nomor Layanan -->
@@ -473,13 +480,13 @@
                                             </div>
                                         </div>
                                     @else
-                                        <!-- Normal / Aman: 1-7 Hari (Green Tint) -->
-                                        <div class="bg-[#f0fdf4] border border-[#dcfce7] rounded-lg px-3 py-1.5 min-w-[145px]">
+                                        <!-- Normal: 1-7 Hari (Neutral Badge / Tanpa Warna Hijau) -->
+                                        <div class="bg-slate-50 border border-slate-200/90 rounded-lg px-3 py-1.5 min-w-[145px]">
                                             <div class="flex items-center justify-between gap-2">
-                                                <span class="font-bold text-emerald-800 text-xs">{{ $sla['sla_label'] }}</span>
-                                                <span class="text-[9px] font-extrabold text-emerald-700 tracking-wider uppercase">{{ $sla['sla_status'] }}</span>
+                                                <span class="font-bold text-slate-800 text-xs">{{ $sla['sla_label'] }}</span>
+                                                <span class="text-[9px] font-extrabold text-slate-500 tracking-wider uppercase">{{ $sla['sla_status'] }}</span>
                                             </div>
-                                            <div class="text-[10px] text-emerald-600 font-medium mt-0.5">
+                                            <div class="text-[10px] text-slate-500 font-medium mt-0.5">
                                                 Batas: {{ $sla['batas_waktu'] }}
                                             </div>
                                         </div>
