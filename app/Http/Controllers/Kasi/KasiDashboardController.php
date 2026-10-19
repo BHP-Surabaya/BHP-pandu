@@ -137,6 +137,182 @@ class KasiDashboardController extends Controller
     ];
 
     /**
+     * Default riwayat layanan selesai sesuai wireframe.
+     *
+     * @var array<int, array<string, mixed>>
+     */
+    protected array $defaultHistoryLayanan = [
+        [
+            'id' => 1,
+            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.09-00018',
+            'jenis_layanan' => 'SKHW',
+            'detail_layanan' => 'Permohonan SKHW',
+            'pemohon' => 'Arif Setiawan',
+            'tanggal_masuk' => '28 Mei 2025',
+            'tanggal_disposisi' => '28 Mei 2025',
+            'tanggal_selesai' => '30 Mei 2025',
+            'durasi_layanan' => '3 hari kerja',
+            'status' => 'Selesai',
+            'keterangan_hasil' => 'Dikirim ke akun pemohon',
+            'tipe_badge' => 'sky',
+        ],
+        [
+            'id' => 2,
+            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00017',
+            'jenis_layanan' => 'Wasiat',
+            'detail_layanan' => 'Pendaftaran Wasiat',
+            'pemohon' => 'Dwi Lestari',
+            'tanggal_masuk' => '27 Mei 2025',
+            'tanggal_disposisi' => '27 Mei 2025',
+            'tanggal_selesai' => '30 Mei 2025',
+            'durasi_layanan' => '4 hari kerja',
+            'status' => 'Selesai',
+            'keterangan_hasil' => 'Dikirim ke akun pemohon',
+            'tipe_badge' => 'purple',
+        ],
+        [
+            'id' => 3,
+            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.09-00016',
+            'jenis_layanan' => 'SKHW',
+            'detail_layanan' => 'Permohonan SKHW',
+            'pemohon' => 'Bagus Permana',
+            'tanggal_masuk' => '26 Mei 2025',
+            'tanggal_disposisi' => '26 Mei 2025',
+            'tanggal_selesai' => '29 Mei 2025',
+            'durasi_layanan' => '4 hari kerja',
+            'status' => 'Selesai',
+            'keterangan_hasil' => 'Dikirim ke akun pemohon',
+            'tipe_badge' => 'sky',
+        ],
+        [
+            'id' => 4,
+            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00015',
+            'jenis_layanan' => 'Wasiat',
+            'detail_layanan' => 'Wasiat Terbuka',
+            'pemohon' => 'Hesti Wulandari',
+            'tanggal_masuk' => '23 Mei 2025',
+            'tanggal_disposisi' => '23 Mei 2025',
+            'tanggal_selesai' => '28 Mei 2025',
+            'durasi_layanan' => '4 hari kerja',
+            'status' => 'Selesai',
+            'keterangan_hasil' => 'Dikirim ke akun pemohon',
+            'tipe_badge' => 'purple',
+        ],
+        [
+            'id' => 5,
+            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.09-00013',
+            'jenis_layanan' => 'SKHW',
+            'detail_layanan' => 'Permohonan SKHW',
+            'pemohon' => 'Irfan Maulana',
+            'tanggal_masuk' => '22 Mei 2025',
+            'tanggal_disposisi' => '22 Mei 2025',
+            'tanggal_selesai' => '27 Mei 2025',
+            'durasi_layanan' => '4 hari kerja',
+            'status' => 'Selesai',
+            'keterangan_hasil' => 'Dikirim ke akun pemohon',
+            'tipe_badge' => 'sky',
+        ],
+        [
+            'id' => 6,
+            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00011',
+            'jenis_layanan' => 'Wasiat',
+            'detail_layanan' => 'Pendaftaran Wasiat',
+            'pemohon' => 'Melati Purnama',
+            'tanggal_masuk' => '20 Mei 2025',
+            'tanggal_disposisi' => '20 Mei 2025',
+            'tanggal_selesai' => '26 Mei 2025',
+            'durasi_layanan' => '5 hari kerja',
+            'status' => 'Selesai',
+            'keterangan_hasil' => 'Dikirim ke akun pemohon',
+            'tipe_badge' => 'purple',
+        ],
+        [
+            'id' => 7,
+            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.09-00010',
+            'jenis_layanan' => 'SKHW',
+            'detail_layanan' => 'Permohonan SKHW',
+            'pemohon' => 'PT Karya Utama',
+            'tanggal_masuk' => '19 Mei 2025',
+            'tanggal_disposisi' => '19 Mei 2025',
+            'tanggal_selesai' => '23 Mei 2025',
+            'durasi_layanan' => '5 hari kerja',
+            'status' => 'Selesai',
+            'keterangan_hasil' => 'Dikirim ke akun pemohon',
+            'tipe_badge' => 'sky',
+        ],
+        [
+            'id' => 8,
+            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00008',
+            'jenis_layanan' => 'Wasiat',
+            'detail_layanan' => 'Wasiat Terbuka',
+            'pemohon' => 'Rangga Pratama',
+            'tanggal_masuk' => '16 Mei 2025',
+            'tanggal_disposisi' => '16 Mei 2025',
+            'tanggal_selesai' => '22 Mei 2025',
+            'durasi_layanan' => '5 hari kerja',
+            'status' => 'Selesai',
+            'keterangan_hasil' => 'Dikirim ke akun pemohon',
+            'tipe_badge' => 'purple',
+        ],
+        [
+            'id' => 9,
+            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.09-00007',
+            'jenis_layanan' => 'SKHW',
+            'detail_layanan' => 'Permohonan SKHW',
+            'pemohon' => 'CV Berkah Abadi',
+            'tanggal_masuk' => '14 Mei 2025',
+            'tanggal_disposisi' => '14 Mei 2025',
+            'tanggal_selesai' => '20 Mei 2025',
+            'durasi_layanan' => '5 hari kerja',
+            'status' => 'Selesai',
+            'keterangan_hasil' => 'Dikirim ke akun pemohon',
+            'tipe_badge' => 'sky',
+        ],
+        [
+            'id' => 10,
+            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00005',
+            'jenis_layanan' => 'Wasiat',
+            'detail_layanan' => 'Wasiat Terbuka',
+            'pemohon' => 'Siti Aminah',
+            'tanggal_masuk' => '12 Mei 2025',
+            'tanggal_disposisi' => '12 Mei 2025',
+            'tanggal_selesai' => '19 Mei 2025',
+            'durasi_layanan' => '5 hari kerja',
+            'status' => 'Selesai',
+            'keterangan_hasil' => 'Dikirim ke akun pemohon',
+            'tipe_badge' => 'purple',
+        ],
+        [
+            'id' => 11,
+            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.09-00003',
+            'jenis_layanan' => 'SKHW',
+            'detail_layanan' => 'Permohonan SKHW',
+            'pemohon' => 'Bambang Sudibyo',
+            'tanggal_masuk' => '08 Mei 2025',
+            'tanggal_disposisi' => '08 Mei 2025',
+            'tanggal_selesai' => '15 Mei 2025',
+            'durasi_layanan' => '6 hari kerja',
+            'status' => 'Selesai',
+            'keterangan_hasil' => 'Dikirim ke akun pemohon',
+            'tipe_badge' => 'sky',
+        ],
+        [
+            'id' => 12,
+            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00002',
+            'jenis_layanan' => 'Wasiat',
+            'detail_layanan' => 'Pendaftaran Wasiat',
+            'pemohon' => 'H. Suryadi',
+            'tanggal_masuk' => '05 Mei 2025',
+            'tanggal_disposisi' => '05 Mei 2025',
+            'tanggal_selesai' => '12 Mei 2025',
+            'durasi_layanan' => '6 hari kerja',
+            'status' => 'Selesai',
+            'keterangan_hasil' => 'Dikirim ke akun pemohon',
+            'tipe_badge' => 'purple',
+        ],
+    ];
+
+    /**
      * Tampilkan halaman utama dashboard KASI (Kepala Seksi).
      */
     public function index(Request $request): View
@@ -198,7 +374,7 @@ class KasiDashboardController extends Controller
             'sla_mendesak' => collect($pemantauanSla)->where('sla_level', 'danger')->count(),
             'sla_perhatian' => collect($pemantauanSla)->where('sla_level', 'warning')->count(),
             'sla_normal' => collect($pemantauanSla)->where('sla_level', 'normal')->count(),
-            'total_selesai' => count(session('kasi_history_layanan', [1, 2, 3])),
+            'total_selesai' => count(session('kasi_history_layanan', $this->defaultHistoryLayanan)),
         ];
 
         return view('kasi.dashboard', compact(
@@ -217,46 +393,19 @@ class KasiDashboardController extends Controller
      */
     public function history(Request $request): View
     {
-        $historyLayanan = session('kasi_history_layanan', [
-            [
-                'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.09-00003',
-                'jenis_layanan' => 'SKHW',
-                'detail_layanan' => 'Permohonan SKHW',
-                'pemohon' => 'Bambang Sudibyo',
-                'tanggal_disposisi' => '20 Mei 2025',
-                'pic' => ['Januar', 'Maya'],
-                'status' => 'Selesai',
-                'selesai_pada' => '28 Mei 2025',
-                'catatan' => 'Verifikasi berkas selesai, SKHW telah diterbitkan.',
-                'tipe_badge' => 'sky',
-            ],
-            [
-                'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00004',
-                'jenis_layanan' => 'Wasiat',
-                'detail_layanan' => 'Pendaftaran Wasiat',
-                'pemohon' => 'Nurul Hidayati',
-                'tanggal_disposisi' => '18 Mei 2025',
-                'pic' => ['Rahmat'],
-                'status' => 'Selesai',
-                'selesai_pada' => '25 Mei 2025',
-                'catatan' => 'Pendaftaran wasiat notaris terverifikasi dan tercatat di buku register.',
-                'tipe_badge' => 'purple',
-            ],
-            [
-                'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00002',
-                'jenis_layanan' => 'Wasiat',
-                'detail_layanan' => 'Wasiat Terbuka',
-                'pemohon' => 'H. Suryadi',
-                'tanggal_disposisi' => '14 Mei 2025',
-                'pic' => ['Indra', 'Lisa'],
-                'status' => 'Selesai',
-                'selesai_pada' => '22 Mei 2025',
-                'catatan' => 'Sidang pembukaan wasiat terlaksana dengan berita acara lengkap.',
-                'tipe_badge' => 'purple',
-            ],
-        ]);
+        $historyLayanan = session('kasi_history_layanan', $this->defaultHistoryLayanan);
 
-        return view('kasi.history', compact('historyLayanan'));
+        $statsHistory = [
+            'layanan_masuk' => count($historyLayanan),
+            'jenis_skhw' => collect($historyLayanan)->where('jenis_layanan', 'SKHW')->count(),
+            'jenis_wasiat' => collect($historyLayanan)->where('jenis_layanan', 'Wasiat')->count(),
+            'sla_merah' => 2,
+            'sla_kuning' => 1,
+            'sla_hijau' => 1,
+            'layanan_selesai' => count($historyLayanan),
+        ];
+
+        return view('kasi.history', compact('historyLayanan', 'statsHistory'));
     }
 
     /**
