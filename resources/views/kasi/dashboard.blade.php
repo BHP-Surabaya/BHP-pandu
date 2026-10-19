@@ -1,0 +1,765 @@
+<x-portal-layout>
+    <x-slot:title>
+        Disposisi &amp; Pemantauan SLA Layanan - Kepala Seksi BHP
+    </x-slot:title>
+
+    <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-7" x-data="{
+        searchLayanan: '',
+        disposisiModalOpen: false,
+        tindakLanjutModalOpen: false,
+        selectedItem: null,
+        selectedPics: [],
+        aksiTindakLanjut: 'kirim_pengingat',
+        catatanTindakLanjut: '',
+
+        openDisposisiModal(item) {
+            this.selectedItem = item;
+            this.selectedPics = [];
+            this.disposisiModalOpen = true;
+        },
+
+        toggleKurator(name, tier) {
+            if (tier === 'madya') {
+                const madyaList = ['Inara', 'Lisa'];
+                if (this.selectedPics.includes(name)) {
+                    this.selectedPics = this.selectedPics.filter(p => p !== name);
+                } else {
+                    this.selectedPics = this.selectedPics.filter(p => !madyaList.includes(p));
+                    this.selectedPics.push(name);
+                }
+            } else {
+                if (this.selectedPics.includes(name)) {
+                    this.selectedPics = this.selectedPics.filter(p => p !== name);
+                } else {
+                    this.selectedPics.push(name);
+                }
+            }
+        },
+
+        isPicSelected(name) {
+            return this.selectedPics.includes(name);
+        },
+
+        openTindakLanjutModal(item) {
+            this.selectedItem = item;
+            this.aksiTindakLanjut = 'kirim_pengingat';
+            this.catatanTindakLanjut = 'Mengingatkan batas waktu SLA tersisa segera berakhir. Mohon percepat proses.';
+            this.tindakLanjutModalOpen = true;
+        }
+    }">
+
+        <!-- Header Page (Sama persis seperti gaya Admin) -->
+        <div class="pb-4 border-b border-gray-200">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-[#0c2a55] tracking-tight">
+                Disposisi Layanan &amp; Pemantauan SLA
+            </h1>
+            <p class="text-xs sm:text-sm text-gray-500 mt-1">
+                Portal Pelayanan Kepala Seksi (KASI) Balai Harta Peninggalan Surabaya.
+            </p>
+        </div>
+
+        <!-- Flash Message Notification -->
+        @if (session('success'))
+            <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm flex items-start gap-3 shadow-sm" x-data="{ show: true }" x-show="show">
+                <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div class="flex-1 font-medium leading-relaxed">
+                    {{ session('success') }}
+                </div>
+                <button type="button" @click="show = false" class="text-emerald-700 hover:text-emerald-900">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+        @endif
+
+        @if (session('info'))
+            <div class="p-4 rounded-xl bg-blue-50 border border-blue-200 text-blue-900 text-sm flex items-start gap-3 shadow-sm" x-data="{ show: true }" x-show="show">
+                <svg class="w-5 h-5 text-blue-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div class="flex-1 font-medium leading-relaxed">
+                    {{ session('info') }}
+                </div>
+                <button type="button" @click="show = false" class="text-blue-700 hover:text-blue-900">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+        @endif
+
+        <!-- SECTION 1: LAYANAN BARU (BELUM DIDISPOSISIKAN) -->
+        <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <!-- Header Section -->
+            <div class="px-6 py-5 sm:px-7 sm:py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100">
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <h2 class="text-base sm:text-lg font-bold text-gray-900 tracking-tight">
+                            Layanan Baru
+                        </h2>
+                        <span class="inline-flex items-center justify-center px-2.5 py-0.5 text-xs font-bold rounded-full bg-gray-100 text-gray-800">
+                            {{ $totalLayananBaru }}
+                        </span>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-1 font-normal">
+                        Layanan masuk yang belum didisposisikan, urut dari terbaru
+                    </p>
+                </div>
+
+                <!-- Search Input Bar -->
+                <div class="w-full md:w-72">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                            <!-- Search Icon -->
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                        </div>
+                        <input type="text" 
+                               x-model="searchLayanan" 
+                               placeholder="Cari layanan..." 
+                               class="w-full pl-9 pr-3.5 py-2 bg-white border border-gray-200 rounded-lg text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0d5c46]/20 focus:border-[#0d5c46] transition" />
+                        <button x-show="searchLayanan.length > 0" 
+                                @click="searchLayanan = ''" 
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                                style="display: none;">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-100 bg-gray-50/50">
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                NOMOR LAYANAN
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                JENIS LAYANAN
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                DETAIL LAYANAN
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                PEMOHON
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                TANGGAL MASUK
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400 text-center">
+                                AKSI
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-xs">
+                        @forelse ($layananBaru as $item)
+                            <tr class="hover:bg-gray-50/60 transition group"
+                                x-show="!searchLayanan || '{{ strtolower($item['nomor_layanan'].' '.$item['jenis_layanan'].' '.$item['detail_layanan'].' '.$item['pemohon']) }}'.includes(searchLayanan.toLowerCase())">
+                                <!-- Nomor Layanan -->
+                                <td class="py-4 px-6 font-semibold text-gray-900 whitespace-nowrap">
+                                    {{ $item['nomor_layanan'] }}
+                                </td>
+
+                                <!-- Jenis Layanan Badge -->
+                                <td class="py-4 px-6 whitespace-nowrap">
+                                    @if ($item['jenis_layanan'] === 'SKHW')
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#e0f2fe] text-[#0284c7] border border-[#bae6fd]">
+                                            SKHW
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#f3e8ff] text-[#9333ea] border border-[#e9d5ff]">
+                                            Wasiat
+                                        </span>
+                                    @endif
+                                </td>
+
+                                <!-- Detail Layanan -->
+                                <td class="py-4 px-6 text-gray-700 whitespace-nowrap font-medium">
+                                    {{ $item['detail_layanan'] }}
+                                </td>
+
+                                <!-- Pemohon -->
+                                <td class="py-4 px-6 text-gray-900 font-semibold whitespace-nowrap">
+                                    {{ $item['pemohon'] }}
+                                </td>
+
+                                <!-- Tanggal Masuk -->
+                                <td class="py-4 px-6 whitespace-nowrap">
+                                    <div class="font-medium text-gray-900">{{ $item['tanggal_masuk'] }}</div>
+                                    <div class="text-[11px] text-gray-400 font-normal">{{ $item['waktu_masuk'] }}</div>
+                                </td>
+
+                                <!-- Aksi Disposisikan Button (Wireframe Match) -->
+                                <td class="py-4 px-6 text-center whitespace-nowrap">
+                                    <button @click="openDisposisiModal({{ json_encode($item) }})" 
+                                            type="button" 
+                                            class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl border border-gray-200 bg-white hover:border-[#0d5c46] hover:text-[#0d5c46] hover:bg-emerald-50/50 text-gray-700 text-xs font-semibold shadow-2xs transition active:scale-95 cursor-pointer">
+                                        <span>Disposisikan</span>
+                                        <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="py-8 text-center text-gray-400">
+                                    Tidak ada layanan baru yang menunggu disposisi.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SECTION 2: PEMANTAUAN SLA LAYANAN -->
+        <section class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+            <!-- Header Section with SLA Legend -->
+            <div class="px-6 py-5 sm:px-7 sm:py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-100">
+                <div>
+                    <div class="flex items-center gap-2.5">
+                        <h2 class="text-base sm:text-lg font-bold text-gray-900 tracking-tight">
+                            Pemantauan SLA Layanan
+                        </h2>
+                        <span class="inline-flex items-center justify-center px-2.5 py-0.5 text-xs font-bold rounded-full bg-gray-100 text-gray-700">
+                            {{ $totalSla }}
+                        </span>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-1 font-normal">
+                        Layanan yang telah didisposisikan dan belum diselesaikan dalam SLA 14 hari kerja
+                    </p>
+                </div>
+
+                <!-- SLA Legend Dots (Top Right Wireframe Match) -->
+                <div class="flex items-center gap-4 text-xs font-medium text-gray-600 bg-gray-50/80 px-3.5 py-2 rounded-xl border border-gray-100">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
+                        <span class="text-[11px] text-gray-600">1-7 hari</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0"></span>
+                        <span class="text-[11px] text-gray-600">8-12 hari</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0"></span>
+                        <span class="text-[11px] text-gray-600">13-14 hari</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-100 bg-gray-50/50">
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                NOMOR LAYANAN
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                JENIS LAYANAN
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                DETAIL LAYANAN
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                PEMOHON
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                TANGGAL DISPOSISI
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                PIC
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                SLA
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400 text-right">
+                                TINDAKAN
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-xs">
+                        @forelse ($pemantauanSla as $sla)
+                            <tr class="hover:bg-gray-50/60 transition group">
+                                <!-- Nomor Layanan -->
+                                <td class="py-4 px-6 font-semibold text-gray-900 whitespace-nowrap">
+                                    {{ $sla['nomor_layanan'] }}
+                                </td>
+
+                                <!-- Jenis Layanan Badge -->
+                                <td class="py-4 px-6 whitespace-nowrap">
+                                    @if ($sla['jenis_layanan'] === 'SKHW')
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#e0f2fe] text-[#0284c7] border border-[#bae6fd]">
+                                            SKHW
+                                        </span>
+                                    @else
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#f3e8ff] text-[#9333ea] border border-[#e9d5ff]">
+                                            Wasiat
+                                        </span>
+                                    @endif
+                                </td>
+
+                                <!-- Detail Layanan -->
+                                <td class="py-4 px-6 text-gray-700 whitespace-nowrap font-medium">
+                                    {{ $sla['detail_layanan'] }}
+                                </td>
+
+                                <!-- Pemohon -->
+                                <td class="py-4 px-6 text-gray-900 font-semibold whitespace-nowrap">
+                                    {{ $sla['pemohon'] }}
+                                </td>
+
+                                <!-- Tanggal Disposisi -->
+                                <td class="py-4 px-6 text-gray-800 font-medium whitespace-nowrap">
+                                    {{ $sla['tanggal_disposisi'] }}
+                                </td>
+
+                                <!-- PIC Pills (Januar, Indra, etc.) -->
+                                <td class="py-4 px-6 whitespace-nowrap">
+                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                        @foreach ((array) $sla['pic'] as $picName)
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 text-[11px] font-medium border border-gray-200/60">
+                                                {{ $picName }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+                                </td>
+
+                                <!-- SLA Box Container (Color-coded based on days) -->
+                                <td class="py-4 px-6 whitespace-nowrap">
+                                    @if ($sla['sla_level'] === 'danger')
+                                        <!-- Mendesak: 13-14 Hari (Red Tint) -->
+                                        <div class="bg-[#fef2f2] border border-[#fecaca] rounded-lg px-3 py-1.5 min-w-[145px]">
+                                            <div class="flex items-center justify-between gap-2">
+                                                <span class="font-bold text-rose-700 text-xs">{{ $sla['sla_label'] }}</span>
+                                                <span class="text-[9px] font-extrabold text-rose-700 tracking-wider uppercase">{{ $sla['sla_status'] }}</span>
+                                            </div>
+                                            <div class="text-[10px] text-rose-500 font-medium mt-0.5">
+                                                Batas: {{ $sla['batas_waktu'] }}
+                                            </div>
+                                        </div>
+                                    @elseif ($sla['sla_level'] === 'warning')
+                                        <!-- Perhatian: 8-12 Hari (Amber Tint) -->
+                                        <div class="bg-[#fffbeb] border border-[#fef3c7] rounded-lg px-3 py-1.5 min-w-[145px]">
+                                            <div class="flex items-center justify-between gap-2">
+                                                <span class="font-bold text-amber-800 text-xs">{{ $sla['sla_label'] }}</span>
+                                                <span class="text-[9px] font-extrabold text-amber-700 tracking-wider uppercase">{{ $sla['sla_status'] }}</span>
+                                            </div>
+                                            <div class="text-[10px] text-amber-600 font-medium mt-0.5">
+                                                Batas: {{ $sla['batas_waktu'] }}
+                                            </div>
+                                        </div>
+                                    @else
+                                        <!-- Normal / Aman: 1-7 Hari (Green Tint) -->
+                                        <div class="bg-[#f0fdf4] border border-[#dcfce7] rounded-lg px-3 py-1.5 min-w-[145px]">
+                                            <div class="flex items-center justify-between gap-2">
+                                                <span class="font-bold text-emerald-800 text-xs">{{ $sla['sla_label'] }}</span>
+                                                <span class="text-[9px] font-extrabold text-emerald-700 tracking-wider uppercase">{{ $sla['sla_status'] }}</span>
+                                            </div>
+                                            <div class="text-[10px] text-emerald-600 font-medium mt-0.5">
+                                                Batas: {{ $sla['batas_waktu'] }}
+                                            </div>
+                                        </div>
+                                    @endif
+                                </td>
+
+                                <!-- Tindakan Button -->
+                                <td class="py-4 px-6 text-right whitespace-nowrap">
+                                    <button @click="openTindakLanjutModal({{ json_encode($sla) }})" 
+                                            type="button" 
+                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-gray-200 hover:border-[#0d5c46] hover:text-[#0d5c46] text-gray-700 text-xs font-semibold shadow-xs transition cursor-pointer">
+                                        <span>Tindak Lanjut</span>
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="py-8 text-center text-gray-400">
+                                    Tidak ada data SLA aktif saat ini.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ======================================================== -->
+        <!-- MODAL 1: PILIH PIC / FUNGSIONAL (Persis Gambar Wireframe) -->
+        <!-- ======================================================== -->
+        <div x-show="disposisiModalOpen" 
+             x-transition:enter="transition ease-out duration-200" 
+             x-transition:enter-start="opacity-0" 
+             x-transition:enter-end="opacity-100" 
+             x-transition:leave="transition ease-in duration-150" 
+             x-transition:leave-start="opacity-100" 
+             x-transition:leave-end="opacity-0" 
+             class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/50 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6" 
+             style="display: none;">
+            
+            <div @click.away="disposisiModalOpen = false" 
+                 class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-gray-100 transform transition-all space-y-6 max-h-[92vh] overflow-y-auto custom-scrollbar">
+                
+                <!-- Modal Header -->
+                <div class="flex items-start justify-between pb-1">
+                    <div>
+                        <span class="text-[11px] font-bold tracking-widest text-[#0d5c46] uppercase">
+                            PENUGASAN LAYANAN
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-black text-gray-900 tracking-tight mt-1">
+                            Pilih PIC / Fungsional
+                        </h3>
+                        <p class="text-xs sm:text-sm text-gray-500 font-normal mt-0.5">
+                            Pilih Kurator Keperdataan yang bertanggung jawab.
+                        </p>
+                    </div>
+                    <button @click="disposisiModalOpen = false" 
+                            type="button" 
+                            class="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-400 hover:text-gray-700 flex items-center justify-center transition cursor-pointer shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Form Disposisi -->
+                <form :action="'{{ url('/kasi/disposisi') }}/' + (selectedItem ? selectedItem.id : '')" method="POST" class="space-y-6">
+                    @csrf
+
+                    <!-- Hidden inputs for selected PICs -->
+                    <template x-for="pic in selectedPics" :key="pic">
+                        <input type="hidden" name="pic[]" :value="pic">
+                    </template>
+
+                    <!-- Card 1: Layanan yang Didisposisikan -->
+                    <div class="bg-[#f4f9f7] border border-[#d2ebe3] rounded-2xl p-4 sm:p-5 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-gray-400 tracking-wider uppercase">
+                                LAYANAN YANG DIDISPOSISIKAN
+                            </span>
+                            <h4 class="text-base sm:text-lg font-bold text-[#0d5c46] font-mono mt-0.5" 
+                                x-text="selectedItem ? selectedItem.nomor_layanan : ''">
+                            </h4>
+                            <p class="text-xs text-gray-500 font-medium mt-0.5" 
+                               x-text="selectedItem ? (selectedItem.pemohon + ' · ' + selectedItem.tanggal_masuk) : ''">
+                            </p>
+                        </div>
+                        <div>
+                            <span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold bg-white text-[#0d5c46] border border-[#d2ebe3] shadow-xs" 
+                                  x-text="selectedItem ? selectedItem.jenis_layanan : 'SKHW'">
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Petunjuk Sebelum Memilih Petugas -->
+                    <div class="bg-[#fffcf4] border border-[#fae2b8] rounded-2xl p-4 sm:p-5 text-xs text-[#785117]">
+                        <h5 class="font-bold text-xs text-[#9a6721] tracking-wider uppercase mb-2">
+                            PETUNJUK SEBELUM MEMILIH PETUGAS
+                        </h5>
+                        <div class="space-y-1.5 text-xs text-[#785117] leading-relaxed font-normal">
+                            <p><strong class="font-bold">a.</strong> Pastikan petugas tidak dalam keadaan sakit atau cuti.</p>
+                            <p><strong class="font-bold">b.</strong> Pastikan jumlah disposisi antarpetugas tetap seimbang.</p>
+                        </div>
+                    </div>
+
+                    <!-- Group 1: KURATOR KEPERDATAAN PERTAMA -->
+                    <div class="space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-gray-700 tracking-wider uppercase">
+                                KURATOR KEPERDATAAN PERTAMA
+                            </span>
+                            <span class="text-xs text-gray-400">
+                                Dapat memilih lebih dari 1
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <!-- Iman -->
+                            <div @click="toggleKurator('Iman', 'pertama')" 
+                                 class="rounded-2xl border p-3.5 flex items-center gap-3 transition cursor-pointer select-none"
+                                 :class="isPicSelected('Iman') ? 'border-[#0d5c46] bg-[#f0f8f5] ring-1 ring-[#0d5c46]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50/50'">
+                                <div class="w-5 h-5 rounded-md border flex items-center justify-center transition shrink-0"
+                                     :class="isPicSelected('Iman') ? 'bg-[#0d5c46] border-[#0d5c46] text-white' : 'border-gray-300 bg-white'">
+                                    <svg x-show="isPicSelected('Iman')" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900 leading-tight">Iman</p>
+                                    <p class="text-xs text-gray-400 font-normal mt-0.5">6 disposisi aktif</p>
+                                </div>
+                            </div>
+
+                            <!-- Rahmat -->
+                            <div @click="toggleKurator('Rahmat', 'pertama')" 
+                                 class="rounded-2xl border p-3.5 flex items-center gap-3 transition cursor-pointer select-none"
+                                 :class="isPicSelected('Rahmat') ? 'border-[#0d5c46] bg-[#f0f8f5] ring-1 ring-[#0d5c46]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50/50'">
+                                <div class="w-5 h-5 rounded-md border flex items-center justify-center transition shrink-0"
+                                     :class="isPicSelected('Rahmat') ? 'bg-[#0d5c46] border-[#0d5c46] text-white' : 'border-gray-300 bg-white'">
+                                    <svg x-show="isPicSelected('Rahmat')" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900 leading-tight">Rahmat</p>
+                                    <p class="text-xs text-gray-400 font-normal mt-0.5">10 disposisi aktif</p>
+                                </div>
+                            </div>
+
+                            <!-- Januar -->
+                            <div @click="toggleKurator('Januar', 'pertama')" 
+                                 class="rounded-2xl border p-3.5 flex items-center gap-3 transition cursor-pointer select-none"
+                                 :class="isPicSelected('Januar') ? 'border-[#0d5c46] bg-[#f0f8f5] ring-1 ring-[#0d5c46]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50/50'">
+                                <div class="w-5 h-5 rounded-md border flex items-center justify-center transition shrink-0"
+                                     :class="isPicSelected('Januar') ? 'bg-[#0d5c46] border-[#0d5c46] text-white' : 'border-gray-300 bg-white'">
+                                    <svg x-show="isPicSelected('Januar')" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900 leading-tight">Januar</p>
+                                    <p class="text-xs text-gray-400 font-normal mt-0.5">8 disposisi aktif</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Group 2: KURATOR KEPERDATAAN MUDA -->
+                    <div class="space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-gray-700 tracking-wider uppercase">
+                                KURATOR KEPERDATAAN MUDA
+                            </span>
+                            <span class="text-xs text-gray-400">
+                                Dapat memilih lebih dari 1
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <!-- Lutfy -->
+                            <div @click="toggleKurator('Lutfy', 'muda')" 
+                                 class="rounded-2xl border p-3.5 flex items-center gap-3 transition cursor-pointer select-none"
+                                 :class="isPicSelected('Lutfy') ? 'border-[#0d5c46] bg-[#f0f8f5] ring-1 ring-[#0d5c46]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50/50'">
+                                <div class="w-5 h-5 rounded-md border flex items-center justify-center transition shrink-0"
+                                     :class="isPicSelected('Lutfy') ? 'bg-[#0d5c46] border-[#0d5c46] text-white' : 'border-gray-300 bg-white'">
+                                    <svg x-show="isPicSelected('Lutfy')" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900 leading-tight">Lutfy</p>
+                                    <p class="text-xs text-gray-400 font-normal mt-0.5">9 disposisi aktif</p>
+                                </div>
+                            </div>
+
+                            <!-- Kemal -->
+                            <div @click="toggleKurator('Kemal', 'muda')" 
+                                 class="rounded-2xl border p-3.5 flex items-center gap-3 transition cursor-pointer select-none"
+                                 :class="isPicSelected('Kemal') ? 'border-[#0d5c46] bg-[#f0f8f5] ring-1 ring-[#0d5c46]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50/50'">
+                                <div class="w-5 h-5 rounded-md border flex items-center justify-center transition shrink-0"
+                                     :class="isPicSelected('Kemal') ? 'bg-[#0d5c46] border-[#0d5c46] text-white' : 'border-gray-300 bg-white'">
+                                    <svg x-show="isPicSelected('Kemal')" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900 leading-tight">Kemal</p>
+                                    <p class="text-xs text-gray-400 font-normal mt-0.5">8 disposisi aktif</p>
+                                </div>
+                            </div>
+
+                            <!-- Maya -->
+                            <div @click="toggleKurator('Maya', 'muda')" 
+                                 class="rounded-2xl border p-3.5 flex items-center gap-3 transition cursor-pointer select-none"
+                                 :class="isPicSelected('Maya') ? 'border-[#0d5c46] bg-[#f0f8f5] ring-1 ring-[#0d5c46]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50/50'">
+                                <div class="w-5 h-5 rounded-md border flex items-center justify-center transition shrink-0"
+                                     :class="isPicSelected('Maya') ? 'bg-[#0d5c46] border-[#0d5c46] text-white' : 'border-gray-300 bg-white'">
+                                    <svg x-show="isPicSelected('Maya')" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900 leading-tight">Maya</p>
+                                    <p class="text-xs text-gray-400 font-normal mt-0.5">7 disposisi aktif</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Group 3: KURATOR KEPERDATAAN MADYA -->
+                    <div class="space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-bold text-gray-700 tracking-wider uppercase">
+                                KURATOR KEPERDATAAN MADYA
+                            </span>
+                            <span class="text-xs text-gray-400">
+                                Pilih maksimal 1
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <!-- Inara -->
+                            <div @click="toggleKurator('Inara', 'madya')" 
+                                 class="rounded-2xl border p-3.5 flex items-center gap-3 transition cursor-pointer select-none"
+                                 :class="isPicSelected('Inara') ? 'border-[#0d5c46] bg-[#f0f8f5] ring-1 ring-[#0d5c46]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50/50'">
+                                <div class="w-5 h-5 rounded-md border flex items-center justify-center transition shrink-0"
+                                     :class="isPicSelected('Inara') ? 'bg-[#0d5c46] border-[#0d5c46] text-white' : 'border-gray-300 bg-white'">
+                                    <svg x-show="isPicSelected('Inara')" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900 leading-tight">Inara</p>
+                                    <p class="text-xs text-gray-400 font-normal mt-0.5">11 disposisi aktif</p>
+                                </div>
+                            </div>
+
+                            <!-- Lisa -->
+                            <div @click="toggleKurator('Lisa', 'madya')" 
+                                 class="rounded-2xl border p-3.5 flex items-center gap-3 transition cursor-pointer select-none"
+                                 :class="isPicSelected('Lisa') ? 'border-[#0d5c46] bg-[#f0f8f5] ring-1 ring-[#0d5c46]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50/50'">
+                                <div class="w-5 h-5 rounded-md border flex items-center justify-center transition shrink-0"
+                                     :class="isPicSelected('Lisa') ? 'bg-[#0d5c46] border-[#0d5c46] text-white' : 'border-gray-300 bg-white'">
+                                    <svg x-show="isPicSelected('Lisa')" class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm text-gray-900 leading-tight">Lisa</p>
+                                    <p class="text-xs text-gray-400 font-normal mt-0.5">13 disposisi aktif</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Action Buttons (Footer matching Image 2) -->
+                    <div class="border-t border-gray-100 pt-5 mt-6 flex items-center justify-end gap-3">
+                        <button @click="disposisiModalOpen = false" 
+                                type="button" 
+                                class="px-6 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 text-sm font-semibold transition cursor-pointer">
+                            Batal
+                        </button>
+                        <button type="submit" 
+                                :disabled="selectedPics.length === 0"
+                                class="px-6 py-2.5 rounded-xl text-sm font-semibold transition flex items-center gap-1.5"
+                                :class="selectedPics.length > 0 ? 'bg-[#87b2a5] hover:bg-[#6c9c8e] text-white shadow-sm active:scale-95 cursor-pointer' : 'bg-[#87b2a5]/60 text-white cursor-not-allowed'">
+                            <span>Simpan Disposisi</span>
+                            <span>(<span x-text="selectedPics.length"></span>)</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- MODAL 2: AKSI TINDAK LANJUT SLA                -->
+        <!-- ============================================== -->
+        <div x-show="tindakLanjutModalOpen" 
+             x-transition:enter="transition ease-out duration-200" 
+             x-transition:enter-start="opacity-0" 
+             x-transition:enter-end="opacity-100" 
+             x-transition:leave="transition ease-in duration-150" 
+             x-transition:leave-start="opacity-100" 
+             x-transition:leave-end="opacity-0" 
+             class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/50 backdrop-blur-xs flex items-center justify-center p-4" 
+             style="display: none;">
+            
+            <div @click.away="tindakLanjutModalOpen = false" 
+                 class="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-gray-100 transform transition-all space-y-5">
+                
+                <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                    <div>
+                        <h3 class="text-base font-bold text-gray-900">
+                            Tindak Lanjut Pemantauan SLA
+                        </h3>
+                        <p class="text-xs text-gray-400 mt-0.5" x-text="selectedItem ? selectedItem.nomor_layanan : ''"></p>
+                    </div>
+                    <button @click="tindakLanjutModalOpen = false" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Info Urgensi SLA -->
+                <div class="p-4 rounded-xl border" 
+                     :class="{
+                         'bg-rose-50 border-rose-200 text-rose-900': selectedItem && selectedItem.sla_level === 'danger',
+                         'bg-amber-50 border-amber-200 text-amber-900': selectedItem && selectedItem.sla_level === 'warning',
+                         'bg-emerald-50 border-emerald-200 text-emerald-900': selectedItem && selectedItem.sla_level === 'normal'
+                     }">
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-sm" x-text="selectedItem ? selectedItem.sla_label : ''"></span>
+                        <span class="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full" 
+                              :class="{
+                                  'bg-rose-100 text-rose-800': selectedItem && selectedItem.sla_level === 'danger',
+                                  'bg-amber-100 text-amber-800': selectedItem && selectedItem.sla_level === 'warning',
+                                  'bg-emerald-100 text-emerald-800': selectedItem && selectedItem.sla_level === 'normal'
+                              }" 
+                              x-text="selectedItem ? selectedItem.sla_status : ''"></span>
+                    </div>
+                    <p class="text-xs mt-1" x-text="'Batas Waktu: ' + (selectedItem ? selectedItem.batas_waktu : '')"></p>
+                    <p class="text-[11px] opacity-80 mt-1" x-text="'Petugas PIC: ' + (selectedItem && selectedItem.pic ? selectedItem.pic.join(', ') : '')"></p>
+                </div>
+
+                <!-- Form Tindak Lanjut -->
+                <form :action="'{{ url('/kasi/tindak-lanjut') }}/' + (selectedItem ? selectedItem.id : '')" method="POST" class="space-y-4">
+                    @csrf
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                            Pilih Bentuk Tindak Lanjut
+                        </label>
+                        <div class="space-y-2">
+                            <label class="flex items-start gap-2.5 p-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer text-xs">
+                                <input type="radio" name="aksi" value="kirim_pengingat" x-model="aksiTindakLanjut" class="mt-0.5 text-[#0d5c46] focus:ring-[#0d5c46]">
+                                <div>
+                                    <div class="font-semibold text-gray-800">Kirim Notifikasi Pengingat ke PIC</div>
+                                    <div class="text-[11px] text-gray-400">Kirim peringatan urgensi batas waktu SLA kepada seluruh petugas yang ditugaskan.</div>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start gap-2.5 p-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer text-xs">
+                                <input type="radio" name="aksi" value="tandai_selesai" x-model="aksiTindakLanjut" class="mt-0.5 text-[#0d5c46] focus:ring-[#0d5c46]">
+                                <div>
+                                    <div class="font-semibold text-gray-800">Tandai Layanan Selesai</div>
+                                    <div class="text-[11px] text-gray-400">Verifikasi berkas telah diselesaikan oleh petugas dan keluarkan dari daftar SLA aktif.</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                            Pesan / Catatan Tambahan
+                        </label>
+                        <textarea name="pesan" 
+                                  x-model="catatanTindakLanjut" 
+                                  rows="2" 
+                                  class="w-full text-xs rounded-lg border-gray-200 focus:border-[#0d5c46] focus:ring focus:ring-[#0d5c46]/20" 
+                                  placeholder="Tuliskan pesan instruksi kepada tim petugas..."></textarea>
+                    </div>
+
+                    <!-- Tombol Aksi -->
+                    <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+                        <button @click="tindakLanjutModalOpen = false" 
+                                type="button" 
+                                class="px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 text-xs font-semibold transition cursor-pointer">
+                            Tutup
+                        </button>
+                        <button type="submit" 
+                                class="px-4 py-2 rounded-lg bg-[#0d5c46] hover:bg-[#084030] text-white text-xs font-semibold shadow-sm transition cursor-pointer">
+                            Eksekusi Tindak Lanjut
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</x-portal-layout>

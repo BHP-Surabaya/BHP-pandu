@@ -46,6 +46,20 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Akun KASI (Kepala Seksi)
+        User::firstOrCreate(
+            ['email' => 'kasi@pandubhp.go.id'],
+            [
+                'name' => 'Ahmad Rizki, S.T.',
+                'password' => bcrypt('password'),
+                'role' => 'kasi',
+                'pekerjaan' => 'Kepala Seksi',
+                'status_akun' => 'kasi',
+                'status_verifikasi' => 'terverifikasi',
+                'email_verified_at' => now(),
+            ]
+        );
+
         // Contoh akun Pemohon
         User::firstOrCreate(
             ['email' => 'pemohon@bhp.test'],

@@ -14,19 +14,28 @@ class UserTest extends TestCase
     {
         $admin = new User(['role' => 'master_admin']);
         $petugas = new User(['role' => 'petugas']);
+        $kasi = new User(['role' => 'kasi']);
         $pemohon = new User(['role' => 'pemohon']);
 
         $this->assertTrue($admin->isMasterAdmin());
         $this->assertFalse($admin->isPetugas());
+        $this->assertFalse($admin->isKasi());
         $this->assertFalse($admin->isPemohon());
 
         $this->assertTrue($petugas->isPetugas());
         $this->assertFalse($petugas->isMasterAdmin());
+        $this->assertFalse($petugas->isKasi());
         $this->assertFalse($petugas->isPemohon());
+
+        $this->assertTrue($kasi->isKasi());
+        $this->assertFalse($kasi->isMasterAdmin());
+        $this->assertFalse($kasi->isPetugas());
+        $this->assertFalse($kasi->isPemohon());
 
         $this->assertTrue($pemohon->isPemohon());
         $this->assertFalse($pemohon->isMasterAdmin());
         $this->assertFalse($pemohon->isPetugas());
+        $this->assertFalse($pemohon->isKasi());
     }
 
     /**
