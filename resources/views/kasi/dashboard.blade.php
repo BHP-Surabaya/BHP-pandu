@@ -9,8 +9,8 @@
         tindakLanjutModalOpen: false,
         selectedItem: null,
         selectedPics: [],
-        aksiTindakLanjut: 'kirim_pengingat',
-        catatanTindakLanjut: '',
+        alasanKeterlambatan: '',
+        komitmenPenyelesaian: '',
 
         openDisposisiModal(item) {
             this.selectedItem = item;
@@ -42,8 +42,8 @@
 
         openTindakLanjutModal(item) {
             this.selectedItem = item;
-            this.aksiTindakLanjut = 'kirim_pengingat';
-            this.catatanTindakLanjut = 'Mengingatkan batas waktu SLA tersisa segera berakhir. Mohon percepat proses.';
+            this.alasanKeterlambatan = '';
+            this.komitmenPenyelesaian = '';
             this.tindakLanjutModalOpen = true;
         }
     }">
@@ -656,9 +656,9 @@
             </div>
         </div>
 
-        <!-- ============================================== -->
-        <!-- MODAL 2: AKSI TINDAK LANJUT SLA                -->
-        <!-- ============================================== -->
+        <!-- ======================================================== -->
+        <!-- MODAL 2: KONFIRMASI PENYELESAIAN LAYANAN (Tindak Lanjut) -->
+        <!-- ======================================================== -->
         <div x-show="tindakLanjutModalOpen" 
              x-transition:enter="transition ease-out duration-200" 
              x-transition:enter-start="opacity-0" 
@@ -666,95 +666,111 @@
              x-transition:leave="transition ease-in duration-150" 
              x-transition:leave-start="opacity-100" 
              x-transition:leave-end="opacity-0" 
-             class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/50 backdrop-blur-xs flex items-center justify-center p-4" 
+             class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/50 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6" 
              style="display: none;">
             
             <div @click.away="tindakLanjutModalOpen = false" 
-                 class="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-gray-100 transform transition-all space-y-5">
+                 class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-gray-100 transform transition-all space-y-6 max-h-[92vh] overflow-y-auto custom-scrollbar">
                 
-                <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <!-- Modal Header -->
+                <div class="flex items-start justify-between pb-1">
                     <div>
-                        <h3 class="text-base font-bold text-gray-900">
-                            Tindak Lanjut Pemantauan SLA
+                        <span class="text-[11px] font-bold tracking-widest text-[#c2410c] uppercase">
+                            TINDAK LANJUT SLA
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-black text-gray-900 tracking-tight mt-1">
+                            Konfirmasi Penyelesaian Layanan
                         </h3>
-                        <p class="text-xs text-gray-400 mt-0.5" x-text="selectedItem ? selectedItem.nomor_layanan : ''"></p>
+                        <p class="text-xs sm:text-sm text-gray-400 font-normal mt-0.5">
+                            Catat alasan dan komitmen penyelesaian dari PIC.
+                        </p>
                     </div>
-                    <button @click="tindakLanjutModalOpen = false" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg">
+                    <button @click="tindakLanjutModalOpen = false" 
+                            type="button" 
+                            class="w-9 h-9 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-400 hover:text-gray-700 flex items-center justify-center transition cursor-pointer shrink-0">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
 
-                <!-- Info Urgensi SLA -->
-                <div class="p-4 rounded-xl border" 
-                     :class="{
-                         'bg-rose-50 border-rose-200 text-rose-900': selectedItem && selectedItem.sla_level === 'danger',
-                         'bg-amber-50 border-amber-200 text-amber-900': selectedItem && selectedItem.sla_level === 'warning',
-                         'bg-emerald-50 border-emerald-200 text-emerald-900': selectedItem && selectedItem.sla_level === 'normal'
-                     }">
-                    <div class="flex items-center justify-between">
-                        <span class="font-bold text-sm" x-text="selectedItem ? selectedItem.sla_label : ''"></span>
-                        <span class="text-xs font-extrabold uppercase px-2 py-0.5 rounded-full" 
-                              :class="{
-                                  'bg-rose-100 text-rose-800': selectedItem && selectedItem.sla_level === 'danger',
-                                  'bg-amber-100 text-amber-800': selectedItem && selectedItem.sla_level === 'warning',
-                                  'bg-emerald-100 text-emerald-800': selectedItem && selectedItem.sla_level === 'normal'
-                              }" 
-                              x-text="selectedItem ? selectedItem.sla_status : ''"></span>
-                    </div>
-                    <p class="text-xs mt-1" x-text="'Batas Waktu: ' + (selectedItem ? selectedItem.batas_waktu : '')"></p>
-                    <p class="text-[11px] opacity-80 mt-1" x-text="'Petugas PIC: ' + (selectedItem && selectedItem.pic ? selectedItem.pic.join(', ') : '')"></p>
-                </div>
-
                 <!-- Form Tindak Lanjut -->
-                <form :action="'{{ url('/kasi/tindak-lanjut') }}/' + (selectedItem ? selectedItem.id : '')" method="POST" class="space-y-4">
+                <form :action="'{{ url('/kasi/tindak-lanjut') }}/' + (selectedItem ? selectedItem.id : '')" method="POST" class="space-y-5">
                     @csrf
 
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 mb-1.5">
-                            Pilih Bentuk Tindak Lanjut
-                        </label>
-                        <div class="space-y-2">
-                            <label class="flex items-start gap-2.5 p-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer text-xs">
-                                <input type="radio" name="aksi" value="kirim_pengingat" x-model="aksiTindakLanjut" class="mt-0.5 text-[#0d5c46] focus:ring-[#0d5c46]">
-                                <div>
-                                    <div class="font-semibold text-gray-800">Kirim Notifikasi Pengingat ke PIC</div>
-                                    <div class="text-[11px] text-gray-400">Kirim peringatan urgensi batas waktu SLA kepada seluruh petugas yang ditugaskan.</div>
+                    <!-- Card Info Layanan & SLA Berjalan -->
+                    <div class="bg-[#f8faf9] border border-gray-200/80 rounded-2xl p-4 sm:p-5 space-y-3.5">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <span class="text-[10px] font-bold text-gray-400 tracking-wider uppercase">
+                                    NOMOR LAYANAN
+                                </span>
+                                <h4 class="text-base sm:text-lg font-bold text-[#0d5c46] font-mono mt-0.5" 
+                                    x-text="selectedItem ? selectedItem.nomor_layanan : ''">
+                                </h4>
+                                <p class="text-xs text-gray-500 font-medium mt-0.5">
+                                    <span x-text="selectedItem ? selectedItem.detail_layanan : ''"></span> · <span x-text="selectedItem ? selectedItem.pemohon : ''"></span>
+                                </p>
+                            </div>
+                            <div>
+                                <div class="bg-[#fae8e8] border border-[#f5d0d0] rounded-xl px-4 py-2 text-center min-w-[125px]">
+                                    <span class="text-[9px] font-bold text-rose-800/80 uppercase tracking-wider block">
+                                        SLA BERJALAN
+                                    </span>
+                                    <span class="text-sm font-extrabold text-rose-800 mt-0.5 block" 
+                                          x-text="selectedItem ? selectedItem.sla_label : 'Hari ke-14'">
+                                    </span>
                                 </div>
-                            </label>
+                            </div>
+                        </div>
 
-                            <label class="flex items-start gap-2.5 p-2.5 rounded-xl border border-gray-200 hover:bg-gray-50 cursor-pointer text-xs">
-                                <input type="radio" name="aksi" value="tandai_selesai" x-model="aksiTindakLanjut" class="mt-0.5 text-[#0d5c46] focus:ring-[#0d5c46]">
-                                <div>
-                                    <div class="font-semibold text-gray-800">Tandai Layanan Selesai</div>
-                                    <div class="text-[11px] text-gray-400">Verifikasi berkas telah diselesaikan oleh petugas dan keluarkan dari daftar SLA aktif.</div>
-                                </div>
-                            </label>
+                        <!-- Divider & PIC Chips -->
+                        <div class="border-t border-gray-200/60 pt-3 flex items-center gap-2 flex-wrap">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">PIC:</span>
+                            <template x-for="picName in (selectedItem && selectedItem.pic ? selectedItem.pic : ['Januar', 'Inara'])" :key="picName">
+                                <span class="inline-flex items-center px-3 py-1 rounded-lg bg-white border border-gray-200 text-gray-700 text-xs font-semibold shadow-2xs" 
+                                      x-text="picName">
+                                </span>
+                            </template>
                         </div>
                     </div>
 
+                    <!-- Input 1: Alasan Keterlambatan -->
                     <div>
                         <label class="block text-xs font-bold text-gray-700 mb-1.5">
-                            Pesan / Catatan Tambahan
+                            Alasan keterlambatan <span class="text-rose-500 font-bold">*</span>
                         </label>
-                        <textarea name="pesan" 
-                                  x-model="catatanTindakLanjut" 
-                                  rows="2" 
-                                  class="w-full text-xs rounded-lg border-gray-200 focus:border-[#0d5c46] focus:ring focus:ring-[#0d5c46]/20" 
-                                  placeholder="Tuliskan pesan instruksi kepada tim petugas..."></textarea>
+                        <textarea name="alasan_keterlambatan" 
+                                  x-model="alasanKeterlambatan" 
+                                  rows="4" 
+                                  required 
+                                  class="w-full text-xs sm:text-sm rounded-2xl border-gray-200 focus:border-[#0d5c46] focus:ring focus:ring-[#0d5c46]/20 p-4 transition text-gray-800 placeholder-gray-400" 
+                                  placeholder="Tuliskan kendala atau alasan layanan belum diselesaikan..."></textarea>
                     </div>
 
-                    <!-- Tombol Aksi -->
-                    <div class="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+                    <!-- Input 2: Komitmen Penyelesaian oleh PIC -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1.5">
+                            Komitmen penyelesaian oleh PIC <span class="text-rose-500 font-bold">*</span>
+                        </label>
+                        <textarea name="komitmen_penyelesaian" 
+                                  x-model="komitmenPenyelesaian" 
+                                  rows="4" 
+                                  required 
+                                  class="w-full text-xs sm:text-sm rounded-2xl border-gray-200 focus:border-[#0d5c46] focus:ring focus:ring-[#0d5c46]/20 p-4 transition text-gray-800 placeholder-gray-400" 
+                                  placeholder="Tuliskan rencana dan target penyelesaian layanan..."></textarea>
+                    </div>
+
+                    <!-- Modal Action Buttons (Footer matching wireframe) -->
+                    <div class="border-t border-gray-100 pt-5 mt-6 flex items-center justify-end gap-3">
                         <button @click="tindakLanjutModalOpen = false" 
                                 type="button" 
-                                class="px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 text-xs font-semibold transition cursor-pointer">
-                            Tutup
+                                class="px-6 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 text-sm font-semibold transition cursor-pointer">
+                            Batal
                         </button>
                         <button type="submit" 
-                                class="px-4 py-2 rounded-lg bg-[#0d5c46] hover:bg-[#084030] text-white text-xs font-semibold shadow-sm transition cursor-pointer">
-                            Eksekusi Tindak Lanjut
+                                class="px-6 py-2.5 rounded-xl bg-[#87b2a5] hover:bg-[#6c9c8e] text-white text-sm font-semibold shadow-sm transition active:scale-95 cursor-pointer">
+                            Simpan Tindak Lanjut
                         </button>
                     </div>
                 </form>

@@ -311,27 +311,34 @@ class KasiDashboardController extends Controller
     }
 
     /**
-     * Proses aksi tindak lanjut SLA.
+     * Proses aksi konfirmasi tindak lanjut SLA.
      */
     public function tindakLanjut(Request $request, string|int $id): RedirectResponse
     {
         $validated = $request->validate([
-            'aksi' => ['required', 'string', 'in:kirim_pengingat,perpanjang_sla,tandai_selesai'],
+            'alasan_keterlambatan' => ['required_without:aksi', 'nullable', 'string', 'max:1000'],
+            'komitmen_penyelesaian' => ['required_without:aksi', 'nullable', 'string', 'max:1000'],
+            'aksi' => ['nullable', 'string', 'in:kirim_pengingat,perpanjang_sla,tandai_selesai'],
             'pesan' => ['nullable', 'string', 'max:500'],
         ]);
 
         $pemantauanSla = session('kasi_pemantauan_sla', $this->defaultPemantauanSla);
         $itemNomor = 'Layanan';
 
-        foreach ($pemantauanSla as $item) {
+        foreach ($pemantauanSla as $key => $item) {
             if ((string) $item['id'] === (string) $id) {
                 $itemNomor = $item['nomor_layanan'];
+                if (! empty($validated['alasan_keterlambatan'])) {
+                    $pemantauanSla[$key]['alasan_keterlambatan'] = $validated['alasan_keterlambatan'];
+                    $pemantauanSla[$key]['komitmen_penyelesaian'] = $validated['komitmen_penyelesaian'];
+                }
                 break;
             }
         }
 
-        if ($validated['aksi'] === 'tandai_selesai') {
-            // Hapus dari SLA dan pindahkan ke history
+        session(['kasi_pemantauan_sla' => $pemantauanSla]);
+
+        if (($validated['aksi'] ?? null) === 'tandai_selesai') {
             $pemantauanSla = array_values(array_filter($pemantauanSla, fn ($i) => (string) $i['id'] !== (string) $id));
             session(['kasi_pemantauan_sla' => $pemantauanSla]);
 
@@ -339,12 +346,7 @@ class KasiDashboardController extends Controller
                 ->with('success', "Tindak lanjut {$itemNomor} berhasil: Status telah ditandai Selesai.");
         }
 
-        if ($validated['aksi'] === 'kirim_pengingat') {
-            return redirect()->route('kasi.dashboard')
-                ->with('success', "Notifikasi pengingat urgensi SLA untuk {$itemNomor} telah berhasil dikirimkan kepada PIC.");
-        }
-
         return redirect()->route('kasi.dashboard')
-            ->with('success', "Instruksi tindak lanjut untuk {$itemNomor} berhasil dicatat.");
+            ->with('success', "Konfirmasi tindak lanjut untuk {$itemNomor} berhasil disimpan.");
     }
 }

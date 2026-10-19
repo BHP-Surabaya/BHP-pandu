@@ -78,6 +78,10 @@ class KasiDashboardTest extends TestCase
         $response->assertSee('KURATOR KEPERDATAAN MUDA');
         $response->assertSee('KURATOR KEPERDATAAN MADYA');
         $response->assertSee('Simpan Disposisi');
+        $response->assertSee('Konfirmasi Penyelesaian Layanan');
+        $response->assertSee('Alasan keterlambatan');
+        $response->assertSee('Komitmen penyelesaian oleh PIC');
+        $response->assertSee('Simpan Tindak Lanjut');
     }
 
     public function test_kasi_can_disposisi_layanan_to_petugas(): void
@@ -99,8 +103,8 @@ class KasiDashboardTest extends TestCase
         $kasi = $this->createKasiUser();
 
         $response = $this->actingAs($kasi)->post(route('kasi.tindak-lanjut', ['id' => 1]), [
-            'aksi' => 'kirim_pengingat',
-            'pesan' => 'Mohon segera selesaikan sebelum batas waktu berakhir.',
+            'alasan_keterlambatan' => 'Menunggu kelengkapan dokumen asli dari pemohon.',
+            'komitmen_penyelesaian' => 'PIC akan menyelesaikan verifikasi dalam waktu 2 hari kerja.',
         ]);
 
         $response->assertRedirect(route('kasi.dashboard'));
