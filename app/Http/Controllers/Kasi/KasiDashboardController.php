@@ -192,13 +192,23 @@ class KasiDashboardController extends Controller
         $totalLayananBaru = count($layananBaru);
         $totalSla = count($pemantauanSla);
 
+        $stats = [
+            'perlu_disposisi' => $totalLayananBaru,
+            'sla_berjalan' => $totalSla,
+            'sla_mendesak' => collect($pemantauanSla)->where('sla_level', 'danger')->count(),
+            'sla_perhatian' => collect($pemantauanSla)->where('sla_level', 'warning')->count(),
+            'sla_normal' => collect($pemantauanSla)->where('sla_level', 'normal')->count(),
+            'total_selesai' => count(session('kasi_history_layanan', [1, 2, 3])),
+        ];
+
         return view('kasi.dashboard', compact(
             'layananBaru',
             'pemantauanSla',
             'totalLayananBaru',
             'totalSla',
             'kuratorList',
-            'petugasList'
+            'petugasList',
+            'stats'
         ));
     }
 
