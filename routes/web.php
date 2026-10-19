@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\UserVerificationController;
+use App\Http\Controllers\Kasi\KasiDashboardController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\PermohonanWasiatController;
 use App\Http\Controllers\ProfileController;
@@ -14,6 +15,10 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     if (auth()->user()->isMasterAdmin()) {
         return redirect()->route('admin.verifikasi.index');
+    }
+
+    if (auth()->user()->isKasi()) {
+        return redirect()->route('kasi.dashboard');
     }
 
     if (auth()->user()->isPetugas()) {
@@ -52,6 +57,13 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
     Route::get('/petugas/dashboard', function () {
         return view('petugas.dashboard');
     })->name('petugas.dashboard');
+});
+
+Route::middleware(['auth', 'role:kasi,kepala_seksi'])->prefix('kasi')->name('kasi.')->group(function () {
+    Route::get('/dashboard', [KasiDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/history', [KasiDashboardController::class, 'history'])->name('history');
+    Route::post('/disposisi/{id}', [KasiDashboardController::class, 'disposisi'])->name('disposisi');
+    Route::post('/tindak-lanjut/{id}', [KasiDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

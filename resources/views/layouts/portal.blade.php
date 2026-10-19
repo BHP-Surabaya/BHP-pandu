@@ -83,6 +83,27 @@
                                 </svg>
                                 <span>Data Permohonan</span>
                             </a>
+                        @elseif (Auth::user()?->isKasi())
+                            <!-- Menu Khusus KASI: Disposisi Layanan -->
+                            <a href="{{ route('kasi.dashboard') }}" 
+                               class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('kasi.dashboard') ? 'bg-[#1d68d8] text-white shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                </svg>
+                                <span>Disposisi Layanan</span>
+                                <span class="ms-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-emerald-400 text-emerald-950 shadow-sm">
+                                    12
+                                </span>
+                            </a>
+
+                            <!-- History Layanan -->
+                            <a href="{{ route('kasi.history') }}" 
+                               class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('kasi.history') ? 'bg-[#1d68d8] text-white font-semibold shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>History Layanan</span>
+                            </a>
                         @else
                             <!-- Layanan (Replaces Dashboard) -->
                             <a href="{{ route('dashboard') }}" 
@@ -151,6 +172,8 @@
                             <p class="text-[10px] text-blue-200/80 font-medium truncate">
                                 @if (Auth::user()->isMasterAdmin())
                                     Master Admin
+                                @elseif (Auth::user()->isKasi())
+                                    Kepala Seksi
                                 @elseif (Auth::user()->isPetugas())
                                     Petugas BHP
                                 @elseif (Auth::user()->status_akun === 'notaris')

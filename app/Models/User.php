@@ -57,6 +57,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Check if the user is a KASI (Kepala Seksi).
+     */
+    public function isKasi(): bool
+    {
+        return in_array($this->role, ['kasi', 'kepala_seksi'], true);
+    }
+
+    /**
      * Check if the user is a pemohon (applicant).
      */
     public function isPemohon(): bool
@@ -127,6 +135,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         if ($this->isMasterAdmin()) {
             return 'Master Admin';
+        }
+
+        if ($this->isKasi()) {
+            return 'Kepala Seksi';
         }
 
         if ($this->status_akun === 'notaris') {
