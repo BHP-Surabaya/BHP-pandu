@@ -4,9 +4,91 @@
     </x-slot:title>
 
     <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6" x-data="{ 
-        searchHistory: '',
-        filterJenis: 'all',
-        filterDropdownOpen: false
+        items: {{ Js::from($historyLayanan) }},
+        searchHistory: '{{ request('q', '') }}',
+        filterJenis: '{{ request('jenis', 'all') }}',
+        dateField: 'tanggal_masuk',
+        startDate: '{{ request('start_date', '') }}',
+        endDate: '{{ request('end_date', '') }}',
+        filterDropdownOpen: false,
+
+        resetFilter() {
+            this.filterJenis = 'all';
+            this.startDate = '';
+            this.endDate = '';
+            this.searchHistory = '';
+        },
+
+        isItemVisible(jenis, text, isoMasuk, isoSelesai) {
+            if (this.filterJenis !== 'all' && jenis !== this.filterJenis) {
+                return false;
+            }
+            if (this.searchHistory && !text.includes(this.searchHistory.toLowerCase())) {
+                return false;
+            }
+            let targetDate = this.dateField === 'tanggal_selesai' ? isoSelesai : isoMasuk;
+            if (this.startDate && targetDate && targetDate < this.startDate) {
+                return false;
+            }
+            if (this.endDate && targetDate && targetDate > this.endDate) {
+                return false;
+            }
+            return true;
+        },
+
+        get activeFilterCount() {
+            let count = 0;
+            if (this.filterJenis !== 'all') count++;
+            if (this.startDate || this.endDate) count++;
+            return count;
+        },
+
+        get visibleCount() {
+            return this.items.filter(item => {
+                let text = ((item.nomor_layanan || '') + ' ' + (item.jenis_layanan || '') + ' ' + (item.detail_layanan || '') + ' ' + (item.pemohon || '')).toLowerCase();
+                return this.isItemVisible(item.jenis_layanan, text, item.tanggal_masuk_iso || '', item.tanggal_selesai_iso || '');
+            }).length;
+        },
+
+        get skhwCount() {
+            return this.items.filter(item => {
+                let targetDate = this.dateField === 'tanggal_selesai' ? item.tanggal_selesai_iso : item.tanggal_masuk_iso;
+                if (this.startDate && targetDate && targetDate < this.startDate) return false;
+                if (this.endDate && targetDate && targetDate > this.endDate) return false;
+                return item.jenis_layanan === 'SKHW';
+            }).length;
+        },
+
+        get wasiatCount() {
+            return this.items.filter(item => {
+                let targetDate = this.dateField === 'tanggal_selesai' ? item.tanggal_selesai_iso : item.tanggal_masuk_iso;
+                if (this.startDate && targetDate && targetDate < this.startDate) return false;
+                if (this.endDate && targetDate && targetDate > this.endDate) return false;
+                return item.jenis_layanan === 'Wasiat';
+            }).length;
+        },
+
+        getDateRangeLabel() {
+            if (this.startDate && this.endDate) {
+                return this.formatDateDisplay(this.startDate) + ' - ' + this.formatDateDisplay(this.endDate);
+            } else if (this.startDate) {
+                return 'Dari ' + this.formatDateDisplay(this.startDate);
+            } else if (this.endDate) {
+                return 'Sampai ' + this.formatDateDisplay(this.endDate);
+            }
+            return '';
+        },
+
+        formatDateDisplay(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                const mIdx = parseInt(parts[1], 10) - 1;
+                return parts[2] + ' ' + (months[mIdx] || parts[1]) + ' ' + parts[0];
+            }
+            return dateStr;
+        }
     }">
         
         <!-- Header Page -->
@@ -295,6 +377,20 @@
                                 </td>
                             </tr>
                         @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</x-portal-layout>
+
+                                <button type="button" 
+                                        @click="resetFilter()" 
+                                        class="mt-3.5 inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-[#0d5c46] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition cursor-pointer">
+                                    Reset Semua Filter
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
