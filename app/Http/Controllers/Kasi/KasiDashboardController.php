@@ -134,8 +134,11 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Permohonan SKHW',
             'pemohon' => 'Arif Setiawan',
             'tanggal_masuk' => '28 Mei 2025',
+            'tanggal_masuk_iso' => '2025-05-28',
             'tanggal_disposisi' => '28 Mei 2025',
+            'tanggal_disposisi_iso' => '2025-05-28',
             'tanggal_selesai' => '30 Mei 2025',
+            'tanggal_selesai_iso' => '2025-05-30',
             'durasi_layanan' => '3 hari kerja',
             'status' => 'Selesai',
             'keterangan_hasil' => 'Dikirim ke akun pemohon',
@@ -148,8 +151,11 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Pendaftaran Wasiat',
             'pemohon' => 'Dwi Lestari',
             'tanggal_masuk' => '27 Mei 2025',
+            'tanggal_masuk_iso' => '2025-05-27',
             'tanggal_disposisi' => '27 Mei 2025',
+            'tanggal_disposisi_iso' => '2025-05-27',
             'tanggal_selesai' => '30 Mei 2025',
+            'tanggal_selesai_iso' => '2025-05-30',
             'durasi_layanan' => '4 hari kerja',
             'status' => 'Selesai',
             'keterangan_hasil' => 'Dikirim ke akun pemohon',
@@ -162,8 +168,11 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Permohonan SKHW',
             'pemohon' => 'Bagus Permana',
             'tanggal_masuk' => '26 Mei 2025',
+            'tanggal_masuk_iso' => '2025-05-26',
             'tanggal_disposisi' => '26 Mei 2025',
+            'tanggal_disposisi_iso' => '2025-05-26',
             'tanggal_selesai' => '29 Mei 2025',
+            'tanggal_selesai_iso' => '2025-05-29',
             'durasi_layanan' => '4 hari kerja',
             'status' => 'Selesai',
             'keterangan_hasil' => 'Dikirim ke akun pemohon',
@@ -176,8 +185,11 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Wasiat Terbuka',
             'pemohon' => 'Hesti Wulandari',
             'tanggal_masuk' => '23 Mei 2025',
+            'tanggal_masuk_iso' => '2025-05-23',
             'tanggal_disposisi' => '23 Mei 2025',
+            'tanggal_disposisi_iso' => '2025-05-23',
             'tanggal_selesai' => '28 Mei 2025',
+            'tanggal_selesai_iso' => '2025-05-28',
             'durasi_layanan' => '4 hari kerja',
             'status' => 'Selesai',
             'keterangan_hasil' => 'Dikirim ke akun pemohon',
@@ -190,8 +202,11 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Permohonan SKHW',
             'pemohon' => 'Irfan Maulana',
             'tanggal_masuk' => '22 Mei 2025',
+            'tanggal_masuk_iso' => '2025-05-22',
             'tanggal_disposisi' => '22 Mei 2025',
+            'tanggal_disposisi_iso' => '2025-05-22',
             'tanggal_selesai' => '27 Mei 2025',
+            'tanggal_selesai_iso' => '2025-05-27',
             'durasi_layanan' => '4 hari kerja',
             'status' => 'Selesai',
             'keterangan_hasil' => 'Dikirim ke akun pemohon',
@@ -204,8 +219,11 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Pendaftaran Wasiat',
             'pemohon' => 'Melati Purnama',
             'tanggal_masuk' => '20 Mei 2025',
+            'tanggal_masuk_iso' => '2025-05-20',
             'tanggal_disposisi' => '20 Mei 2025',
+            'tanggal_disposisi_iso' => '2025-05-20',
             'tanggal_selesai' => '26 Mei 2025',
+            'tanggal_selesai_iso' => '2025-05-26',
             'durasi_layanan' => '5 hari kerja',
             'status' => 'Selesai',
             'keterangan_hasil' => 'Dikirim ke akun pemohon',
@@ -218,8 +236,11 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Permohonan SKHW',
             'pemohon' => 'PT Karya Utama',
             'tanggal_masuk' => '19 Mei 2025',
+            'tanggal_masuk_iso' => '2025-05-19',
             'tanggal_disposisi' => '19 Mei 2025',
+            'tanggal_disposisi_iso' => '2025-05-19',
             'tanggal_selesai' => '23 Mei 2025',
+            'tanggal_selesai_iso' => '2025-05-23',
             'durasi_layanan' => '5 hari kerja',
             'status' => 'Selesai',
             'keterangan_hasil' => 'Dikirim ke akun pemohon',
@@ -232,8 +253,11 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Wasiat Terbuka',
             'pemohon' => 'Rangga Pratama',
             'tanggal_masuk' => '16 Mei 2025',
+            'tanggal_masuk_iso' => '2025-05-16',
             'tanggal_disposisi' => '16 Mei 2025',
+            'tanggal_disposisi_iso' => '2025-05-16',
             'tanggal_selesai' => '22 Mei 2025',
+            'tanggal_selesai_iso' => '2025-05-22',
             'durasi_layanan' => '5 hari kerja',
             'status' => 'Selesai',
             'keterangan_hasil' => 'Dikirim ke akun pemohon',
@@ -246,8 +270,11 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Permohonan SKHW',
             'pemohon' => 'CV Berkah Abadi',
             'tanggal_masuk' => '14 Mei 2025',
+            'tanggal_masuk_iso' => '2025-05-14',
             'tanggal_disposisi' => '14 Mei 2025',
+            'tanggal_disposisi_iso' => '2025-05-14',
             'tanggal_selesai' => '20 Mei 2025',
+            'tanggal_selesai_iso' => '2025-05-20',
             'durasi_layanan' => '5 hari kerja',
             'status' => 'Selesai',
             'keterangan_hasil' => 'Dikirim ke akun pemohon',
@@ -260,8 +287,11 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Wasiat Terbuka',
             'pemohon' => 'Siti Aminah',
             'tanggal_masuk' => '12 Mei 2025',
+            'tanggal_masuk_iso' => '2025-05-12',
             'tanggal_disposisi' => '12 Mei 2025',
+            'tanggal_disposisi_iso' => '2025-05-12',
             'tanggal_selesai' => '19 Mei 2025',
+            'tanggal_selesai_iso' => '2025-05-19',
             'durasi_layanan' => '5 hari kerja',
             'status' => 'Selesai',
             'keterangan_hasil' => 'Dikirim ke akun pemohon',
@@ -274,8 +304,11 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Permohonan SKHW',
             'pemohon' => 'Bambang Sudibyo',
             'tanggal_masuk' => '08 Mei 2025',
+            'tanggal_masuk_iso' => '2025-05-08',
             'tanggal_disposisi' => '08 Mei 2025',
+            'tanggal_disposisi_iso' => '2025-05-08',
             'tanggal_selesai' => '15 Mei 2025',
+            'tanggal_selesai_iso' => '2025-05-15',
             'durasi_layanan' => '6 hari kerja',
             'status' => 'Selesai',
             'keterangan_hasil' => 'Dikirim ke akun pemohon',
@@ -288,8 +321,11 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Pendaftaran Wasiat',
             'pemohon' => 'H. Suryadi',
             'tanggal_masuk' => '05 Mei 2025',
+            'tanggal_masuk_iso' => '2025-05-05',
             'tanggal_disposisi' => '05 Mei 2025',
+            'tanggal_disposisi_iso' => '2025-05-05',
             'tanggal_selesai' => '12 Mei 2025',
+            'tanggal_selesai_iso' => '2025-05-12',
             'durasi_layanan' => '6 hari kerja',
             'status' => 'Selesai',
             'keterangan_hasil' => 'Dikirim ke akun pemohon',
@@ -385,6 +421,22 @@ class KasiDashboardController extends Controller
     {
         $historyLayanan = session('kasi_history_layanan', $this->defaultHistoryLayanan);
 
+        // Pastikan format ISO tersedia untuk filter range tanggal
+        $historyLayanan = array_map(function ($item) {
+            if (empty($item['tanggal_masuk_iso']) && ! empty($item['tanggal_masuk'])) {
+                $item['tanggal_masuk_iso'] = $this->convertIndoDateToIso($item['tanggal_masuk']);
+            }
+            if (empty($item['tanggal_disposisi_iso']) && ! empty($item['tanggal_disposisi'])) {
+                $item['tanggal_disposisi_iso'] = $this->convertIndoDateToIso($item['tanggal_disposisi']);
+            }
+            $selesai = $item['tanggal_selesai'] ?? $item['selesai_pada'] ?? null;
+            if (empty($item['tanggal_selesai_iso']) && ! empty($selesai)) {
+                $item['tanggal_selesai_iso'] = $this->convertIndoDateToIso($selesai);
+            }
+
+            return $item;
+        }, $historyLayanan);
+
         $statsHistory = [
             'layanan_masuk' => count($historyLayanan),
             'jenis_skhw' => collect($historyLayanan)->where('jenis_layanan', 'SKHW')->count(),
@@ -396,6 +448,36 @@ class KasiDashboardController extends Controller
         ];
 
         return view('kasi.history', compact('historyLayanan', 'statsHistory'));
+    }
+
+    /**
+     * Konversi format tanggal Indonesia (misal: "28 Mei 2025") ke ISO YYYY-MM-DD.
+     */
+    protected function convertIndoDateToIso(?string $dateStr): ?string
+    {
+        if (empty($dateStr)) {
+            return null;
+        }
+
+        $bulanMap = [
+            'Januari' => '01', 'Februari' => '02', 'Maret' => '03', 'April' => '04',
+            'Mei' => '05', 'Juni' => '06', 'Juli' => '07', 'Agustus' => '08',
+            'September' => '09', 'Oktober' => '10', 'November' => '11', 'Desember' => '12',
+            'Jan' => '01', 'Feb' => '02', 'Mar' => '03', 'Apr' => '04',
+            'May' => '05', 'Jun' => '06', 'Jul' => '07', 'Aug' => '08',
+            'Sep' => '09', 'Oct' => '10', 'Nov' => '11', 'Dec' => '12',
+        ];
+
+        if (preg_match('/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/', trim($dateStr), $matches)) {
+            $day = str_pad($matches[1], 2, '0', STR_PAD_LEFT);
+            $monthName = ucfirst(strtolower($matches[2]));
+            $month = $bulanMap[$monthName] ?? '01';
+            $year = $matches[3];
+
+            return "{$year}-{$month}-{$day}";
+        }
+
+        return null;
     }
 
     /**
