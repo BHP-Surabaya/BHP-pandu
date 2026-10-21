@@ -121,4 +121,73 @@ class KasiDashboardTest extends TestCase
         $response->assertSee('History Layanan');
         $response->assertSee('W15.AHU.AHU.1.AH.06.09-00003');
     }
+
+    public function test_kasi_sidebar_badge_shows_perlu_disposisi_count(): void
+    {
+        $kasi = $this->createKasiUser();
+
+        $response = $this->actingAs($kasi)->get(route('kasi.dashboard'));
+
+        $response->assertOk();
+        $response->assertSee('Disposisi Layanan');
+        // Badge sidebar mengikuti jumlah perlu disposisi default (5) dan bukan 12
+        $response->assertSee('bg-emerald-400 text-emerald-950');
+        $response->assertDontSee('12'.PHP_EOL.'                                </span>', false);
+    }
+
+    public function test_kasi_history_page_displays_date_range_filter_controls(): void
+    {
+        $kasi = $this->createKasiUser();
+
+        $response = $this->actingAs($kasi)->get(route('kasi.history'));
+
+        $response->assertOk();
+        $response->assertSee('Mulai:');
+        $response->assertSee('Sampai:');
+        $response->assertDontSee('Pilihan Cepat');
+        $response->assertDontSee('Acuan Tanggal:');
+    }
+
+    public function test_kasi_history_page_filters_by_date_range(): void
+    {
+        $kasi = $this->createKasiUser();
+
+        // Filter rentang tanggal 26 Mei - 30 Mei 2025
+        $response = $this->actingAs($kasi)->get(route('kasi.history', [
+            'start_date' => '2025-05-26',
+            'end_date' => '2025-05-30',
+        ]));
+
+        $response->assertOk();
+        // Item yang masuk tanggal 26, 27, 28 Mei ada di data yang difilter
+        $response->assertViewHas('historyLayanan', function ($items) {
+            $nomors = collect($items)->pluck('nomor_layanan')->all();
+
+            return in_array('W15.AHU.AHU.1.AH.06.09-00018', $nomors) && // 28 Mei
+                   in_array('W15.AHU.AHU.1.AH.06.01-00017', $nomors) && // 27 Mei
+                   in_array('W15.AHU.AHU.1.AH.06.09-00016', $nomors) && // 26 Mei
+                   ! in_array('W15.AHU.AHU.1.AH.06.01-00002', $nomors); // 05 Mei (di luar rentang)
+        });
+    }
+
+    public function test_kasi_history_page_filters_by_tanggal_selesai(): void
+    {
+        $kasi = $this->createKasiUser();
+
+        // Filter berdasarkan tanggal selesai 28 Mei - 30 Mei 2025
+        $response = $this->actingAs($kasi)->get(route('kasi.history', [
+            'date_field' => 'tanggal_selesai',
+            'start_date' => '2025-05-28',
+            'end_date' => '2025-05-30',
+        ]));
+
+        $response->assertOk();
+        $response->assertViewHas('historyLayanan', function ($items) {
+            $nomors = collect($items)->pluck('nomor_layanan')->all();
+
+            return in_array('W15.AHU.AHU.1.AH.06.09-00018', $nomors) && // selesai 30 Mei
+                   in_array('W15.AHU.AHU.1.AH.06.01-00017', $nomors) && // selesai 30 Mei
+                   ! in_array('W15.AHU.AHU.1.AH.06.01-00002', $nomors); // selesai 12 Mei
+        });
+    }
 }
