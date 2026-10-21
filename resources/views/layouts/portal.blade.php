@@ -84,6 +84,9 @@
                                 <span>Data Permohonan</span>
                             </a>
                         @elseif (Auth::user()?->isKasi())
+                            @php
+                                $perluDisposisiCount = \App\Http\Controllers\Kasi\KasiDashboardController::getPerluDisposisiCount();
+                            @endphp
                             <!-- Menu Khusus KASI: Disposisi Layanan -->
                             <a href="{{ route('kasi.dashboard') }}" 
                                class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('kasi.dashboard') ? 'bg-[#1d68d8] text-white shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
@@ -91,9 +94,11 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                                 </svg>
                                 <span>Disposisi Layanan</span>
-                                <span class="ms-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-emerald-400 text-emerald-950 shadow-sm">
-                                    12
-                                </span>
+                                @if ($perluDisposisiCount > 0)
+                                    <span class="ms-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-emerald-400 text-emerald-950 shadow-sm">
+                                        {{ $perluDisposisiCount }}
+                                    </span>
+                                @endif
                             </a>
 
                             <!-- History Layanan -->

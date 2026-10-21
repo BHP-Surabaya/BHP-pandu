@@ -437,6 +437,40 @@ class KasiDashboardController extends Controller
             return $item;
         }, $historyLayanan);
 
+        $rawHistoryLayanan = $historyLayanan;
+
+        if ($request->filled('start_date')) {
+            $startDate = (string) $request->query('start_date');
+            $dateField = $request->query('date_field', 'tanggal_masuk') === 'tanggal_selesai' ? 'tanggal_selesai_iso' : 'tanggal_masuk_iso';
+            $historyLayanan = array_values(array_filter($historyLayanan, function ($item) use ($startDate, $dateField) {
+                return ! empty($item[$dateField]) && $item[$dateField] >= $startDate;
+            }));
+        }
+
+        if ($request->filled('end_date')) {
+            $endDate = (string) $request->query('end_date');
+            $dateField = $request->query('date_field', 'tanggal_masuk') === 'tanggal_selesai' ? 'tanggal_selesai_iso' : 'tanggal_masuk_iso';
+            $historyLayanan = array_values(array_filter($historyLayanan, function ($item) use ($endDate, $dateField) {
+                return ! empty($item[$dateField]) && $item[$dateField] <= $endDate;
+            }));
+        }
+
+        if ($request->filled('jenis') && $request->query('jenis') !== 'all') {
+            $jenis = (string) $request->query('jenis');
+            $historyLayanan = array_values(array_filter($historyLayanan, function ($item) use ($jenis) {
+                return ($item['jenis_layanan'] ?? '') === $jenis;
+            }));
+        }
+
+        if ($request->filled('q')) {
+            $q = strtolower((string) $request->query('q'));
+            $historyLayanan = array_values(array_filter($historyLayanan, function ($item) use ($q) {
+                $searchable = strtolower(($item['nomor_layanan'] ?? '').' '.($item['jenis_layanan'] ?? '').' '.($item['detail_layanan'] ?? '').' '.($item['pemohon'] ?? ''));
+
+                return str_contains($searchable, $q);
+            }));
+        }
+
         $statsHistory = [
             'layanan_masuk' => count($historyLayanan),
             'jenis_skhw' => collect($historyLayanan)->where('jenis_layanan', 'SKHW')->count(),
@@ -447,7 +481,7 @@ class KasiDashboardController extends Controller
             'layanan_selesai' => count($historyLayanan),
         ];
 
-        return view('kasi.history', compact('historyLayanan', 'statsHistory'));
+        return view('kasi.history', compact('historyLayanan', 'rawHistoryLayanan', 'statsHistory'));
     }
 
     /**
@@ -579,5 +613,29 @@ class KasiDashboardController extends Controller
 
         return redirect()->route('kasi.dashboard')
             ->with('success', "Konfirmasi tindak lanjut untuk {$itemNomor} berhasil disimpan.");
+    }
+
+    /**
+     * Hitung jumlah layanan baru yang perlu didisposisikan oleh KASI.
+     */
+    public static function getPerluDisposisiCount(): int
+    {
+        $instance = new self;
+        $layananBaru = session('kasi_layanan_baru', $instance->defaultLayananBaru);
+
+        try {
+            $dbPermohonans = Permohonan::where('status', 'menunggu_verifikasi')->get();
+            foreach ($dbPermohonans as $permohonan) {
+                $nomor = $permohonan->nomor_permohonan ?: ('W15.AHU.AHU.1.AH.06.01-'.str_pad((string) $permohonan->id, 5, '0', STR_PAD_LEFT));
+                $exists = collect($layananBaru)->contains('nomor_layanan', $nomor);
+                if (! $exists) {
+                    $layananBaru[] = ['nomor_layanan' => $nomor];
+                }
+            }
+        } catch (\Throwable) {
+            // Abaikan jika tabel belum ada atau koneksi gagal
+        }
+
+        return count($layananBaru);
     }
 }
