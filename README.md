@@ -1,56 +1,66 @@
-# Pandu BHP Surabaya (Modul Permohonan Wasiat Tertutup)
+# BHP-Pandu Surabaya
 
-Aplikasi portal permohonan layanan dan sistem administrasi Balai Harta Peninggalan (BHP) Surabaya, dengan fokus utama pada alur pendaftaran, penyerahan, dan verifikasi permohonan wasiat tertutup.
+Aplikasi portal permohonan layanan dan sistem administrasi digital Balai Harta Peninggalan (BHP) Surabaya — Direktorat Jenderal Administrasi Hukum Umum (Ditjen AHU), Kementerian Hukum dan HAM RI.
 
----
-
-## 📌 Prasyarat Sistem
-
-Sebelum memulai instalasi, pastikan perangkat Anda sudah terpasang:
-- **PHP** `>= 8.3` (Disarankan PHP 8.3 - 8.5)
-  - Ekstensi PHP yang dibutuhkan: `pdo_mysql`, `openssl`, `mbstring`, `tokenizer`, `xml`, `ctype`, `json`, `curl`, `fileinfo`
-- **Composer** `2.x`
-- **Node.js** `>= 18.x` & **NPM**
-- **Database Server**: MySQL `>= 8.0` / MariaDB / TiDB Cloud
-- **Git**
+Aplikasi ini mencakup alur permohonan wasiat (terbuka & tertutup), Surat Keterangan Hak Waris (SKHW), pemantauan Service Level Agreement (SLA), hingga manajemen disposisi penugasan layanan oleh Kepala Seksi (KASI) ke fungsional Kurator Keperdataan (PIC).
 
 ---
 
-## 🚀 Panduan Instalasi & Setup Pertama Kali
+## 🌟 Fitur Utama
 
-Ikuti langkah-langkah berikut secara berurutan:
+- **Portal Pemohon**: Pendaftaran & verifikasi akun, pengajuan layanan wasiat & SKHW, pengunggahan berkas persyaratan, dan pemantauan status permohonan secara real-time.
+- **Dashboard Verifikasi Petugas**: Pemeriksaan kelengkapan berkas fisik & digital, verifikasi data pemohon, dan pencatatan hasil telaah.
+- **Dashboard KASI (Kepala Seksi)**:
+  - **Disposisi Layanan**: Penugasan permohonan masuk ke petugas PIC/Kurator Keperdataan (Pertama, Muda, Madya).
+  - **Pemantauan SLA**: Pemantauan batas waktu layanan (SLA Mendesak 13–14 hari & SLA Perhatian 8–12 hari) serta form tindak lanjut penyelesaian.
+  - **History Layanan**: Rekapitulasi riwayat penyelesaian layanan lengkap dengan filter rentang tanggal (Mulai – Sampai) dan filter kategori layanan reaktif.
 
-### 1. Clone Repository
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Laravel 13](https://laravel.com/) (PHP `>= 8.3`)
+- **Frontend**: Blade Templating, [Tailwind CSS](https://tailwindcss.com/), [Alpine.js](https://alpinejs.dev/)
+- **Bundler**: [Vite](https://vitejs.dev/)
+- **Database**: MySQL `>= 8.0` / TiDB Cloud
+- **Testing**: PHPUnit
+
+---
+
+## 🚀 Getting Started
+
+Ikuti langkah-langkah berikut untuk menjalankan proyek di komputer lokal:
+
+### 1. Prasyarat Sistem
+Pastikan perangkat Anda telah terpasang:
+- PHP `>= 8.3` (dengan ekstensi `pdo_mysql`, `mbstring`, `openssl`, `fileinfo`, `curl`)
+- Composer `>= 2.x`
+- Node.js `>= 18.x` & NPM
+- MySQL Server / MariaDB
+
+### 2. Clone Repository
 ```bash
 git clone https://github.com/BHP-Surabaya/BHP-pandu.git
 cd BHP-pandu
 ```
 
-### 2. Install Dependensi PHP (Composer)
+### 3. Install Dependensi
 ```bash
+# Dependensi PHP
 composer install
-```
 
-### 3. Install Dependensi Frontend (NPM)
-```bash
+# Dependensi Frontend
 npm install
 ```
 
 ### 4. Konfigurasi Environment (`.env`)
-Salin file template `.env.example` menjadi `.env`:
+Salin file template `.env.example` ke `.env` lalu generate application key:
 ```bash
 cp .env.example .env
-```
-
-Generate application key:
-```bash
 php artisan key:generate
 ```
 
-### 5. Konfigurasi Koneksi Database
-Buka file `.env` di text editor Anda dan sesuaikan konfigurasi database:
-
-#### A. Menggunakan MySQL Lokal (XAMPP / MySQL Service)
+Buka file `.env` dan sesuaikan koneksi database Anda:
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -59,107 +69,47 @@ DB_DATABASE=bhp_permohonan_wasiat
 DB_USERNAME=root
 DB_PASSWORD=
 ```
-> **Catatan:** Pastikan database `bhp_permohonan_wasiat` sudah dibuat di MySQL/phpMyAdmin sebelum menjalankan migrasi.
+> **Catatan:** Buat database bernama `bhp_permohonan_wasiat` di MySQL/phpMyAdmin sebelum langkah berikutnya.
 
-#### B. Menggunakan TiDB Cloud (SSL Connection)
-```env
-DB_CONNECTION=mysql
-DB_HOST=gateway01.ap-southeast-1.prod.aws.tidbcloud.com
-DB_PORT=4000
-DB_DATABASE=bhp_permohonan_wasiat
-DB_USERNAME=your_username.root
-DB_PASSWORD=your_password
-MYSQL_ATTR_SSL_CA=/etc/ssl/certs/ca-certificates.crt
-MYSQL_ATTR_SSL_VERIFY_SERVER_CERT=true
-```
-
-### 6. Jalankan Migrasi & Database Seeder
-Jalankan migrasi tabel beserta data awal/demo:
+### 5. Migrasi & Seeder Database
+Jalankan migrasi struktur tabel sekaligus data awal demo:
 ```bash
 php artisan migrate --seed
 ```
 
-### 7. Buat Symbolic Link Storage (Untuk Upload Dokumen)
-Aplikasi membutuhkan symbolic link agar file dokumen yang diunggah pemohon dapat diakses oleh sistem:
+### 6. Hubungkan Storage Link
+Buat symbolic link storage agar berkas dokumen upload dapat diakses:
 ```bash
 php artisan storage:link
 ```
 
-### 8. Compile Asset Frontend
-Kompilasi asset Vite (CSS & JS) untuk tampilan:
+### 7. Build Frontend Asset
+Kompilasi asset Tailwind CSS & JS:
 ```bash
 npm run build
 ```
 
-### 9. Jalankan Aplikasi
+### 8. Jalankan Aplikasi
 Jalankan development server Laravel:
 ```bash
 php artisan serve
 ```
-Buka browser dan akses: [http://localhost:8000](http://localhost:8000)
+Aplikasi dapat diakses melalui browser di: [http://localhost:8000](http://localhost:8000)
 
-> **Tips:** Anda juga dapat menggunakan perintah bawaan untuk menjalankan server Laravel dan Vite sekaligus:
+> **Tips:** Anda juga dapat menjalankan server Laravel dan Vite secara bersamaan menggunakan:
 > ```bash
 > composer run dev
 > ```
 
 ---
 
-## 👥 Akun Default (Hasil Seeder)
+## 🧪 Menjalankan Pengujian (Testing)
 
-Setelah menjalankan `php artisan db:seed` atau `migrate --seed`, Anda dapat masuk menggunakan akun demo berikut:
-
-| Peran (Role) | Email | Password | Keterangan |
-| :--- | :--- | :--- | :--- |
-| **Petugas BHP** | `petugas@bhp.test` | `password` | Mengakses dashboard verifikasi petugas |
-| **Pemohon** | `pemohon@bhp.test` | `password` | Mengakses portal pengajuan pemohon |
-| **Pengguna Demo** | `test@example.com` | `password` | Akun pemohon umum |
-
----
-
-## 🔄 Cara Menarik Pembaruan (Git Pull / Sinkronisasi)
-
-Jika rekan tim memperbarui repository GitHub dan Anda ingin menyinkronkan laptop Anda:
-
-```bash
-# 1. Tarik pembaruan kode terbaru
-git pull origin main
-
-# 2. Update dependensi jika ada perubahan
-composer install
-npm install
-
-# 3. Jalankan migrasi jika ada struktur tabel baru
-php artisan migrate
-
-# 4. Bersihkan cache Laravel
-php artisan optimize:clear
-
-# 5. Rebuild asset frontend
-npm run build
-```
-
----
-
-## 🧪 Menjalankan Automated Test
-
-Aplikasi ini dilengkapi pengujian fitur (Feature Tests) menggunakan PHPUnit:
-
+Jalankan test suite menggunakan PHPUnit:
 ```bash
 # Menjalankan seluruh test
 php artisan test
 
-# Menjalankan pengujian tertentu (misal: pengujian profil)
-php artisan test --filter=ProfileTest
+# Menjalankan test fitur KASI saja
+php artisan test tests/Feature/Kasi/KasiDashboardTest.php
 ```
-
----
-
-## 📂 Struktur Utama Proyek
-
-- `app/Http/Controllers/` : Controller alur permohonan wasiat, profil, dan otentikasi.
-- `app/Models/` : Model Eloquent (`Permohonan`, `Pewasiat`, `Pasangan`, `AhliWaris`, `Dokumen`, `Voucher`, `User`).
-- `database/migrations/` : Skema struktur database permohonan dan pengguna.
-- `database/seeders/` : Seeder data awal pengguna dan permohonan.
-- `resources/views/` : Template antarmuka Blade (BHP Surabaya theme, Alpine.js & Tailwind CSS).
-- `routes/web.php` : Rute navigasi pemohon dan petugas.
