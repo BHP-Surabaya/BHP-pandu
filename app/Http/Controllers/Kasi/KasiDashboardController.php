@@ -81,6 +81,7 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Permohonan SKHW',
             'pemohon' => 'Dian Puspitasari',
             'tanggal_disposisi' => '9 Mei 2025',
+            'status_layanan' => 'Verifikasi Madya',
             'pic' => ['Januar', 'Indra'],
             'sla_hari' => 14,
             'sla_label' => 'Hari ke-14',
@@ -96,6 +97,7 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Wasiat Terbuka',
             'pemohon' => 'Suhindra Wijaya',
             'tanggal_disposisi' => '12 Mei 2025',
+            'status_layanan' => 'Verifikasi Muda',
             'pic' => ['Maya', 'Lisa'],
             'sla_hari' => 13,
             'sla_label' => 'Hari ke-13',
@@ -111,6 +113,7 @@ class KasiDashboardController extends Controller
             'detail_layanan' => 'Pendaftaran Wasiat',
             'pemohon' => 'PT Adikara Sentosa',
             'tanggal_disposisi' => '16 Mei 2025',
+            'status_layanan' => 'Verifikasi PNBP',
             'pic' => ['Rahmat', 'Kamal'],
             'sla_hari' => 9,
             'sla_label' => 'Hari ke-9',
@@ -342,6 +345,18 @@ class KasiDashboardController extends Controller
         $rawPemantauan = session('kasi_pemantauan_sla', $this->defaultPemantauanSla);
         $pemantauanSla = collect($rawPemantauan)
             ->reject(fn ($item) => ($item['sla_level'] ?? '') === 'normal' || (int) ($item['sla_hari'] ?? 0) <= 7)
+            ->map(function ($item) {
+                if (empty($item['status_layanan'])) {
+                    $item['status_layanan'] = match ((int) ($item['id'] ?? 0)) {
+                        1 => 'Verifikasi Madya',
+                        2 => 'Verifikasi Muda',
+                        3 => 'Verifikasi PNBP',
+                        default => 'Verifikasi Pertama',
+                    };
+                }
+
+                return $item;
+            })
             ->values()
             ->all();
         session(['kasi_pemantauan_sla' => $pemantauanSla]);
@@ -550,6 +565,7 @@ class KasiDashboardController extends Controller
                 'detail_layanan' => $targetItem['detail_layanan'],
                 'pemohon' => $targetItem['pemohon'],
                 'tanggal_disposisi' => now()->translatedFormat('d F Y'),
+                'status_layanan' => 'Verifikasi Pertama',
                 'pic' => $validated['pic'],
                 'sla_hari' => 1,
                 'sla_label' => 'Hari ke-1',

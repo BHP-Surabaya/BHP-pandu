@@ -68,6 +68,10 @@ class KasiDashboardTest extends TestCase
         $response->assertSee('W15.AHU.AHU.1.AH.06.09-00006');
         $response->assertSee('Fajar Nugroho');
         $response->assertSee('Pemantauan SLA Layanan');
+        $response->assertSee('STATUS LAYANAN');
+        $response->assertSee('Verifikasi Madya');
+        $response->assertSee('Verifikasi Muda');
+        $response->assertSee('Verifikasi PNBP');
         $response->assertSee('W15.AHU.AHU.1.AH.06.09-00008');
         $response->assertSee('MENDESAK');
         $response->assertSee('Ahmad Rizki, S.T.');
