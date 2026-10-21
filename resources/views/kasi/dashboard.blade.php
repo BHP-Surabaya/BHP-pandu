@@ -396,6 +396,9 @@
                                 TANGGAL DISPOSISI
                             </th>
                             <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                STATUS LAYANAN
+                            </th>
+                            <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
                                 PIC
                             </th>
                             <th scope="col" class="py-3 px-6 text-[10px] font-bold uppercase tracking-wider text-gray-400">
@@ -442,6 +445,29 @@
                                 <!-- Tanggal Disposisi -->
                                 <td class="py-4 px-6 text-gray-800 font-medium whitespace-nowrap">
                                     {{ $sla['tanggal_disposisi'] }}
+                                </td>
+
+                                <!-- Status Layanan Badge -->
+                                <td class="py-4 px-6 whitespace-nowrap">
+                                    @php
+                                        $statusLayanan = $sla['status_layanan'] ?? 'Verifikasi Pertama';
+                                        $badgeClass = match ($statusLayanan) {
+                                            'Verifikasi Madya' => 'bg-purple-50 text-purple-700 border-purple-200/80',
+                                            'Verifikasi Muda' => 'bg-blue-50 text-blue-700 border-blue-200/80',
+                                            'Verifikasi PNBP' => 'bg-emerald-50 text-emerald-700 border-emerald-200/80',
+                                            default => 'bg-amber-50 text-amber-700 border-amber-200/80',
+                                        };
+                                        $dotClass = match ($statusLayanan) {
+                                            'Verifikasi Madya' => 'bg-purple-500',
+                                            'Verifikasi Muda' => 'bg-blue-500',
+                                            'Verifikasi PNBP' => 'bg-emerald-500',
+                                            default => 'bg-amber-500',
+                                        };
+                                    @endphp
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border {{ $badgeClass }}">
+                                        <span class="w-1.5 h-1.5 rounded-full {{ $dotClass }}"></span>
+                                        <span>{{ $statusLayanan }}</span>
+                                    </span>
                                 </td>
 
                                 <!-- PIC Pills (Januar, Indra, etc.) -->
@@ -507,7 +533,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="py-8 text-center text-gray-400">
+                                <td colspan="9" class="py-8 text-center text-gray-400">
                                     Tidak ada data SLA aktif saat ini.
                                 </td>
                             </tr>
@@ -849,12 +875,19 @@
                             </div>
                         </div>
 
-                        <!-- Divider & PIC Chips -->
-                        <div class="border-t border-gray-200/60 pt-3 flex items-center gap-2 flex-wrap">
-                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">PIC:</span>
-                            <template x-for="picName in (selectedItem && selectedItem.pic ? selectedItem.pic : ['Januar', 'Inara'])" :key="picName">
-                                <span class="inline-flex items-center px-3 py-1 rounded-lg bg-white border border-gray-200 text-gray-700 text-xs font-semibold shadow-2xs" 
-                                      x-text="picName">
+                        <!-- Divider & PIC Chips & Status Layanan -->
+                        <div class="border-t border-gray-200/60 pt-3 flex items-center justify-between gap-2 flex-wrap">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">PIC:</span>
+                                <template x-for="picName in (selectedItem && selectedItem.pic ? selectedItem.pic : ['Januar', 'Inara'])" :key="picName">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-lg bg-white border border-gray-200 text-gray-700 text-xs font-semibold shadow-2xs" 
+                                          x-text="picName">
+                                    </span>
+                                </template>
+                            </div>
+                            <template x-if="selectedItem && selectedItem.status_layanan">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-gray-100 text-gray-700 border border-gray-200"
+                                      x-text="selectedItem.status_layanan">
                                 </span>
                             </template>
                         </div>
