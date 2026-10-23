@@ -65,6 +65,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Check if the user is a Bendahara Penerimaan.
+     */
+    public function isBendahara(): bool
+    {
+        return in_array($this->role, ['bendahara', 'bendahara_penerimaan'], true);
+    }
+
+    /**
      * Check if the user is a pemohon (applicant).
      */
     public function isPemohon(): bool
@@ -139,6 +147,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
         if ($this->isKasi()) {
             return 'Kepala Seksi';
+        }
+
+        if ($this->isBendahara()) {
+            return 'Bendahara Penerimaan';
         }
 
         if ($this->status_akun === 'notaris') {

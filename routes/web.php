@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\UserVerificationController;
+use App\Http\Controllers\Bendahara\BendaharaPnbpController;
 use App\Http\Controllers\Kasi\KasiDashboardController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\PermohonanWasiatController;
@@ -19,6 +20,10 @@ Route::get('/dashboard', function () {
 
     if (auth()->user()->isKasi()) {
         return redirect()->route('kasi.dashboard');
+    }
+
+    if (auth()->user()->isBendahara()) {
+        return redirect()->route('bendahara.verifikasi.index');
     }
 
     if (auth()->user()->isPetugas()) {
@@ -64,6 +69,13 @@ Route::middleware(['auth', 'role:kasi,kepala_seksi'])->prefix('kasi')->name('kas
     Route::get('/history', [KasiDashboardController::class, 'history'])->name('history');
     Route::post('/disposisi/{id}', [KasiDashboardController::class, 'disposisi'])->name('disposisi');
     Route::post('/tindak-lanjut/{id}', [KasiDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
+});
+
+Route::middleware(['auth', 'role:bendahara,bendahara_penerimaan'])->prefix('bendahara')->name('bendahara.')->group(function () {
+    Route::get('/verifikasi-pnbp', [BendaharaPnbpController::class, 'index'])->name('verifikasi.index');
+    Route::post('/verifikasi-pnbp/{id}/tindak-lanjut', [BendaharaPnbpController::class, 'tindakLanjut'])->name('verifikasi.tindak-lanjut');
+    Route::get('/riwayat-pnbp', [BendaharaPnbpController::class, 'history'])->name('history.index');
+    Route::get('/riwayat-pnbp/export', [BendaharaPnbpController::class, 'export'])->name('history.export');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

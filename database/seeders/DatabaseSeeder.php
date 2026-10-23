@@ -60,6 +60,20 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Akun Bendahara Penerimaan
+        User::firstOrCreate(
+            ['email' => 'bendahara@pandubhp.go.id'],
+            [
+                'name' => 'Bendahara Penerimaan BHP',
+                'password' => bcrypt('password'),
+                'role' => 'bendahara',
+                'pekerjaan' => 'Bendahara Penerimaan',
+                'status_akun' => 'bendahara',
+                'status_verifikasi' => 'terverifikasi',
+                'email_verified_at' => now(),
+            ]
+        );
+
         // Contoh akun Pemohon
         User::firstOrCreate(
             ['email' => 'pemohon@bhp.test'],
