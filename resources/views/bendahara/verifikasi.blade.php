@@ -231,64 +231,62 @@
             </a>
         </div>
 
-        <!-- Filter & Search Bar -->
-        <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-xs space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between sm:gap-4">
-            <!-- Filter Tabs -->
-            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 text-xs font-semibold">
-                <a href="{{ route('bendahara.verifikasi.index', ['status' => 'all', 'q' => request('q')]) }}"
-                   class="px-3.5 py-2 rounded-xl transition whitespace-nowrap {{ ($statusFilter ?? 'all') === 'all' ? 'bg-blue-600 text-white shadow-xs' : 'text-gray-600 hover:bg-gray-100' }}">
-                    Semua ({{ $stats['total_verifikasi'] ?? 0 }})
-                </a>
-                <a href="{{ route('bendahara.verifikasi.index', ['status' => 'sudah_bayar', 'q' => request('q')]) }}"
-                   class="px-3.5 py-2 rounded-xl transition whitespace-nowrap {{ ($statusFilter ?? '') === 'sudah_bayar' ? 'bg-emerald-600 text-white shadow-xs' : 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100' }}">
-                    Sudah Bayar ({{ $stats['sudah_bayar'] ?? 0 }})
-                </a>
-                <a href="{{ route('bendahara.verifikasi.index', ['status' => 'belum_bayar', 'q' => request('q')]) }}"
-                   class="px-3.5 py-2 rounded-xl transition whitespace-nowrap {{ ($statusFilter ?? '') === 'belum_bayar' ? 'bg-amber-600 text-white shadow-xs' : 'text-amber-700 bg-amber-50 hover:bg-amber-100' }}">
-                    Belum Bayar ({{ $stats['belum_bayar'] ?? 0 }})
-                </a>
-                <a href="{{ route('bendahara.verifikasi.index', ['status' => 'kadaluarsa', 'q' => request('q')]) }}"
-                   class="px-3.5 py-2 rounded-xl transition whitespace-nowrap {{ ($statusFilter ?? '') === 'kadaluarsa' ? 'bg-rose-600 text-white shadow-xs' : 'text-rose-700 bg-rose-50 hover:bg-rose-100' }}">
-                    Lewat SLA (> 14 Hari) ({{ $stats['kadaluarsa'] ?? 0 }})
-                </a>
-            </div>
-
-            <!-- Search Input Form -->
-            <form action="{{ route('bendahara.verifikasi.index') }}" method="GET" class="relative max-w-xs w-full shrink-0">
+        <!-- ======================================================== -->
+        <!-- PENCARIAN ANTREAN PNBP (SEARCH BAR TERINTEGRASI RAPI) -->
+        <!-- ======================================================== -->
+        <div class="bg-white rounded-2xl border border-gray-100 p-3 sm:p-3.5 shadow-xs">
+            <form action="{{ route('bendahara.verifikasi.index') }}" method="GET" class="relative w-full">
                 <input type="hidden" name="status" value="{{ $statusFilter ?? 'all' }}">
-                <div class="relative">
+                <div class="relative flex items-center">
+                    <!-- Icon Search (Vertically Centered di Sisi Kiri) -->
+                    <div class="absolute inset-y-0 left-0 pl-3.5 sm:pl-4 flex items-center pointer-events-none text-gray-400">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                        </svg>
+                    </div>
+
+                    <!-- Input Box (Tinggi Nyaman, Font Jelas, & Background Lembut) -->
                     <input type="text" 
                            name="q" 
                            value="{{ request('q') }}"
-                           placeholder="Cari nomor, pemohon, pewasiat..." 
-                           class="w-full pl-9 pr-8 py-2 text-xs rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition" />
-                    <svg class="w-4 h-4 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                    </svg>
-                    @if(request('q'))
-                        <a href="{{ route('bendahara.verifikasi.index', ['status' => $statusFilter ?? 'all']) }}" 
-                           class="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                           placeholder="Cari nomor layanan, nama pemohon, atau nama pewasiat..." 
+                           class="w-full pl-10 sm:pl-12 pr-24 sm:pr-28 py-2.5 sm:py-3 bg-gray-50/70 hover:bg-gray-50 focus:bg-white text-xs sm:text-sm text-gray-900 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition placeholder:text-gray-400 shadow-2xs" />
+
+                    <!-- Tombol Aksi di Dalam Kanan Input (Rapi & Tidak Terpotong) -->
+                    <div class="absolute inset-y-0 right-0 pr-1.5 sm:pr-2 flex items-center gap-1.5">
+                        @if(request('q'))
+                            <a href="{{ route('bendahara.verifikasi.index', ['status' => $statusFilter ?? 'all']) }}" 
+                               class="p-1 sm:p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-200/60 transition"
+                               title="Hapus pencarian">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </a>
+                        @endif
+                        <button type="submit" 
+                                class="inline-flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold rounded-lg shadow-xs transition hover:shadow cursor-pointer">
+                            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                             </svg>
-                        </a>
-                    @endif
+                            <span>Cari</span>
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
 
         <!-- Tabel Verifikasi PNBP -->
         <div class="bg-white rounded-2xl border border-gray-100 shadow-xs overflow-hidden">
-            <div class="p-4 sm:p-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div class="p-4 sm:p-5 border-b border-gray-100 flex items-center justify-between gap-3">
                 <div>
                     <h2 class="text-base font-bold text-gray-900">
                         Daftar Antrean Verifikasi PNBP
                     </h2>
-                    <p class="text-xs text-gray-500">
+                    <p class="text-xs text-gray-500 mt-0.5">
                         Menampilkan permohonan yang memerlukan validasi setoran PNBP dan pemantauan masa tenggang 14 hari.
                     </p>
                 </div>
-                <div class="text-xs font-semibold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200/80 self-start sm:self-auto">
+                <div class="text-xs font-semibold text-gray-500 bg-gray-50 px-3 py-1.5 rounded-xl border border-gray-200/80 whitespace-nowrap shrink-0">
                     Total: <span class="text-gray-900 font-bold">{{ count($pnbpList) }} Layanan</span>
                 </div>
             </div>
@@ -302,7 +300,8 @@
                             <th scope="col" class="py-3.5 px-4">Nama Pemohon</th>
                             <th scope="col" class="py-3.5 px-4">Nama Pewasiat</th>
                             <th scope="col" class="py-3.5 px-4">Tanggal Masuk</th>
-                            <th scope="col" class="py-3.5 px-4">Status PNBP &amp; SLA</th>
+                            <th scope="col" class="py-3.5 px-4">Status PNBP</th>
+                            <th scope="col" class="py-3.5 px-4">Keterangan</th>
                             <th scope="col" class="py-3.5 px-4 sm:px-6 text-center">Tindak Lanjut</th>
                         </tr>
                     </thead>
@@ -310,7 +309,7 @@
                         @forelse ($pnbpList as $item)
                             <tr class="hover:bg-blue-50/30 transition-colors duration-150">
                                 <!-- 1. Nomor Layanan -->
-                                <td class="py-4 px-4 sm:px-6">
+                                <td class="py-4 px-4 sm:px-6 whitespace-nowrap">
                                     <div class="flex items-center gap-2">
                                         <span class="font-mono font-bold text-gray-900 text-xs select-all">
                                             {{ $item['nomor_layanan'] }}
@@ -331,13 +330,13 @@
                                             </template>
                                         </button>
                                     </div>
-                                    <span class="text-[10px] text-gray-500 font-medium">
-                                        Tarif PNBP: Rp {{ number_format($item['nominal_tagihan'] ?? 200000, 0, ',', '.') }}
+                                    <span class="text-[11px] text-gray-500 block mt-0.5">
+                                        Tarif: Rp {{ number_format($item['nominal_tagihan'] ?? 200000, 0, ',', '.') }}
                                     </span>
                                 </td>
 
                                 <!-- 2. Jenis Layanan -->
-                                <td class="py-4 px-4">
+                                <td class="py-4 px-4 whitespace-nowrap">
                                     <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold 
                                         {{ str_contains(strtolower($item['jenis_layanan']), 'skhw') ? 'bg-sky-50 text-sky-800 border border-sky-100' : 'bg-purple-50 text-purple-800 border border-purple-100' }}">
                                         <span class="w-1.5 h-1.5 rounded-full {{ str_contains(strtolower($item['jenis_layanan']), 'skhw') ? 'bg-sky-500' : 'bg-purple-500' }}"></span>
@@ -346,107 +345,80 @@
                                 </td>
 
                                 <!-- 3. Nama Pemohon -->
-                                <td class="py-4 px-4">
+                                <td class="py-4 px-4 whitespace-nowrap">
                                     <div class="flex items-center gap-2.5">
                                         <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-800 font-bold text-[11px] flex items-center justify-center shrink-0">
                                             {{ strtoupper(substr($item['nama_pemohon'] ?? 'P', 0, 2)) }}
                                         </div>
-                                        <div class="min-w-0">
-                                            <p class="font-bold text-gray-900 leading-snug truncate">
-                                                {{ $item['nama_pemohon'] }}
-                                            </p>
-                                            <p class="text-[11px] text-gray-500 font-medium">
-                                                Pemohon
-                                            </p>
-                                        </div>
+                                        <span class="font-bold text-gray-900 leading-snug">
+                                            {{ $item['nama_pemohon'] }}
+                                        </span>
                                     </div>
                                 </td>
 
                                 <!-- 4. Nama Pewasiat -->
-                                <td class="py-4 px-4">
-                                    <div class="font-medium text-gray-800 leading-snug">
+                                <td class="py-4 px-4 whitespace-nowrap">
+                                    <span class="font-medium text-gray-800">
                                         {{ $item['nama_pewasiat'] ?: '-' }}
-                                    </div>
-                                    <span class="text-[10px] text-gray-500">
-                                        Pewasiat
                                     </span>
                                 </td>
 
                                 <!-- 5. Tanggal Masuk Layanan -->
                                 <td class="py-4 px-4 whitespace-nowrap">
-                                    <div class="text-gray-900 font-semibold">
+                                    <span class="text-gray-900 font-medium">
                                         {{ $item['tanggal_masuk'] }}
-                                    </div>
-                                    <span class="text-[10px] text-gray-500">
-                                        Hari ke-{{ $item['sla_hari_berjalan'] ?? 1 }} berjalan
                                     </span>
                                 </td>
 
-                                <!-- 6. Status PNBP (Belum Bayar / Sudah Bayar) + SLA 14 Hari -->
-                                <td class="py-4 px-4">
+                                <!-- 6. Status PNBP -->
+                                <td class="py-4 px-4 whitespace-nowrap">
                                     @if (($item['status_pnbp'] ?? '') === 'sudah_bayar')
-                                        <div class="space-y-1">
-                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-xs">
-                                                <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                                </svg>
-                                                Sudah Bayar
-                                            </span>
-                                            <div class="text-[11px] font-medium text-emerald-700 flex items-center gap-1">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                                <span>Siap Input NTPN &amp; Voucher</span>
-                                            </div>
-                                        </div>
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs">
+                                            <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                            </svg>
+                                            Sudah Bayar
+                                        </span>
+                                    @elseif ($item['is_expired'] ?? false)
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200/80 shadow-2xs">
+                                            <svg class="w-3.5 h-3.5 text-rose-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                                            </svg>
+                                            Lewat SLA
+                                        </span>
                                     @else
-                                        <!-- Belum Bayar -->
-                                        <div class="space-y-1.5">
-                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
-                                                <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                </svg>
-                                                Belum Bayar
-                                            </span>
-
-                                            <!-- Indikator SLA 14 Hari -->
-                                            @if ($item['is_expired'] ?? false)
-                                                <!-- SLA Lewat > 14 Hari: Harus Daftar Lagi -->
-                                                <div class="p-1.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-800 text-[10px] space-y-0.5">
-                                                    <div class="font-bold flex items-center gap-1 text-rose-700">
-                                                        <svg class="w-3 h-3 text-rose-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                                                        </svg>
-                                                        <span>Lewat SLA 14 Hari</span>
-                                                    </div>
-                                                    <p class="font-extrabold text-rose-900 uppercase tracking-tight">
-                                                        Harus Daftar Lagi
-                                                    </p>
-                                                </div>
-                                            @elseif (($item['sla_hari_sisa'] ?? 14) <= 3)
-                                                <!-- SLA Mendekati Habis (1-3 hari sisa) -->
-                                                <div class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100">
-                                                    <svg class="w-3 h-3 animate-bounce" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0 3.75h.007v.008H12v-.008z" />
-                                                    </svg>
-                                                    <span>SLA: Sisa {{ $item['sla_hari_sisa'] }} Hari!</span>
-                                                </div>
-                                            @else
-                                                <!-- SLA Aman (> 3 hari sisa) -->
-                                                <div class="inline-flex items-center gap-1 text-[11px] font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">
-                                                    <span>SLA: Sisa {{ $item['sla_hari_sisa'] }} Hari</span>
-                                                </div>
-                                            @endif
-                                        </div>
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200/80 shadow-2xs">
+                                            <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Belum Bayar
+                                        </span>
                                     @endif
                                 </td>
 
-                                <!-- 7. Tindak Lanjut -->
-                                <td class="py-4 px-4 sm:px-6 text-center">
+                                <!-- 7. Keterangan -->
+                                <td class="py-4 px-4 whitespace-nowrap">
+                                    @if (($item['status_pnbp'] ?? '') === 'sudah_bayar')
+                                        <span class="text-xs font-semibold text-emerald-700">
+                                            Siap Input NTPN &amp; Voucher
+                                        </span>
+                                    @elseif ($item['is_expired'] ?? false)
+                                        <span class="text-xs font-semibold text-rose-600">
+                                            Harus Daftar Lagi
+                                        </span>
+                                    @else
+                                        <span class="text-xs text-gray-400 font-medium">-</span>
+                                    @endif
+                                </td>
+
+                                <!-- 8. Tindak Lanjut -->
+                                <td class="py-4 px-4 sm:px-6 text-center whitespace-nowrap">
                                     @if (($item['status_pnbp'] ?? '') === 'sudah_bayar')
                                         <!-- Tombol Tindak Lanjut: Membuka Form Input NTPN & Upload Voucher -->
                                         <button type="button" 
                                                 @click="openTindakLanjutModal({{ json_encode($item) }})"
-                                                class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm hover:shadow transition transform hover:-translate-y-0.5 active:translate-y-0">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition hover:shadow">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                             </svg>
                                             <span>Tindak Lanjut</span>
@@ -455,8 +427,8 @@
                                         <!-- Jika Belum Bayar: Tombol Info SLA / Batas Bayar -->
                                         <button type="button" 
                                                 @click="openSlaInfoModal({{ json_encode($item) }})"
-                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border {{ ($item['is_expired'] ?? false) ? 'border-rose-300 text-rose-700 bg-rose-50 hover:bg-rose-100' : 'border-gray-200 text-gray-700 bg-gray-50 hover:bg-gray-100' }} text-xs font-semibold transition">
-                                            <svg class="w-3.5 h-3.5 {{ ($item['is_expired'] ?? false) ? 'text-rose-600' : 'text-gray-500' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border {{ ($item['is_expired'] ?? false) ? 'border-rose-200 text-rose-700 bg-rose-50/70 hover:bg-rose-100' : 'border-gray-200 text-gray-600 bg-gray-50/70 hover:bg-gray-100' }} text-xs font-semibold transition">
+                                            <svg class="w-3.5 h-3.5 {{ ($item['is_expired'] ?? false) ? 'text-rose-600' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
                                             </svg>
                                             <span>{{ ($item['is_expired'] ?? false) ? 'Info Kadaluarsa' : 'Info SLA' }}</span>
@@ -466,7 +438,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="py-12 px-6 text-center text-gray-500">
+                                <td colspan="8" class="py-12 px-6 text-center text-gray-500">
                                     <div class="max-w-sm mx-auto flex flex-col items-center">
                                         <div class="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center text-gray-400 mb-3">
                                             <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
