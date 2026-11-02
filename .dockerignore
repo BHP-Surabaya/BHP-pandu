@@ -9,3 +9,9 @@ tests
 .phpunit.cache
 .phpunit.result.cache
 storage/logs/*.log
+public/hot
+public/storage
+.agents
+.vscode
+.idea
+docker-compose*.yml
