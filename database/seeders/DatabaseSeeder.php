@@ -60,6 +60,20 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Akun JFKK Pertama (Kurator Keperdataan Pertama)
+        User::firstOrCreate(
+            ['email' => 'jfkk.pertama@pandubhp.go.id'],
+            [
+                'name' => 'Iman, S.H.',
+                'password' => bcrypt('password'),
+                'role' => 'petugas',
+                'pekerjaan' => 'Kurator Keperdataan Pertama',
+                'status_akun' => 'petugas',
+                'status_verifikasi' => 'terverifikasi',
+                'email_verified_at' => now(),
+            ]
+        );
+
         // Akun Bendahara Penerimaan
         User::firstOrCreate(
             ['email' => 'bendahara@pandubhp.go.id'],

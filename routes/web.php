@@ -5,6 +5,7 @@ use App\Http\Controllers\Bendahara\BendaharaPnbpController;
 use App\Http\Controllers\Kasi\KasiDashboardController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\PermohonanWasiatController;
+use App\Http\Controllers\Petugas\PetugasDashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Permohonan;
 use Illuminate\Support\Facades\Route;
@@ -58,10 +59,10 @@ Route::middleware(['auth', 'role:master_admin'])->prefix('admin')->name('admin.'
     Route::delete('/verifikasi/{user}', [UserVerificationController::class, 'destroy'])->name('verifikasi.destroy');
 });
 
-Route::middleware(['auth', 'role:petugas'])->group(function () {
-    Route::get('/petugas/dashboard', function () {
-        return view('petugas.dashboard');
-    })->name('petugas.dashboard');
+Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')->group(function () {
+    Route::get('/dashboard', [PetugasDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/history', [PetugasDashboardController::class, 'history'])->name('history');
+    Route::post('/verifikasi/{id}/tindak-lanjut', [PetugasDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
 });
 
 Route::middleware(['auth', 'role:kasi,kepala_seksi'])->prefix('kasi')->name('kasi.')->group(function () {
