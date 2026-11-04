@@ -81,4 +81,33 @@ class UserFactory extends Factory
             'status_verifikasi' => 'terverifikasi',
         ]);
     }
+
+    /**
+     * Indicate that the user is a KASI (Kepala Seksi).
+     */
+    public function kasi(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'Ahmad Rizki, S.T.',
+            'role' => 'kasi',
+            'pekerjaan' => 'Kepala Seksi',
+            'status_akun' => 'kasi',
+            'status_verifikasi' => 'terverifikasi',
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a JFKK Pertama (Kurator Keperdataan Pertama).
+     */
+    public function jfkkPertama(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'Iman, S.H.',
+            'email' => 'jfkk.pertama@pandubhp.go.id',
+            'role' => 'petugas',
+            'pekerjaan' => 'Kurator Keperdataan Pertama',
+            'status_akun' => 'petugas',
+            'status_verifikasi' => 'terverifikasi',
+        ]);
+    }
 }
