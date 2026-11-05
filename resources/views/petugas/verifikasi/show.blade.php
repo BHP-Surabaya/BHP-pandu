@@ -660,59 +660,68 @@
                         </div>
 
                         <!-- ================= ACTION & KEPUTUSAN VERIFIKASI ================= -->
-                        <div class="p-6 sm:p-7 bg-slate-50/50 border-t border-gray-100 space-y-6">
-                            <div>
-                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-3">
-                                    Hasil Telaah Persyaratan
-                                </label>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
-                                    <label class="flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition text-xs font-semibold shadow-2xs"
-                                           :class="statusKeputusan === 'disetujui' ? 'border-[#1d68d8] bg-blue-50/60 text-[#1d68d8] ring-2 ring-[#1d68d8]/20' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'">
-                                        <input type="radio" name="status" value="disetujui" x-model="statusKeputusan" class="mt-0.5 text-[#1d68d8] focus:ring-[#1d68d8]">
-                                        <div>
-                                            <div class="font-bold text-gray-900">Setujui Persyaratan Dokumen</div>
-                                            <div class="text-[11px] text-gray-500 font-normal mt-0.5">
-                                                Seluruh berkas fisik/digital lengkap & valid. Teruskan ke tahap selanjutnya.
-                                            </div>
-                                        </div>
-                                    </label>
+                        <div class="p-6 sm:p-8 bg-slate-50/60 border-t border-gray-200/80">
+                            <div class="max-w-3xl mx-auto space-y-6">
+                                
+                                <!-- Pilihan Keputusan -->
+                                <div>
+                                    <div class="flex items-center justify-between mb-3">
+                                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                            Hasil Telaah Persyaratan
+                                        </label>
+                                        <span class="text-[11px] font-medium text-gray-400">Pilih salah satu keputusan</span>
+                                    </div>
 
-                                    <label class="flex items-start gap-3 p-4 rounded-2xl border cursor-pointer transition text-xs font-semibold shadow-2xs"
-                                           :class="statusKeputusan === 'revisi' ? 'border-amber-500 bg-amber-50/60 text-amber-900 ring-2 ring-amber-500/20' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'">
-                                        <input type="radio" name="status" value="revisi" x-model="statusKeputusan" class="mt-0.5 text-amber-500 focus:ring-amber-500">
-                                        <div>
-                                            <div class="font-bold text-gray-900">Minta Perbaikan / Revisi Berkas</div>
-                                            <div class="text-[11px] text-gray-500 font-normal mt-0.5">
-                                                Terdapat dokumen yang buram, tidak sesuai, atau belum lengkap diunggah pemohon.
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <label class="flex items-start gap-3.5 p-4 rounded-2xl border cursor-pointer transition text-xs font-semibold shadow-2xs"
+                                               :class="statusKeputusan === 'disetujui' ? 'border-[#1d68d8] bg-blue-50/70 text-[#1d68d8] ring-2 ring-[#1d68d8]/20' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'">
+                                            <input type="radio" name="status" value="disetujui" x-model="statusKeputusan" class="mt-0.5 text-[#1d68d8] focus:ring-[#1d68d8]">
+                                            <div>
+                                                <div class="font-bold text-gray-900">Setujui Persyaratan Dokumen</div>
+                                                <div class="text-[11px] text-gray-500 font-normal mt-0.5 leading-relaxed">
+                                                    Seluruh berkas fisik/digital lengkap &amp; valid. Teruskan ke tahap selanjutnya.
+                                                </div>
                                             </div>
-                                        </div>
-                                    </label>
+                                        </label>
+
+                                        <label class="flex items-start gap-3.5 p-4 rounded-2xl border cursor-pointer transition text-xs font-semibold shadow-2xs"
+                                               :class="statusKeputusan === 'revisi' ? 'border-amber-500 bg-amber-50/70 text-amber-900 ring-2 ring-amber-500/20' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'">
+                                            <input type="radio" name="status" value="revisi" x-model="statusKeputusan" class="mt-0.5 text-amber-500 focus:ring-amber-500">
+                                            <div>
+                                                <div class="font-bold text-gray-900">Minta Perbaikan / Revisi Berkas</div>
+                                                <div class="text-[11px] text-gray-500 font-normal mt-0.5 leading-relaxed">
+                                                    Terdapat dokumen yang buram, tidak sesuai, atau belum lengkap diunggah pemohon.
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Catatan Verifikator -->
-                            <div class="max-w-3xl">
-                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                                    Catatan Verifikator Persyaratan
-                                </label>
-                                <textarea name="catatan" rows="3" 
-                                          placeholder="Tuliskan catatan verifikasi (opsional untuk persetujuan, wajib bila meminta revisi pemohon)..."
-                                          class="w-full text-xs rounded-2xl border-gray-200 focus:border-[#1d68d8] focus:ring-[#1d68d8]/20 p-3.5 bg-white shadow-2xs"></textarea>
-                            </div>
+                                <!-- Catatan Verifikator -->
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                                        Catatan Verifikator Persyaratan
+                                    </label>
+                                    <textarea name="catatan" rows="3" 
+                                              placeholder="Tuliskan catatan verifikasi (opsional untuk persetujuan, wajib bila meminta revisi pemohon)..."
+                                              class="w-full text-xs rounded-2xl border-gray-200 focus:border-[#1d68d8] focus:ring-[#1d68d8]/20 p-4 bg-white shadow-2xs leading-relaxed"></textarea>
+                                </div>
 
-                            <!-- Tombol Aksi -->
-                            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-gray-200/60">
-                                <a href="{{ route('petugas.dashboard') }}" 
-                                   class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-gray-200 text-xs font-semibold text-gray-600 hover:bg-gray-100 transition text-center cursor-pointer">
-                                    Kembali ke Daftar
-                                </a>
-                                <button type="submit" 
-                                        class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#0c2a55] hover:bg-[#103873] active:bg-[#00479e] text-white text-xs font-bold shadow-md shadow-blue-950/10 transition active:scale-95 cursor-pointer">
-                                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                    </svg>
-                                    <span>Simpan Hasil Verifikasi</span>
-                                </button>
+                                <!-- Tombol Aksi (Tengah / Centered) -->
+                                <div class="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-4 border-t border-gray-200/70">
+                                    <a href="{{ route('petugas.dashboard') }}" 
+                                       class="w-full sm:w-auto px-6 py-2.5 rounded-xl border border-gray-300 bg-white hover:bg-gray-100 text-xs font-semibold text-gray-700 transition text-center cursor-pointer shadow-2xs active:scale-95">
+                                        Kembali ke Daftar
+                                    </a>
+                                    <button type="submit" 
+                                            class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-2.5 rounded-xl bg-[#0c2a55] hover:bg-[#103873] active:bg-[#00479e] text-white text-xs font-bold shadow-md shadow-blue-950/10 transition active:scale-95 cursor-pointer">
+                                        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                        </svg>
+                                        <span>Simpan Hasil Verifikasi</span>
+                                    </button>
+                                </div>
+
                             </div>
                         </div>
 
