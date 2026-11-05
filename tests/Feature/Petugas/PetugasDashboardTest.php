@@ -88,12 +88,13 @@ class PetugasDashboardTest extends TestCase
         $response->assertOk();
         $response->assertSee('Data Input Pemohon');
         $response->assertSee('Dokumen Persyaratan');
-        $response->assertSee('Verifikasi Permohonan');
+        $response->assertSee('Verifikasi Data Input dan Persyaratan');
         $response->assertSee('Nadia Prameswari');
         $response->assertSee('KTP Pemohon.pdf');
-        $response->assertSee('Ada Akta Kematian dan scan Akta Kematian.');
-        $response->assertSee('Ada Surat Keterangan Wasiat dari DPW, Ditjen AHU, dan hasil scan.');
-        $response->assertSee('Kesesuaian nama pewasiat pada Akta Kematian dan Akta Penyimpanan Wasiat.');
+        $response->assertSee('Permohonan diajukan oleh Notaris');
+        $response->assertSee('Verifikasi Data Pewasiat');
+        $response->assertSee('Daftar Pusat Wasiat, Ditjen AHU');
+        $response->assertSee('Verifikasi data dan informasi para Ahli Waris');
     }
 
     public function test_pemohon_cannot_view_verifikasi_detail_page(): void

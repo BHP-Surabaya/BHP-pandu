@@ -15,13 +15,19 @@
              activeDocIndex: 0,
              zoomLevel: 100,
              answers: {
-                 poin1: null,
-                 poin2: null,
-                 poin3: null,
-                 poin4: '',
-                 poin5: null,
-                 poin6: null,
-                 poin7: null,
+                 p_1_a: null,
+                 p_1_b: null,
+                 p_2_a: null,
+                 p_2_b: null,
+                 p_2_c: null,
+                 p_2_d: null,
+                 p_3_a: null,
+                 p_3_b: null,
+                 p_3_c: null,
+                 p_4_a: null,
+                 p_4_b: null,
+                 p_4_c: null,
+                 p_4_d: null,
              },
              statusKeputusan: 'disetujui',
              get currentDoc() {
@@ -29,13 +35,9 @@
              },
              get completedCount() {
                  let count = 0;
-                 if (this.answers.poin1 !== null) count++;
-                 if (this.answers.poin2 !== null) count++;
-                 if (this.answers.poin3 !== null) count++;
-                 if (this.answers.poin4 !== '') count++;
-                 if (this.answers.poin5 !== null) count++;
-                 if (this.answers.poin6 !== null) count++;
-                 if (this.answers.poin7 !== null) count++;
+                 for (let k in this.answers) {
+                     if (this.answers[k] !== null) count++;
+                 }
                  return count;
              },
              openDocSplit(index) {
@@ -255,7 +257,7 @@
                 <div class="bg-white rounded-3xl border border-gray-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden">
                     
                     <!-- Header Card -->
-                    <div class="p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-50">
+                    <div class="p-6 sm:p-7 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-100">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center shadow-2xs flex-shrink-0">
                                 <!-- Shield Check Icon -->
@@ -265,17 +267,17 @@
                             </div>
                             <div>
                                 <h2 class="text-base font-bold text-gray-900 tracking-tight">
-                                    Verifikasi Permohonan
+                                    Verifikasi Data Input dan Persyaratan
                                 </h2>
-                                <p class="text-xs text-gray-400 mt-0.5">
-                                    Bandingkan data permohonan dengan dokumen yang telah diunggah.
+                                <p class="text-xs text-gray-500 mt-0.5">
+                                    Permohonan Pembukaan/Pembacaan Wasiat Tertutup Oleh Fungsional Pertama
                                 </p>
                             </div>
                         </div>
 
                         <div>
-                            <span class="inline-flex items-center px-3 py-1.5 rounded-xl bg-gray-50 border border-gray-200/80 text-xs font-semibold text-gray-600 font-mono shadow-2xs">
-                                <span x-text="completedCount" class="font-bold text-[#1d68d8]">0</span>&nbsp;dari 7 diperiksa
+                            <span class="inline-flex items-center px-3.5 py-1.5 rounded-xl bg-gray-50 border border-gray-200/80 text-xs font-semibold text-gray-700 font-mono shadow-2xs">
+                                <span x-text="completedCount" class="font-bold text-[#1d68d8]">0</span>&nbsp;dari 13 diperiksa
                             </span>
                         </div>
                     </div>
@@ -284,185 +286,369 @@
                     <form action="{{ route('petugas.tindak-lanjut', $layanan['id']) }}" method="POST">
                         @csrf
 
-                        <!-- Table Poin Pemeriksaan -->
+                        <!-- Table Poin Pemeriksaan Resmi Sesuai Acuan SOP -->
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse">
                                 <thead>
-                                    <tr class="border-b border-gray-100 bg-gray-50/40 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                                    <tr class="border-b border-gray-200 bg-gray-50/70 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
                                         <th scope="col" class="py-3 px-4 w-12 text-center">NO.</th>
-                                        <th scope="col" class="py-3 px-4">POIN PEMERIKSAAN</th>
-                                        <th scope="col" class="py-3 px-6 text-right">HASIL PEMERIKSAAN</th>
+                                        <th scope="col" class="py-3 px-4">POIN PEMERIKSAAN DATA &amp; PERSYARATAN</th>
+                                        <th scope="col" class="py-3 px-6 text-right w-44">CEKLIST (HASIL)</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-gray-100 text-xs text-gray-700 font-medium">
 
-                                    <!-- POIN 1 -->
-                                    <tr class="hover:bg-gray-50/50 transition">
-                                        <td class="py-4 px-4 text-center text-gray-400 font-semibold">1</td>
-                                        <td class="py-4 px-4 text-gray-800">
-                                            Ada Akta Kematian dan scan Akta Kematian.
+                                    <!-- ================= 1. VERIFIKASI UMUM ================= -->
+                                    <tr class="bg-slate-100/80 border-t border-b border-gray-200/80">
+                                        <td class="py-2.5 px-4 text-center font-black text-[#0b2e66]">1</td>
+                                        <td colspan="2" class="py-2.5 px-4 font-bold text-[#0b2e66] tracking-wide">
+                                            Verifikasi Umum Permohonan Pembukaan dan Pembacaan Wasiat
                                         </td>
-                                        <td class="py-4 px-6 text-right whitespace-nowrap">
-                                            <input type="hidden" name="poin1" :value="answers.poin1">
-                                            <div class="inline-flex items-center gap-2 justify-end">
+                                    </tr>
+
+                                    <!-- 1.a -->
+                                    <tr class="hover:bg-gray-50/50 transition">
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">a</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            Permohonan diajukan oleh Notaris
+                                        </td>
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_1_a" :value="answers.p_1_a">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
                                                 <button type="button" 
-                                                        @click="answers.poin1 = (answers.poin1 === 'iya' ? null : 'iya')"
-                                                        :class="answers.poin1 === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
-                                                        class="px-4 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                        @click="answers.p_1_a = (answers.p_1_a === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_1_a === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
                                                     Iya
                                                 </button>
                                                 <button type="button" 
-                                                        @click="answers.poin1 = (answers.poin1 === 'tidak' ? null : 'tidak')"
-                                                        :class="answers.poin1 === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
-                                                        class="px-4 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                        @click="answers.p_1_a = (answers.p_1_a === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_1_a === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
                                                     Tidak
                                                 </button>
                                             </div>
                                         </td>
                                     </tr>
 
-                                    <!-- POIN 2 -->
+                                    <!-- 1.b -->
                                     <tr class="hover:bg-gray-50/50 transition">
-                                        <td class="py-4 px-4 text-center text-gray-400 font-semibold">2</td>
-                                        <td class="py-4 px-4 text-gray-800">
-                                            Ada Surat Keterangan Wasiat dari DPW, Ditjen AHU, dan hasil scan.
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">b</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            Selain yang sudah barcode, seluruh dokumen persyaratan yang diupload wajib dilakukan Legalisasi (<em>legalisasir</em>)
                                         </td>
-                                        <td class="py-4 px-6 text-right whitespace-nowrap">
-                                            <input type="hidden" name="poin2" :value="answers.poin2">
-                                            <div class="inline-flex items-center gap-2 justify-end">
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_1_b" :value="answers.p_1_b">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
                                                 <button type="button" 
-                                                        @click="answers.poin2 = (answers.poin2 === 'iya' ? null : 'iya')"
-                                                        :class="answers.poin2 === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
-                                                        class="px-4 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                        @click="answers.p_1_b = (answers.p_1_b === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_1_b === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
                                                     Iya
                                                 </button>
                                                 <button type="button" 
-                                                        @click="answers.poin2 = (answers.poin2 === 'tidak' ? null : 'tidak')"
-                                                        :class="answers.poin2 === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
-                                                        class="px-4 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                        @click="answers.p_1_b = (answers.p_1_b === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_1_b === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
                                                     Tidak
                                                 </button>
                                             </div>
                                         </td>
                                     </tr>
 
-                                    <!-- POIN 3 -->
-                                    <tr class="hover:bg-gray-50/50 transition">
-                                        <td class="py-4 px-4 text-center text-gray-400 font-semibold">3</td>
-                                        <td class="py-4 px-4 text-gray-800">
-                                            Data pada Surat Keterangan Wasiat dari DPW dan Ditjen AHU sama dengan Akta Penyimpanan Wasiat.
+                                    <!-- ================= 2. VERIFIKASI DATA PEWASIAT ================= -->
+                                    <tr class="bg-slate-100/80 border-t border-b border-gray-200/80">
+                                        <td class="py-2.5 px-4 text-center font-black text-[#0b2e66]">2</td>
+                                        <td colspan="2" class="py-2.5 px-4 font-bold text-[#0b2e66] tracking-wide">
+                                            Verifikasi Data Pewasiat
                                         </td>
-                                        <td class="py-4 px-6 text-right whitespace-nowrap">
-                                            <input type="hidden" name="poin3" :value="answers.poin3">
-                                            <div class="inline-flex items-center gap-2 justify-end">
+                                    </tr>
+
+                                    <!-- 2.a -->
+                                    <tr class="hover:bg-gray-50/50 transition">
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">a</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            Permohonan telah dilengkapi Surat Kematian dengan memastikan barcode dari Surat Kematian dapat discan dan hasil scan sesuai dengan data dan informasi kematian Pewasiat
+                                        </td>
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_2_a" :value="answers.p_2_a">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
                                                 <button type="button" 
-                                                        @click="answers.poin3 = (answers.poin3 === 'iya' ? null : 'iya')"
-                                                        :class="answers.poin3 === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
-                                                        class="px-4 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                        @click="answers.p_2_a = (answers.p_2_a === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_2_a === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
                                                     Iya
                                                 </button>
                                                 <button type="button" 
-                                                        @click="answers.poin3 = (answers.poin3 === 'tidak' ? null : 'tidak')"
-                                                        :class="answers.poin3 === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
-                                                        class="px-4 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                        @click="answers.p_2_a = (answers.p_2_a === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_2_a === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
                                                     Tidak
                                                 </button>
                                             </div>
                                         </td>
                                     </tr>
 
-                                    <!-- POIN 4 (DROPDOWN) -->
+                                    <!-- 2.b -->
                                     <tr class="hover:bg-gray-50/50 transition">
-                                        <td class="py-4 px-4 text-center text-gray-400 font-semibold align-middle">4</td>
-                                        <td class="py-4 px-4">
-                                            <div class="text-gray-800">
-                                                Kesesuaian nama pewasiat pada Akta Kematian dan Akta Penyimpanan Wasiat.
-                                            </div>
-                                            <div class="text-[11px] text-gray-400 mt-0.5">
-                                                Pilih kondisi yang ditemukan pada kedua dokumen.
-                                            </div>
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">b</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            Nama Pewasiat sesuai di input data dan semua Dokumen Persyaratan, apabila terdapat perbedaan nama/ganti nama telah dilengkapi Penetapan/Putusan dari Pengadilan oleh Pemohon
                                         </td>
-                                        <td class="py-4 px-6 text-right whitespace-nowrap align-middle">
-                                            <select name="poin4" 
-                                                    x-model="answers.poin4"
-                                                    class="text-xs font-medium rounded-xl border border-gray-200 bg-white py-2 px-3 text-gray-700 focus:ring-1 focus:ring-sky-500 focus:border-sky-500 transition shadow-2xs">
-                                                <option value="">Pilih kondisi nama</option>
-                                                <option value="sesuai">Nama Sama Sesuai</option>
-                                                <option value="beda_dengan_keterangan">Perbedaan Nama (Ada Penetapan / Keterangan)</option>
-                                                <option value="tidak_sesuai">Nama Tidak Sesuai (Perlu Revisi)</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-
-                                    <!-- POIN 5 -->
-                                    <tr class="hover:bg-gray-50/50 transition">
-                                        <td class="py-4 px-4 text-center text-gray-400 font-semibold">5</td>
-                                        <td class="py-4 px-4 text-gray-800">
-                                            Dokumen perkawinan pewasiat tersedia dan sesuai.
-                                        </td>
-                                        <td class="py-4 px-6 text-right whitespace-nowrap">
-                                            <input type="hidden" name="poin5" :value="answers.poin5">
-                                            <div class="inline-flex items-center gap-2 justify-end">
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_2_b" :value="answers.p_2_b">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
                                                 <button type="button" 
-                                                        @click="answers.poin5 = (answers.poin5 === 'iya' ? null : 'iya')"
-                                                        :class="answers.poin5 === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
-                                                        class="px-4 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                        @click="answers.p_2_b = (answers.p_2_b === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_2_b === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
                                                     Iya
                                                 </button>
                                                 <button type="button" 
-                                                        @click="answers.poin5 = (answers.poin5 === 'tidak' ? null : 'tidak')"
-                                                        :class="answers.poin5 === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
-                                                        class="px-4 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                        @click="answers.p_2_b = (answers.p_2_b === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_2_b === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
                                                     Tidak
                                                 </button>
                                             </div>
                                         </td>
                                     </tr>
 
-                                    <!-- POIN 6 -->
+                                    <!-- 2.c -->
                                     <tr class="hover:bg-gray-50/50 transition">
-                                        <td class="py-4 px-4 text-center text-gray-400 font-semibold">6</td>
-                                        <td class="py-4 px-4 text-gray-800">
-                                            Pewasiat memiliki ahli waris.
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">c</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            NIK Pewasiat sesuai dengan input data dan semua Dokumen Persyaratan dari Pemohon
                                         </td>
-                                        <td class="py-4 px-6 text-right whitespace-nowrap">
-                                            <input type="hidden" name="poin6" :value="answers.poin6">
-                                            <div class="inline-flex items-center gap-2 justify-end">
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_2_c" :value="answers.p_2_c">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
                                                 <button type="button" 
-                                                        @click="answers.poin6 = (answers.poin6 === 'iya' ? null : 'iya')"
-                                                        :class="answers.poin6 === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
-                                                        class="px-4 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                        @click="answers.p_2_c = (answers.p_2_c === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_2_c === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
                                                     Iya
                                                 </button>
                                                 <button type="button" 
-                                                        @click="answers.poin6 = (answers.poin6 === 'tidak' ? null : 'tidak')"
-                                                        :class="answers.poin6 === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
-                                                        class="px-4 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                        @click="answers.p_2_c = (answers.p_2_c === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_2_c === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
                                                     Tidak
                                                 </button>
                                             </div>
                                         </td>
                                     </tr>
 
-                                    <!-- POIN 7 -->
+                                    <!-- 2.d -->
                                     <tr class="hover:bg-gray-50/50 transition">
-                                        <td class="py-4 px-4 text-center text-gray-400 font-semibold">7</td>
-                                        <td class="py-4 px-4 text-gray-800">
-                                            Semua data dan dokumen ahli waris yang diinput telah lengkap dan sesuai.
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">d</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            Tempat Tanggal Lahir dan/atau Tempat Tanggal Meninggal Pewasiat sesuai dengan input data dan semua Dokumen Persyaratan dari Pemohon
                                         </td>
-                                        <td class="py-4 px-6 text-right whitespace-nowrap">
-                                            <input type="hidden" name="poin7" :value="answers.poin7">
-                                            <div class="inline-flex items-center gap-2 justify-end">
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_2_d" :value="answers.p_2_d">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
                                                 <button type="button" 
-                                                        @click="answers.poin7 = (answers.poin7 === 'iya' ? null : 'iya')"
-                                                        :class="answers.poin7 === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
-                                                        class="px-4 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                        @click="answers.p_2_d = (answers.p_2_d === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_2_d === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
                                                     Iya
                                                 </button>
                                                 <button type="button" 
-                                                        @click="answers.poin7 = (answers.poin7 === 'tidak' ? null : 'tidak')"
-                                                        :class="answers.poin7 === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
-                                                        class="px-4 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                        @click="answers.p_2_d = (answers.p_2_d === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_2_d === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Tidak
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- ================= 3. VERIFIKASI AKTA PENYIMPANAN ================= -->
+                                    <tr class="bg-slate-100/80 border-t border-b border-gray-200/80">
+                                        <td class="py-2.5 px-4 text-center font-black text-[#0b2e66]">3</td>
+                                        <td colspan="2" class="py-2.5 px-4 font-bold text-[#0b2e66] tracking-wide">
+                                            Verifikasi Akta Penyimpanan (Akta <em>van depot</em> / <em>Superscriptie</em>) dari Pemohon
+                                        </td>
+                                    </tr>
+
+                                    <!-- 3.a -->
+                                    <tr class="hover:bg-gray-50/50 transition">
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">a</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            Permohonan telah dilengkapi Akta Penyimpanan (Akta <em>van depot</em> / <em>Superscriptie</em>)
+                                        </td>
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_3_a" :value="answers.p_3_a">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
+                                                <button type="button" 
+                                                        @click="answers.p_3_a = (answers.p_3_a === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_3_a === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Iya
+                                                </button>
+                                                <button type="button" 
+                                                        @click="answers.p_3_a = (answers.p_3_a === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_3_a === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Tidak
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- 3.b -->
+                                    <tr class="hover:bg-gray-50/50 transition">
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">b</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            Permohonan telah dilengkapi Surat Keterangan dari Daftar Pusat Wasiat, Ditjen AHU, Kemenkum RI
+                                        </td>
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_3_b" :value="answers.p_3_b">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
+                                                <button type="button" 
+                                                        @click="answers.p_3_b = (answers.p_3_b === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_3_b === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Iya
+                                                </button>
+                                                <button type="button" 
+                                                        @click="answers.p_3_b = (answers.p_3_b === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_3_b === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Tidak
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- 3.c -->
+                                    <tr class="hover:bg-gray-50/50 transition">
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">c</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            Akta Penyimpanan (Akta <em>van depot</em> / <em>Superscriptie</em>) telah terdaftar/tercatat di Daftar Pusat Wasiat, Ditjen AHU, Kemenkum RI
+                                        </td>
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_3_c" :value="answers.p_3_c">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
+                                                <button type="button" 
+                                                        @click="answers.p_3_c = (answers.p_3_c === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_3_c === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Iya
+                                                </button>
+                                                <button type="button" 
+                                                        @click="answers.p_3_c = (answers.p_3_c === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_3_c === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Tidak
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- ================= 4. VERIFIKASI AHLI WARIS ================= -->
+                                    <tr class="bg-slate-100/80 border-t border-b border-gray-200/80">
+                                        <td class="py-2.5 px-4 text-center font-black text-[#0b2e66]">4</td>
+                                        <td colspan="2" class="py-2.5 px-4 font-bold text-[#0b2e66] tracking-wide">
+                                            Verifikasi data dan informasi para Ahli Waris
+                                        </td>
+                                    </tr>
+
+                                    <!-- 4.a -->
+                                    <tr class="hover:bg-gray-50/50 transition">
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">a</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            Apabila Pewasiat telah menikah, Permohonan telah dilengkapi dengan Buku Nikah/Akta Perkawinan
+                                        </td>
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_4_a" :value="answers.p_4_a">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
+                                                <button type="button" 
+                                                        @click="answers.p_4_a = (answers.p_4_a === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_4_a === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Iya
+                                                </button>
+                                                <button type="button" 
+                                                        @click="answers.p_4_a = (answers.p_4_a === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_4_a === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Tidak
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- 4.b -->
+                                    <tr class="hover:bg-gray-50/50 transition">
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">b</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            Apabila Pewasiat memiliki anak, Permohonan telah dilengkapi dengan Akta Lahir, KK dan KTP dari Anak
+                                        </td>
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_4_b" :value="answers.p_4_b">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
+                                                <button type="button" 
+                                                        @click="answers.p_4_b = (answers.p_4_b === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_4_b === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Iya
+                                                </button>
+                                                <button type="button" 
+                                                        @click="answers.p_4_b = (answers.p_4_b === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_4_b === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Tidak
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- 4.c -->
+                                    <tr class="hover:bg-gray-50/50 transition">
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">c</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            Nama para Ahli Waris sesuai di input data dan semua Dokumen Persyaratan, apabila terdapat perbedaan nama/ganti nama telah dilengkapi Penetapan/Putusan dari Pengadilan oleh Pemohon
+                                        </td>
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_4_c" :value="answers.p_4_c">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
+                                                <button type="button" 
+                                                        @click="answers.p_4_c = (answers.p_4_c === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_4_c === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Iya
+                                                </button>
+                                                <button type="button" 
+                                                        @click="answers.p_4_c = (answers.p_4_c === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_4_c === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Tidak
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- 4.d -->
+                                    <tr class="hover:bg-gray-50/50 transition">
+                                        <td class="py-3.5 px-4 text-center text-gray-500 font-bold">d</td>
+                                        <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
+                                            Apabila terdapat Ahli Waris yang meninggal dunia terlebih dahulu, Permohonan telah dilengkapi dengan Akta Kematian Ahli Waris
+                                        </td>
+                                        <td class="py-3.5 px-6 text-right whitespace-nowrap">
+                                            <input type="hidden" name="p_4_d" :value="answers.p_4_d">
+                                            <div class="inline-flex items-center gap-1.5 justify-end">
+                                                <button type="button" 
+                                                        @click="answers.p_4_d = (answers.p_4_d === 'iya' ? null : 'iya')"
+                                                        :class="answers.p_4_d === 'iya' ? 'bg-[#10b981] text-white border-[#10b981] shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
+                                                    Iya
+                                                </button>
+                                                <button type="button" 
+                                                        @click="answers.p_4_d = (answers.p_4_d === 'tidak' ? null : 'tidak')"
+                                                        :class="answers.p_4_d === 'tidak' ? 'bg-rose-500 text-white border-rose-500 shadow-xs font-bold' : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'"
+                                                        class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition cursor-pointer active:scale-95">
                                                     Tidak
                                                 </button>
                                             </div>
