@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PetugasDashboardController extends Controller
@@ -22,6 +23,10 @@ class PetugasDashboardController extends Controller
             'jenis_layanan' => 'SKHW',
             'detail_layanan' => 'Permohonan Surat Keterangan Hak Waris',
             'nama_pemohon' => 'Nadia Prameswari',
+            'nik' => '3578••••••••0006',
+            'email' => 'nadia.p@email.com',
+            'nomor_telepon' => '0812 •••• 8841',
+            'alamat_domisili' => 'Kec. Genteng, Kota Surabaya',
             'nama_pewasiat' => 'Alm. Soetrisno',
             'tanggal_masuk' => '30 Mei 2025',
             'waktu_masuk' => 'Pukul 14:32',
@@ -31,6 +36,12 @@ class PetugasDashboardController extends Controller
             'dokumen_total' => 4,
             'tipe_badge' => 'sky',
             'catatan' => 'Pemeriksaan silsilah ahli waris dan KTP pemohon.',
+            'dokumen_list' => [
+                ['nama' => 'KTP Pemohon.pdf', 'ukuran' => '1,2 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Kartu Keluarga.pdf', 'ukuran' => '2,4 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Akta Kematian Pewaris.pdf', 'ukuran' => '1,8 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Surat Pernyataan Ahli Waris.pdf', 'ukuran' => '3,1 MB', 'tipe' => 'PDF'],
+            ],
         ],
         [
             'id' => 2,
@@ -38,6 +49,10 @@ class PetugasDashboardController extends Controller
             'jenis_layanan' => 'Wasiat',
             'detail_layanan' => 'Pendaftaran Wasiat Terbuka',
             'nama_pemohon' => 'Ahmad Fadli',
+            'nik' => '3578••••••••0012',
+            'email' => 'ahmad.fadli@email.com',
+            'nomor_telepon' => '0813 •••• 9921',
+            'alamat_domisili' => 'Kec. Rungkut, Kota Surabaya',
             'nama_pewasiat' => 'Almh. Siti Hartini',
             'tanggal_masuk' => '30 Mei 2025',
             'waktu_masuk' => 'Pukul 11:18',
@@ -47,6 +62,13 @@ class PetugasDashboardController extends Controller
             'dokumen_total' => 5,
             'tipe_badge' => 'purple',
             'catatan' => 'Salinan akta wasiat terbuka dan surat kematian terlampir.',
+            'dokumen_list' => [
+                ['nama' => 'KTP Pemohon.pdf', 'ukuran' => '1,1 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Akta Kematian Pewasiat.pdf', 'ukuran' => '1,9 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Surat Keterangan Wasiat AHU.pdf', 'ukuran' => '2,5 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Akta Penyimpanan Wasiat.pdf', 'ukuran' => '2,1 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Kartu Keluarga Ahli Waris.pdf', 'ukuran' => '1,6 MB', 'tipe' => 'PDF'],
+            ],
         ],
         [
             'id' => 3,
@@ -54,15 +76,25 @@ class PetugasDashboardController extends Controller
             'jenis_layanan' => 'SKHW',
             'detail_layanan' => 'Permohonan Surat Keterangan Hak Waris',
             'nama_pemohon' => 'Rizka Amelia',
+            'nik' => '3578••••••••0045',
+            'email' => 'rizka.amelia@email.com',
+            'nomor_telepon' => '0857 •••• 1234',
+            'alamat_domisili' => 'Kec. Wonokromo, Kota Surabaya',
             'nama_pewasiat' => 'Alm. Johannes Tan',
             'tanggal_masuk' => '29 Mei 2025',
             'waktu_masuk' => 'Pukul 16:05',
             'status_verifikasi' => 'menunggu_telaah',
             'status_label' => 'Menunggu Telaah Berkas',
-            'dokumen_count' => 3,
-            'dokumen_total' => 3,
+            'dokumen_count' => 4,
+            'dokumen_total' => 4,
             'tipe_badge' => 'sky',
             'catatan' => 'Berkas kepemilikan dan buku nikah.',
+            'dokumen_list' => [
+                ['nama' => 'KTP Pemohon.pdf', 'ukuran' => '1,3 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Akta Kematian Pewaris.pdf', 'ukuran' => '1,7 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Buku Nikah Pewaris.pdf', 'ukuran' => '2,2 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Kartu Keluarga.pdf', 'ukuran' => '1,5 MB', 'tipe' => 'PDF'],
+            ],
         ],
         [
             'id' => 4,
@@ -70,15 +102,25 @@ class PetugasDashboardController extends Controller
             'jenis_layanan' => 'Wasiat',
             'detail_layanan' => 'Pelaporan Wasiat',
             'nama_pemohon' => 'Bambang Suryono',
+            'nik' => '3578••••••••0098',
+            'email' => 'bambang.suryono@email.com',
+            'nomor_telepon' => '0811 •••• 5678',
+            'alamat_domisili' => 'Kec. Gubeng, Kota Surabaya',
             'nama_pewasiat' => 'Alm. Raden Mas Wardoyo',
             'tanggal_masuk' => '29 Mei 2025',
             'waktu_masuk' => 'Pukul 10:40',
             'status_verifikasi' => 'menunggu_telaah',
             'status_label' => 'Menunggu Telaah Berkas',
-            'dokumen_count' => 6,
-            'dokumen_total' => 6,
+            'dokumen_count' => 4,
+            'dokumen_total' => 4,
             'tipe_badge' => 'purple',
             'catatan' => 'Pemeriksaan sampul dan laporan akta wasiat.',
+            'dokumen_list' => [
+                ['nama' => 'KTP Pemohon.pdf', 'ukuran' => '1,0 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Akta Kematian Pewasiat.pdf', 'ukuran' => '1,8 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Surat Keterangan Wasiat AHU.pdf', 'ukuran' => '2,0 MB', 'tipe' => 'PDF'],
+                ['nama' => 'Akta Penyimpanan Wasiat Notaris.pdf', 'ukuran' => '2,8 MB', 'tipe' => 'PDF'],
+            ],
         ],
     ];
 
@@ -214,6 +256,90 @@ class PetugasDashboardController extends Controller
     }
 
     /**
+     * Tampilkan detail verifikasi persyaratan sesuai ID layanan.
+     */
+    public function show(string|int $id): View|RedirectResponse
+    {
+        $verifikasiList = session('petugas_verifikasi_list', $this->defaultVerifikasiList);
+        $layanan = collect($verifikasiList)->firstWhere('id', (int) $id)
+            ?? collect($verifikasiList)->firstWhere('id', (string) $id);
+
+        if (! $layanan) {
+            $permohonan = Permohonan::with(['user', 'pewasiat', 'dokumens', 'voucher'])->find($id);
+            if ($permohonan) {
+                $dokumenList = [];
+                $docLabels = [
+                    'ktp' => 'KTP Pemohon.pdf',
+                    'surat_kuasa' => 'Surat Kuasa.pdf',
+                    'akta_kematian' => 'Akta Kematian Pewaris.pdf',
+                    'surat_keterangan_wasiat' => 'Surat Keterangan Wasiat DPW.pdf',
+                    'akta_penyimpanan_wasiat' => 'Akta Penyimpanan Wasiat Notaris.pdf',
+                    'buku_nikah' => 'Buku Nikah Pewasiat.pdf',
+                    'akta_lahir_ktp_kk' => 'Kartu Keluarga & Akta Lahir.pdf',
+                    'dokumen_lainnya' => 'Dokumen Tambahan.pdf',
+                ];
+
+                foreach ($permohonan->dokumens as $dok) {
+                    $namaFile = $docLabels[$dok->jenis_dokumen] ?? (basename($dok->file_path) ?: 'Dokumen Persyaratan.pdf');
+                    $dokumenList[] = [
+                        'nama' => $namaFile,
+                        'ukuran' => '1,5 MB',
+                        'tipe' => 'PDF',
+                        'url' => Storage::url($dok->file_path),
+                    ];
+                }
+
+                if (empty($dokumenList)) {
+                    $dokumenList = [
+                        ['nama' => 'KTP Pemohon.pdf', 'ukuran' => '1,2 MB', 'tipe' => 'PDF'],
+                        ['nama' => 'Akta Kematian Pewaris.pdf', 'ukuran' => '1,8 MB', 'tipe' => 'PDF'],
+                        ['nama' => 'Surat Keterangan Wasiat DPW.pdf', 'ukuran' => '2,1 MB', 'tipe' => 'PDF'],
+                        ['nama' => 'Akta Penyimpanan Wasiat.pdf', 'ukuran' => '2,5 MB', 'tipe' => 'PDF'],
+                    ];
+                }
+
+                $userNik = $permohonan->user?->nik;
+                $maskedNik = $userNik ? (strlen($userNik) > 8 ? substr($userNik, 0, 4).'••••••••'.substr($userNik, -4) : $userNik) : '3578••••••••0006';
+
+                $userPhone = $permohonan->user?->phone;
+                $maskedPhone = $userPhone ? (strlen($userPhone) > 8 ? substr($userPhone, 0, 4).' •••• '.substr($userPhone, -4) : $userPhone) : '0812 •••• 8841';
+
+                $layanan = [
+                    'id' => $permohonan->id,
+                    'nomor_layanan' => $permohonan->nomor_permohonan ?? 'W15.AHU-'.str_pad($permohonan->id, 5, '0', STR_PAD_LEFT),
+                    'jenis_layanan' => 'Wasiat',
+                    'detail_layanan' => 'Pembukaan Wasiat Tertutup',
+                    'nama_pemohon' => $permohonan->user?->name ?? 'Pemohon',
+                    'nik' => $maskedNik,
+                    'email' => $permohonan->user?->email ?? 'pemohon@email.com',
+                    'nomor_telepon' => $maskedPhone,
+                    'alamat_domisili' => $permohonan->user?->alamat_domisili ?? 'Kec. Genteng, Kota Surabaya',
+                    'nama_pewasiat' => $permohonan->pewasiat?->nama_lengkap ?? 'Pewasiat',
+                    'tanggal_masuk' => $permohonan->created_at?->translatedFormat('d F Y') ?? now()->translatedFormat('d F Y'),
+                    'waktu_masuk' => $permohonan->created_at?->format('H:i') ? 'Pukul '.$permohonan->created_at->format('H:i') : 'Pukul 10:00',
+                    'status_verifikasi' => 'menunggu_telaah',
+                    'status_label' => 'Menunggu Telaah Berkas',
+                    'dokumen_count' => count($dokumenList),
+                    'dokumen_total' => count($dokumenList),
+                    'tipe_badge' => 'purple',
+                    'catatan' => 'Permohonan masuk dari portal pemohon.',
+                    'dokumen_list' => $dokumenList,
+                ];
+            }
+        }
+
+        if (! $layanan) {
+            $layanan = $verifikasiList[0] ?? null;
+        }
+
+        if (! $layanan) {
+            return redirect()->route('petugas.dashboard')->with('error', 'Layanan tidak ditemukan.');
+        }
+
+        return view('petugas.verifikasi.show', compact('layanan'));
+    }
+
+    /**
      * Proses telaah/verifikasi persyaratan (setujui / revisi).
      */
     public function tindakLanjut(Request $request, string|int $id): RedirectResponse
@@ -247,7 +373,7 @@ class PetugasDashboardController extends Controller
                 'tanggal_selesai' => now()->translatedFormat('d F Y'),
                 'status_hasil' => $validated['status'],
                 'status_label' => $validated['status'] === 'disetujui' ? 'Berkas Terverifikasi' : 'Perlu Revisi Pemohon',
-                'petugas_verifikator' => auth()->user()?->name ?? 'Petugas BHP',
+                'petugas_verifikator' => auth()->user()?->name ?? 'Iman, S.H.',
                 'catatan' => $validated['catatan'] ?? ($validated['status'] === 'disetujui' ? 'Dokumen persyaratan lengkap dan absah.' : 'Terdapat kekurangan berkas persyaratan.'),
             ];
 
@@ -257,6 +383,15 @@ class PetugasDashboardController extends Controller
                 'petugas_verifikasi_list' => $newVerifikasiList,
                 'petugas_history_list' => $historyList,
             ]);
+
+            // Sinkronkan status permohonan di DB jika ada
+            $permohonan = Permohonan::find($id);
+            if ($permohonan) {
+                $permohonan->update([
+                    'status' => $validated['status'] === 'disetujui' ? 'selesai' : 'revisi',
+                    'catatan_revisi' => $validated['catatan'] ?? null,
+                ]);
+            }
 
             $pesan = $validated['status'] === 'disetujui'
                 ? "Permohonan {$targetItem['nomor_layanan']} berhasil diverifikasi dan disetujui."

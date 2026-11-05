@@ -4,17 +4,7 @@
     </x-slot:title>
 
     <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6" x-data="{ 
-        searchLayanan: '{{ $search ?? '' }}',
-        detailModalOpen: false, 
-        selectedItem: null,
-        statusTindakLanjut: 'disetujui',
-        catatanTindakLanjut: '',
-        openDetail(item, defaultStatus = 'disetujui') {
-            this.selectedItem = item;
-            this.statusTindakLanjut = defaultStatus;
-            this.catatanTindakLanjut = '';
-            this.detailModalOpen = true;
-        }
+        searchLayanan: '{{ $search ?? '' }}'
     }">
 
         @if (session('success'))
@@ -146,13 +136,13 @@
 
                                 <!-- AKSI -->
                                 <td class="py-4 px-4 whitespace-nowrap text-right">
-                                    <button type="button" @click="openDetail({{ json_encode($item) }})"
-                                            class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0c2a55] hover:bg-[#103873] active:bg-[#00479e] text-white text-xs font-semibold shadow-xs transition active:scale-95 cursor-pointer">
+                                    <a href="{{ route('petugas.verifikasi.show', $item['id']) }}"
+                                       class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0c2a55] hover:bg-[#103873] active:bg-[#00479e] text-white text-xs font-semibold shadow-xs transition active:scale-95 cursor-pointer">
                                         <span>Verifikasi Persyaratan</span>
-                                        <svg class="w-3.5 h-3.5 text-white/80" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                        <svg class="w-3.5 h-3.5 text-white/80" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                                         </svg>
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         @empty
@@ -164,118 +154,6 @@
                         @endforelse
                     </tbody>
                 </table>
-            </div>
-        </div>
-
-        <!-- Modal Telaah & Verifikasi Dokumen Persyaratan -->
-        <div x-show="detailModalOpen" 
-             class="fixed inset-0 z-50 overflow-y-auto bg-gray-900/60 backdrop-blur-xs flex items-center justify-center p-4" 
-             style="display: none;" 
-             x-transition:enter="transition ease-out duration-200"
-             x-transition:enter-start="opacity-0"
-             x-transition:enter-end="opacity-100"
-             x-transition:leave="transition ease-in duration-150"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0">
-
-            <div @click.away="detailModalOpen = false" 
-                 class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-5 border border-gray-100">
-                
-                <div class="flex items-center justify-between pb-3 border-b border-gray-100">
-                    <div>
-                        <h3 class="text-lg font-black text-gray-900">Telaah Persyaratan Layanan</h3>
-                        <p class="text-xs text-gray-500 font-mono mt-0.5" x-text="selectedItem?.nomor_layanan"></p>
-                    </div>
-                    <button @click="detailModalOpen = false" class="text-gray-400 hover:text-gray-600 p-1.5 rounded-xl hover:bg-gray-100 transition cursor-pointer">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="bg-gray-50 rounded-2xl p-4 space-y-2.5 text-xs">
-                    <div class="flex justify-between">
-                        <span class="text-gray-500 font-medium">Jenis Layanan:</span>
-                        <span class="font-bold text-gray-900" x-text="selectedItem?.detail_layanan"></span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-500 font-medium">Nama Pemohon:</span>
-                        <span class="font-bold text-gray-900" x-text="selectedItem?.nama_pemohon"></span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-500 font-medium">Tanggal Masuk:</span>
-                        <span class="text-gray-700" x-text="(selectedItem?.tanggal_masuk ?? '') + ' ' + (selectedItem?.waktu_masuk ?? '')"></span>
-                    </div>
-                </div>
-
-                <!-- Dokumen Persyaratan Checklist -->
-                <div>
-                    <h4 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                        Dokumen Persyaratan yang Diunggah
-                    </h4>
-                    <div class="space-y-1.5">
-                        <div class="flex items-center justify-between p-2.5 rounded-xl border border-gray-100 bg-gray-50/60 text-xs">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <span class="font-medium text-gray-800">KTP Pemohon & Dokumen Identitas</span>
-                            </div>
-                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">Lengkap</span>
-                        </div>
-                        <div class="flex items-center justify-between p-2.5 rounded-xl border border-gray-100 bg-gray-50/60 text-xs">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <span class="font-medium text-gray-800">Berkas Permohonan / Akta / Silsilah Waris</span>
-                            </div>
-                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">Valid</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Form Tindak Lanjut -->
-                <form :action="'{{ url('/petugas/verifikasi') }}/' + (selectedItem?.id || 1) + '/tindak-lanjut'" method="POST" class="space-y-4">
-                    @csrf
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
-                            Hasil Telaah Persyaratan
-                        </label>
-                        <div class="grid grid-cols-2 gap-3">
-                            <label class="flex items-center gap-2 p-3 border rounded-xl cursor-pointer transition text-xs font-semibold"
-                                   :class="statusTindakLanjut === 'disetujui' ? 'border-[#1d68d8] bg-blue-50/50 text-[#1d68d8] ring-1 ring-[#1d68d8]' : 'border-gray-200 text-gray-700'">
-                                <input type="radio" name="status" value="disetujui" x-model="statusTindakLanjut" class="text-[#1d68d8] focus:ring-[#1d68d8]">
-                                <span>Setujui Persyaratan</span>
-                            </label>
-                            <label class="flex items-center gap-2 p-3 border rounded-xl cursor-pointer transition text-xs font-semibold"
-                                   :class="statusTindakLanjut === 'revisi' ? 'border-amber-500 bg-amber-50/60 text-amber-800 ring-1 ring-amber-500' : 'border-gray-200 text-gray-700'">
-                                <input type="radio" name="status" value="revisi" x-model="statusTindakLanjut" class="text-amber-500 focus:ring-amber-500">
-                                <span>Minta Revisi Berkas</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-700 mb-1">
-                            Catatan Verifikator Persyaratan
-                        </label>
-                        <textarea name="catatan" rows="3" 
-                                  placeholder="Tuliskan catatan hasil telaah dokumen persyaratan..."
-                                  class="w-full text-xs rounded-xl border-gray-200 focus:border-[#1d68d8] focus:ring-[#1d68d8]/20 p-3"></textarea>
-                    </div>
-
-                    <div class="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
-                        <button type="button" @click="detailModalOpen = false" 
-                                class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 hover:bg-gray-100 transition cursor-pointer">
-                            Batal
-                        </button>
-                        <button type="submit" 
-                                class="px-5 py-2.5 rounded-xl bg-[#0c2a55] hover:bg-[#103873] active:bg-[#00479e] text-white text-xs font-bold shadow-md transition active:scale-95 cursor-pointer">
-                            Simpan Hasil Verifikasi
-                        </button>
-                    </div>
-                </form>
             </div>
         </div>
 

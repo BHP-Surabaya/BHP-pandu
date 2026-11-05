@@ -62,6 +62,7 @@ Route::middleware(['auth', 'role:master_admin'])->prefix('admin')->name('admin.'
 Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')->group(function () {
     Route::get('/dashboard', [PetugasDashboardController::class, 'index'])->name('dashboard');
     Route::get('/history', [PetugasDashboardController::class, 'history'])->name('history');
+    Route::get('/verifikasi/{id}', [PetugasDashboardController::class, 'show'])->name('verifikasi.show');
     Route::post('/verifikasi/{id}/tindak-lanjut', [PetugasDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
 });
 
