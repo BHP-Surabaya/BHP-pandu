@@ -70,21 +70,7 @@
                 </span>
             </div>
 
-            <div class="flex flex-wrap items-center gap-2.5">
-                <!-- Toggle Button Mode Bandingkan / Split View -->
-                <button type="button" 
-                        @click="splitViewOpen = !splitViewOpen"
-                        :class="splitViewOpen ? 'bg-sky-50 text-sky-700 border-sky-300 ring-2 ring-sky-500/20' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'"
-                        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl border text-xs font-bold transition active:scale-95 shadow-2xs cursor-pointer">
-                    <svg class="w-4 h-4" :class="splitViewOpen ? 'text-sky-600' : 'text-gray-500'" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125z" />
-                    </svg>
-                    <span x-text="splitViewOpen ? 'Tutup Mode Bandingkan (Side-by-Side)' : 'Mode Bandingkan Dokumen (Side-by-Side)'"></span>
-                    <span class="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded font-bold"
-                          :class="splitViewOpen ? 'bg-sky-200 text-sky-900' : 'bg-gray-100 text-gray-500'"
-                          x-text="splitViewOpen ? 'Aktif' : 'Split'"></span>
-                </button>
-
+            <div class="flex items-center gap-2">
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
                     Menunggu Verifikasi Persyaratan
@@ -118,7 +104,6 @@
                                         <h2 class="text-base font-bold text-gray-900 tracking-tight">
                                             Data Input Pemohon
                                         </h2>
-                                        <p class="text-[11px] text-gray-400">Data resmi yang dimasukkan pada form permohonan</p>
                                     </div>
                                 </div>
 
@@ -216,7 +201,6 @@
                                             <h2 class="text-base font-bold text-gray-900 tracking-tight">
                                                 Dokumen Persyaratan
                                             </h2>
-                                            <p class="text-[11px] text-gray-400">Klik "Lihat" untuk membuka mode perbandingan langsung</p>
                                         </div>
                                     </div>
                                     <span class="text-xs text-gray-400 font-medium">
@@ -259,10 +243,8 @@
                             </div>
 
                             <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
-                                <span>Format: PDF, JPG, PNG</span>
-                                <span class="text-sky-600 font-semibold cursor-pointer hover:underline" @click="openDocSplit(0)">
-                                    Buka Mode Bandingkan &rarr;
-                                </span>
+                                <span>Format yang didukung: PDF, JPG, PNG</span>
+                                <span>Maks. 5 MB/file</span>
                             </div>
                         </div>
                     </template>
