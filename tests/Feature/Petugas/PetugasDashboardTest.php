@@ -79,6 +79,32 @@ class PetugasDashboardTest extends TestCase
         $response->assertSee('MENU UTAMA');
     }
 
+    public function test_petugas_can_view_verifikasi_detail_page(): void
+    {
+        $petugas = $this->createPetugasUser();
+
+        $response = $this->actingAs($petugas)->get(route('petugas.verifikasi.show', ['id' => 1]));
+
+        $response->assertOk();
+        $response->assertSee('Data Input Pemohon');
+        $response->assertSee('Dokumen Persyaratan');
+        $response->assertSee('Verifikasi Permohonan');
+        $response->assertSee('Nadia Prameswari');
+        $response->assertSee('KTP Pemohon.pdf');
+        $response->assertSee('Ada Akta Kematian dan scan Akta Kematian.');
+        $response->assertSee('Ada Surat Keterangan Wasiat dari DPW, Ditjen AHU, dan hasil scan.');
+        $response->assertSee('Kesesuaian nama pewasiat pada Akta Kematian dan Akta Penyimpanan Wasiat.');
+    }
+
+    public function test_pemohon_cannot_view_verifikasi_detail_page(): void
+    {
+        $pemohon = $this->createPemohonUser();
+
+        $response = $this->actingAs($pemohon)->get(route('petugas.verifikasi.show', ['id' => 1]));
+
+        $response->assertForbidden();
+    }
+
     public function test_petugas_can_process_tindak_lanjut_verifikasi(): void
     {
         $petugas = $this->createPetugasUser();
