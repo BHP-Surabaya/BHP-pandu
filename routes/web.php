@@ -76,6 +76,8 @@ Route::middleware(['auth', 'role:kurator_muda,muda'])->prefix('muda')->name('mud
     Route::get('/history', [MudaDashboardController::class, 'history'])->name('history');
     Route::get('/verifikasi/{id}', [MudaDashboardController::class, 'show'])->name('verifikasi.show');
     Route::post('/verifikasi/{id}/tindak-lanjut', [MudaDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
+    Route::post('/jadwal/{id}/tindak-lanjut', [MudaDashboardController::class, 'tindakLanjutJadwal'])->name('jadwal.tindak-lanjut');
+    Route::post('/dokumen/{id}/terbitkan', [MudaDashboardController::class, 'terbitkanDokumen'])->name('dokumen.terbitkan');
 });
 
 Route::middleware(['auth', 'role:kasi,kepala_seksi'])->prefix('kasi')->name('kasi.')->group(function () {

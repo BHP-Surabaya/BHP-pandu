@@ -48,17 +48,28 @@ class MudaDashboardTest extends TestCase
         $response->assertRedirect(route('muda.dashboard'));
     }
 
-    public function test_muda_dashboard_renders_with_menu_utama_and_verifikasi_persyaratan(): void
+    public function test_muda_dashboard_renders_with_tabs_and_jadwal_pembukaan(): void
     {
         $muda = $this->createKuratorMudaUser();
 
         $response = $this->actingAs($muda)->get(route('muda.dashboard'));
 
         $response->assertOk();
-        $response->assertSee('DASHBOARD KURATOR MUDA');
-        $response->assertSee('Verifikasi Persyaratan');
-        $response->assertSee('History Verifikasi');
-        $response->assertSee('Daftar Layanan');
+        $response->assertSee('RUANG KERJA');
+        $response->assertSee('Verifikasi Lanjutan');
+        $response->assertSee('Hasil Verifikasi Pertama');
+        $response->assertSee('Penjadwalan Pembukaan');
+        $response->assertSee('Penerbitan Dokumen');
+        $response->assertSee('Jadwal Pembukaan Wasiat');
+        $response->assertSee('WST-2025-04098');
+        $response->assertSee('Dimas Mahendra');
+        $response->assertSee('23 Mei 2025');
+        $response->assertSee('2 hari tersisa');
+        $response->assertSee('0812 8876 2104');
+        $response->assertSee('Sari Wulandari');
+        $response->assertSee('Fajar Nugraha');
+        $response->assertSee('Tindak lanjut');
+        $response->assertSee('Lihat');
     }
 
     public function test_muda_history_page_renders_successfully(): void
@@ -108,6 +119,33 @@ class MudaDashboardTest extends TestCase
         $response = $this->actingAs($muda)->post(route('muda.tindak-lanjut', ['id' => 1]), [
             'status' => 'disetujui',
             'catatan' => 'Berkas persyaratan lengkap diverifikasi Kurator Muda.',
+        ]);
+
+        $response->assertRedirect(route('muda.dashboard'));
+        $response->assertSessionHas('success');
+    }
+
+    public function test_muda_can_process_tindak_lanjut_jadwal(): void
+    {
+        $muda = $this->createKuratorMudaUser();
+
+        $response = $this->actingAs($muda)->post(route('muda.jadwal.tindak-lanjut', ['id' => 2]), [
+            'status' => 'disetujui',
+            'lokasi' => 'Ruang Sidang Utama BHP Surabaya',
+            'catatan' => 'Jadwal pembukaan wasiat disetujui.',
+        ]);
+
+        $response->assertRedirect(route('muda.dashboard'));
+        $response->assertSessionHas('success');
+    }
+
+    public function test_muda_can_terbitkan_dokumen(): void
+    {
+        $muda = $this->createKuratorMudaUser();
+
+        $response = $this->actingAs($muda)->post(route('muda.dokumen.terbitkan', ['id' => 1]), [
+            'status_dokumen' => 'Selesai & Terdistribusi',
+            'catatan' => 'Berita acara telah diunggah resmi.',
         ]);
 
         $response->assertRedirect(route('muda.dashboard'));
