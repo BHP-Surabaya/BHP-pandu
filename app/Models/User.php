@@ -57,6 +57,24 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Check if the user is a Kurator Keperdataan Muda.
+     */
+    public function isKuratorMuda(): bool
+    {
+        return in_array($this->role, ['kurator_muda', 'muda'], true)
+            || ($this->role === 'petugas' && str_contains(strtolower($this->pekerjaan ?? ''), 'muda'));
+    }
+
+    /**
+     * Check if the user is a Kurator Keperdataan Pertama.
+     */
+    public function isKuratorPertama(): bool
+    {
+        return in_array($this->role, ['kurator_pertama', 'pertama'], true)
+            || ($this->role === 'petugas' && ! $this->isKuratorMuda());
+    }
+
+    /**
      * Check if the user is a KASI (Kepala Seksi).
      */
     public function isKasi(): bool
@@ -125,7 +143,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function canAccessNotarisServices(): bool
     {
-        return $this->isMasterAdmin() || $this->isPetugas() || $this->status_akun === 'notaris';
+        return $this->isMasterAdmin() || $this->isPetugas() || $this->isKuratorMuda() || $this->status_akun === 'notaris';
     }
 
     /**
@@ -133,7 +151,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function canAccessPengacaraServices(): bool
     {
-        return $this->isMasterAdmin() || $this->isPetugas() || $this->status_akun === 'pengacara';
+        return $this->isMasterAdmin() || $this->isPetugas() || $this->isKuratorMuda() || $this->status_akun === 'pengacara';
     }
 
     /**
@@ -151,6 +169,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
         if ($this->isBendahara()) {
             return 'Bendahara Penerimaan';
+        }
+
+        if ($this->isKuratorMuda()) {
+            return 'Kurator Keperdataan Muda';
+        }
+
+        if ($this->isKuratorPertama()) {
+            return 'Kurator Keperdataan Pertama';
         }
 
         if ($this->status_akun === 'notaris') {
