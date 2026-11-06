@@ -17,7 +17,12 @@ class EnsureUserHasRole
     {
         $user = $request->user();
 
-        abort_unless($user && in_array($user->role, $roles, true), 403);
+        $authorized = $user && (
+            in_array($user->role, $roles, true)
+            || (in_array('kurator_muda', $roles, true) && $user->isKuratorMuda())
+        );
+
+        abort_unless($authorized, 403);
 
         return $next($request);
     }
