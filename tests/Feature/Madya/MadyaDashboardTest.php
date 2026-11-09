@@ -48,17 +48,19 @@ class MadyaDashboardTest extends TestCase
         $response->assertRedirect(route('madya.dashboard'));
     }
 
-    public function test_madya_dashboard_renders_with_menu_utama_and_verifikasi_persyaratan(): void
+    public function test_madya_dashboard_renders_with_menu_utama_and_layanan_wasiat_tertutup(): void
     {
         $madya = $this->createKuratorMadyaUser();
 
         $response = $this->actingAs($madya)->get(route('madya.dashboard'));
 
         $response->assertOk();
-        $response->assertSee('DASHBOARD FUNGSIONAL MADYA');
-        $response->assertSee('Verifikasi Persyaratan');
-        $response->assertSee('History Verifikasi');
+        $response->assertSee('DASHBOARD MADYA');
+        $response->assertSee('Layanan Wasiat Tertutup');
         $response->assertSee('Daftar Layanan');
+        $response->assertSee('Histori Layanan');
+        $response->assertSee('SLA Layanan');
+        $response->assertSee('Jadwal Pembukaan');
     }
 
     public function test_madya_history_page_renders_successfully(): void
@@ -68,9 +70,44 @@ class MadyaDashboardTest extends TestCase
         $response = $this->actingAs($madya)->get(route('madya.history'));
 
         $response->assertOk();
-        $response->assertSee('History Verifikasi');
-        $response->assertSee('DASHBOARD FUNGSIONAL MADYA');
-        $response->assertSee('Inara, S.H., M.H.');
+        $response->assertSee('Histori Layanan');
+        $response->assertSee('DASHBOARD MADYA');
+        $response->assertSee('Daftar Layanan');
+    }
+
+    public function test_madya_can_create_ba_for_layanan(): void
+    {
+        $madya = $this->createKuratorMadyaUser();
+
+        $response = $this->actingAs($madya)->post(route('madya.layanan.buat-ba', ['id' => 1]), [
+            'nomor_ba' => 'BA.01/WST/BHP.SBY/05/2025',
+            'catatan' => 'Pemeriksaan fisik telah selesai.',
+        ]);
+
+        $response->assertRedirect(route('madya.dashboard'));
+        $response->assertSessionHas('success');
+    }
+
+    public function test_madya_can_record_cetak_dokumen(): void
+    {
+        $madya = $this->createKuratorMadyaUser();
+
+        $response = $this->actingAs($madya)->post(route('madya.layanan.cetak-dokumen', ['id' => 1]));
+
+        $response->assertRedirect(route('madya.dashboard'));
+        $response->assertSessionHas('success');
+    }
+
+    public function test_madya_can_archive_layanan(): void
+    {
+        $madya = $this->createKuratorMadyaUser();
+
+        $response = $this->actingAs($madya)->post(route('madya.layanan.arsipkan', ['id' => 1]), [
+            'catatan' => 'Layanan telah selesai dan diarsipkan.',
+        ]);
+
+        $response->assertRedirect(route('madya.dashboard'));
+        $response->assertSessionHas('success');
     }
 
     public function test_madya_can_view_verifikasi_detail_page(): void
@@ -83,7 +120,7 @@ class MadyaDashboardTest extends TestCase
         $response->assertSee('Data Input Pemohon');
         $response->assertSee('Dokumen Persyaratan');
         $response->assertSee('Verifikasi Data Input dan Persyaratan');
-        $response->assertSee('Nadia Prameswari');
+        $response->assertSee('Dimas Mahendra');
         $response->assertSee('KTP Pemohon.pdf');
         $response->assertSee('Permohonan Pembukaan/Pembacaan Wasiat Tertutup Oleh Fungsional Madya');
         $response->assertSee('Permohonan diajukan oleh Notaris');
@@ -101,13 +138,13 @@ class MadyaDashboardTest extends TestCase
         $response->assertForbidden();
     }
 
-    public function test_madya_can_process_tindak_lanjut_verifikasi(): void
+    public function test_madya_can_submit_tindak_lanjut_verifikasi(): void
     {
         $madya = $this->createKuratorMadyaUser();
 
         $response = $this->actingAs($madya)->post(route('madya.tindak-lanjut', ['id' => 1]), [
             'status' => 'disetujui',
-            'catatan' => 'Berkas persyaratan lengkap diverifikasi Kurator Madya.',
+            'catatan' => 'Semua berkas persyaratan lengkap dan sah.',
         ]);
 
         $response->assertRedirect(route('madya.dashboard'));

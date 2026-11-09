@@ -90,6 +90,9 @@ Route::middleware(['auth', 'role:kurator_madya,madya'])->prefix('madya')->name('
     Route::get('/history', [MadyaDashboardController::class, 'history'])->name('history');
     Route::get('/verifikasi/{id}', [MadyaDashboardController::class, 'show'])->name('verifikasi.show');
     Route::post('/verifikasi/{id}/tindak-lanjut', [MadyaDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
+    Route::post('/layanan/{id}/buat-ba', [MadyaDashboardController::class, 'buatBa'])->name('layanan.buat-ba');
+    Route::post('/layanan/{id}/cetak-dokumen', [MadyaDashboardController::class, 'cetakDokumen'])->name('layanan.cetak-dokumen');
+    Route::post('/layanan/{id}/arsipkan', [MadyaDashboardController::class, 'arsipkan'])->name('layanan.arsipkan');
 });
 
 Route::middleware(['auth', 'role:kasi,kepala_seksi'])->prefix('kasi')->name('kasi.')->group(function () {

@@ -18,7 +18,7 @@
 
                     @if (Auth::user()->isKuratorMadya())
                         <x-nav-link :href="route('madya.dashboard')" :active="request()->routeIs('madya.dashboard')">
-                            {{ __('Dashboard Kurator Madya') }}
+                            {{ __('Daftar Layanan') }}
                         </x-nav-link>
                     @elseif (Auth::user()->isKuratorMuda())
                         <x-nav-link :href="route('muda.dashboard')" :active="request()->routeIs('muda.dashboard')">

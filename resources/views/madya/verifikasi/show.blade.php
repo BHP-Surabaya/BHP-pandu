@@ -110,7 +110,7 @@
                                 </div>
 
                                 <span class="text-xs font-mono font-bold text-gray-400">
-                                    {{ $layanan['tanggal_masuk'] }}
+                                    {{ $layanan['tanggal_masuk'] ?? ($layanan['jadwal_pembukaan'] ?? '30 Mei 2025') }}
                                 </span>
                             </div>
 
@@ -172,7 +172,7 @@
                                         JENIS PERMOHONAN
                                     </div>
                                     <div class="text-xs font-bold text-[#0b2e66]">
-                                        {{ $layanan['detail_layanan'] }}
+                                        {{ $layanan['detail_layanan'] ?? 'Pembukaan Wasiat Tertutup' }}
                                     </div>
                                 </div>
                             </div>
