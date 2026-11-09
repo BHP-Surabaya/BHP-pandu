@@ -16,7 +16,11 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    @if (Auth::user()->isKuratorMuda())
+                    @if (Auth::user()->isKuratorMadya())
+                        <x-nav-link :href="route('madya.dashboard')" :active="request()->routeIs('madya.dashboard')">
+                            {{ __('Dashboard Kurator Madya') }}
+                        </x-nav-link>
+                    @elseif (Auth::user()->isKuratorMuda())
                         <x-nav-link :href="route('muda.dashboard')" :active="request()->routeIs('muda.dashboard')">
                             {{ __('Dashboard Kurator Muda') }}
                         </x-nav-link>
@@ -44,7 +48,11 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        @if (Auth::user()->isKuratorMuda())
+                        @if (Auth::user()->isKuratorMadya())
+                            <x-dropdown-link :href="route('madya.dashboard')">
+                                {{ __('Dashboard Kurator Madya') }}
+                            </x-dropdown-link>
+                        @elseif (Auth::user()->isKuratorMuda())
                             <x-dropdown-link :href="route('muda.dashboard')">
                                 {{ __('Dashboard Kurator Muda') }}
                             </x-dropdown-link>

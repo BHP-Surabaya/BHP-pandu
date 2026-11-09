@@ -57,6 +57,15 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Check if the user is a Kurator Keperdataan Madya.
+     */
+    public function isKuratorMadya(): bool
+    {
+        return in_array($this->role, ['kurator_madya', 'madya'], true)
+            || ($this->role === 'petugas' && str_contains(strtolower($this->pekerjaan ?? ''), 'madya'));
+    }
+
+    /**
      * Check if the user is a Kurator Keperdataan Muda.
      */
     public function isKuratorMuda(): bool
@@ -71,7 +80,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isKuratorPertama(): bool
     {
         return in_array($this->role, ['kurator_pertama', 'pertama'], true)
-            || ($this->role === 'petugas' && ! $this->isKuratorMuda());
+            || ($this->role === 'petugas' && ! $this->isKuratorMuda() && ! $this->isKuratorMadya());
     }
 
     /**
@@ -143,7 +152,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function canAccessNotarisServices(): bool
     {
-        return $this->isMasterAdmin() || $this->isPetugas() || $this->isKuratorMuda() || $this->status_akun === 'notaris';
+        return $this->isMasterAdmin() || $this->isPetugas() || $this->isKuratorMuda() || $this->isKuratorMadya() || $this->status_akun === 'notaris';
     }
 
     /**
@@ -151,7 +160,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function canAccessPengacaraServices(): bool
     {
-        return $this->isMasterAdmin() || $this->isPetugas() || $this->isKuratorMuda() || $this->status_akun === 'pengacara';
+        return $this->isMasterAdmin() || $this->isPetugas() || $this->isKuratorMuda() || $this->isKuratorMadya() || $this->status_akun === 'pengacara';
     }
 
     /**
@@ -169,6 +178,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
         if ($this->isBendahara()) {
             return 'Bendahara Penerimaan';
+        }
+
+        if ($this->isKuratorMadya()) {
+            return 'Kurator Keperdataan Madya';
         }
 
         if ($this->isKuratorMuda()) {
