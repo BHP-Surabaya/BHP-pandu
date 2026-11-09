@@ -19,6 +19,7 @@ class EnsureUserHasRole
 
         $authorized = $user && (
             in_array($user->role, $roles, true)
+            || (in_array('kurator_madya', $roles, true) && $user->isKuratorMadya())
             || (in_array('kurator_muda', $roles, true) && $user->isKuratorMuda())
         );
 

@@ -135,6 +135,40 @@
                                 </svg>
                                 <span>Riwayat PNBP</span>
                             </a>
+                        @elseif (Auth::user()?->isKuratorMadya())
+                            <!-- Section Title -->
+                            <div class="px-2 pt-2 pb-1">
+                                <p class="text-[11px] font-bold tracking-wider text-blue-200/60 uppercase">
+                                    MENU UTAMA
+                                </p>
+                            </div>
+
+                            @php
+                                $perluVerifikasiCount = \App\Http\Controllers\Madya\MadyaDashboardController::getPerluVerifikasiCount();
+                            @endphp
+
+                            <!-- 1. Daftar Layanan -->
+                            <a href="{{ route('madya.dashboard') }}" 
+                               class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('madya.dashboard', 'madya.verifikasi.*') ? 'bg-[#1d68d8] text-white shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
+                                </svg>
+                                <span>Daftar Layanan</span>
+                                @if ($perluVerifikasiCount > 0)
+                                    <span class="ms-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-emerald-400 text-emerald-950 shadow-sm">
+                                        {{ $perluVerifikasiCount }}
+                                    </span>
+                                @endif
+                            </a>
+
+                            <!-- 2. Histori Layanan -->
+                            <a href="{{ route('madya.history') }}" 
+                               class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('madya.history*') ? 'bg-[#1d68d8] text-white font-semibold shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>Histori Layanan</span>
+                            </a>
                         @elseif (Auth::user()?->isKuratorMuda())
                             <!-- Section Title -->
                             <div class="px-2 pt-2 pb-1">
@@ -279,6 +313,8 @@
                                     Kepala Seksi
                                 @elseif (Auth::user()->isBendahara())
                                     Bendahara Penerimaan
+                                @elseif (Auth::user()->isKuratorMadya())
+                                    {{ Auth::user()->pekerjaan ?: 'Kurator Keperdataan Madya' }}
                                 @elseif (Auth::user()->isKuratorMuda())
                                     {{ Auth::user()->pekerjaan ?: 'Kurator Keperdataan Muda' }}
                                 @elseif (Auth::user()->isPetugas())
