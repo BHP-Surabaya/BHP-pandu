@@ -1,7 +1,7 @@
 <x-guest-layout :full-bleed="true">
     <div class="relative min-h-screen w-full flex items-center justify-center overflow-x-hidden bg-slate-900 py-6 sm:py-10 px-4 sm:px-8">
         <!-- Background Image of BHP Surabaya Building -->
-        <div class="absolute inset-0 bg-cover bg-center sm:bg-[center_top_20%] bg-no-repeat transition-all duration-700 scale-100" 
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700 scale-100" 
              style="background-image: url('{{ asset('images/bg-gedung-bhp-clean.jpg') }}');">
         </div>
 
