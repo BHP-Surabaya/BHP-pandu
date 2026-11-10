@@ -44,9 +44,17 @@
         @endif
 
         <!-- ================= HERO BANNER EKSEKUTIF ================= -->
-        <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#071d40] via-[#0b2e66] to-[#0a234c] p-6 sm:p-9 text-white shadow-xl border border-blue-800/40">
+        <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-[#0b2868] p-6 sm:p-9 text-white shadow-xl border border-blue-900/40">
+            <!-- Background Image Illustration of BHP Surabaya Building on Right Side -->
+            <div class="absolute inset-0 bg-no-repeat bg-right bg-cover opacity-90 sm:opacity-100 pointer-events-none"
+                 style="background-image: url('{{ asset('images/banner-selamat-datang.png') }}'); background-position: right center;">
+            </div>
+
+            <!-- Soft Gradient Overlay on Left to guarantee 100% text readability -->
+            <div class="absolute inset-0 bg-gradient-to-r from-[#0b2868] via-[#0b2868]/95 to-transparent sm:via-[#0b2868]/75 sm:to-transparent pointer-events-none"></div>
+
             <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                <div class="space-y-3 max-w-3xl">
+                <div class="space-y-3.5 max-w-xl">
                     <!-- Brand Pill -->
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-amber-300 border border-white/15 text-xs font-semibold backdrop-blur-md shadow-xs">
                         <img src="{{ asset('images/pengayoman.svg') }}" alt="Pengayoman" class="w-4 h-4 object-contain rounded-xs" />
@@ -60,42 +68,26 @@
                     <p class="text-xs sm:text-sm text-blue-100/90 leading-relaxed font-normal">
                         Portal pelayanan hukum terpadu Balai Harta Peninggalan Surabaya. Silakan pilih layanan yang ingin Anda ajukan di bawah ini atau pantau seluruh status permohonan melalui menu Histori Permohonan.
                     </p>
-                </div>
 
-                <!-- Shortcut Actions -->
-                <div class="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-3">
-                    <a href="{{ route('permohonan.index') }}" 
-                       class="inline-flex items-center justify-center gap-2.5 px-5 py-3 bg-[#1d68d8] hover:bg-[#2575ea] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-blue-900/30 transition-all hover:scale-[1.02] active:scale-[0.98]">
-                        <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>Histori Permohonan</span>
-                        @php
-                            $userCount = Auth::user()?->permohonans()->count() ?? 0;
-                        @endphp
-                        @if ($userCount > 0)
-                            <span class="px-2 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-extrabold">
-                                {{ $userCount }}
-                            </span>
-                        @endif
-                    </a>
+                    <!-- Shortcut Actions -->
+                    <div class="pt-1 flex flex-wrap items-center gap-3">
+                        <a href="{{ route('permohonan.index') }}" 
+                           class="inline-flex items-center justify-center gap-2.5 px-5 py-2.5 bg-[#1d68d8] hover:bg-[#2575ea] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-blue-900/30 transition-all hover:scale-[1.02] active:scale-[0.98]">
+                            <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>Histori Permohonan</span>
+                            @php
+                                $userCount = Auth::user()?->permohonans()->count() ?? 0;
+                            @endphp
+                            @if ($userCount > 0)
+                                <span class="px-2 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-extrabold">
+                                    {{ $userCount }}
+                                </span>
+                            @endif
+                        </a>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Subtle Skyline Silhouette Watermark -->
-            <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none translate-x-4 translate-y-4">
-                <svg class="w-80 h-36 text-white" fill="currentColor" viewBox="0 0 300 120">
-                    <path d="M10 110 H290 V120 H10 Z" />
-                    <path d="M20 100 H280 V110 H20 Z" />
-                    <path d="M30 40 L150 10 L270 40 V50 H30 Z" />
-                    <rect x="50" y="50" width="16" height="50" rx="2" />
-                    <rect x="80" y="50" width="16" height="50" rx="2" />
-                    <rect x="110" y="50" width="16" height="50" rx="2" />
-                    <rect x="142" y="50" width="16" height="50" rx="2" />
-                    <rect x="174" y="50" width="16" height="50" rx="2" />
-                    <rect x="204" y="50" width="16" height="50" rx="2" />
-                    <rect x="234" y="50" width="16" height="50" rx="2" />
-                </svg>
             </div>
         </div>
 
