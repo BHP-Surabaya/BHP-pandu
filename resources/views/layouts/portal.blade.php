@@ -283,9 +283,9 @@
                     </nav>
                 </div>
 
-                <!-- Siluet Arsitektur di Pojokan Bawah Sidebar (Watermark Halus Tanpa Kotak/Teks) -->
-                <div class="pointer-events-none px-4 pb-2 opacity-15 mt-auto">
-                    <img src="{{ asset('images/siluet-gedung-bhp-white.png') }}" alt="Siluet Gedung BHP" class="w-full object-contain" />
+                <!-- Siluet Arsitektur Gedung BHP di Pojokan Bawah Sidebar -->
+                <div class="pointer-events-none px-4 pb-2 opacity-30 mt-auto">
+                    <img src="{{ asset('images/siluet-gedung-bhp-white.png') }}" alt="Siluet Gedung BHP" class="w-full object-contain drop-shadow-xs" />
                 </div>
             </div>
 
