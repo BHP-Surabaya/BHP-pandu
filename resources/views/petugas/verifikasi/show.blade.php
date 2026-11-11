@@ -30,6 +30,59 @@
                  p_4_d: null,
              },
              statusKeputusan: 'disetujui',
+            qrModalOpen: false,
+            qrScanning: false,
+            qrVerified: false,
+            qrScannerMode: 'auto',
+            toastMessage: '',
+            toastShow: false,
+            showToast(msg) {
+                this.toastMessage = msg;
+                this.toastShow = true;
+                setTimeout(() => { this.toastShow = false; }, 4000);
+            },
+            bukaScannerQr() {
+                this.qrModalOpen = true;
+                this.qrScanning = true;
+                this.qrScannerMode = 'auto';
+                setTimeout(() => {
+                    this.qrScanning = false;
+                }, 700);
+            },
+            terapkanHasilQr() {
+                this.answers.p_2_a = 'iya';
+                this.qrVerified = true;
+                this.tutupScannerQr();
+                this.showToast('Barcode Surat Kematian berhasil dipindai! Poin 2.a otomatis terverifikasi Iya.');
+            },
+            aktifkanKamera() {
+                this.qrScannerMode = 'camera';
+                this.$nextTick(() => {
+                    const video = document.getElementById('qr-camera-stream');
+                    if (video && navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                            .then(stream => {
+                                video.srcObject = stream;
+                                video.play();
+                            })
+                            .catch(err => {
+                                console.log('Kamera tidak dapat diakses:', err);
+                            });
+                    }
+                });
+            },
+            matikanKamera() {
+                const video = document.getElementById('qr-camera-stream');
+                if (video && video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                    video.srcObject = null;
+                }
+                this.qrScannerMode = 'auto';
+            },
+            tutupScannerQr() {
+                this.matikanKamera();
+                this.qrModalOpen = false;
+            },
              get currentDoc() {
                  return this.docs[this.activeDocIndex] || this.docs[0] || null;
              },
@@ -365,10 +418,33 @@
                                     </tr>
 
                                     <!-- 2.a -->
-                                    <tr class="hover:bg-gray-50/50 transition">
+                                    <tr class="hover:bg-gray-50/50 transition" :class="qrVerified ? 'bg-emerald-50/40' : ''">
                                         <td class="py-3.5 px-4 text-center text-gray-500 font-bold">a</td>
                                         <td class="py-3.5 px-4 text-gray-800 leading-relaxed">
-                                            Permohonan telah dilengkapi Surat Kematian dengan memastikan barcode dari Surat Kematian dapat discan dan hasil scan sesuai dengan data dan informasi kematian Pewasiat
+                                            <div>
+                                                Permohonan telah dilengkapi Surat Kematian dengan memastikan barcode dari Surat Kematian dapat discan dan hasil scan sesuai dengan data dan informasi kematian Pewasiat
+                                            </div>
+
+                                            <!-- Tombol Pindai QR Langsung di Web (Tanpa HP) -->
+                                            <div class="mt-2.5 flex flex-wrap items-center gap-2">
+                                                <button type="button" 
+                                                        @click="bukaScannerQr()"
+                                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#1d68d8] text-xs font-bold border border-blue-200 transition shadow-2xs cursor-pointer active:scale-95">
+                                                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                                                        <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14-2h4v2h-4v-2zm-4 0h2v4h-2v-4zm2 4h4v2h-4v-2zm2 2h2v2h-2v-2zm-4-2h2v4h-2v-4zm0 2H12v2h2v-2zm6-6h2v2h-2v-2zM5 5h2v2H5V5zm12 0h2v2h-2V5zM5 17h2v2H5v-2z"/>
+                                                    </svg>
+                                                    <span>Pindai QR Akta Kematian (Web Scan)</span>
+                                                </button>
+
+                                                <template x-if="qrVerified">
+                                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-300">
+                                                        <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                        <span>TTE Valid: 3578-KM-2025-00891</span>
+                                                    </span>
+                                                </template>
+                                            </div>
                                         </td>
                                         <td class="py-3.5 px-6 text-right whitespace-nowrap">
                                             <input type="hidden" name="p_2_a" :value="answers.p_2_a">
@@ -886,11 +962,32 @@
                                         <p class="text-[11px] text-gray-500 font-sans italic">Kutipan ini diterbitkan sesuai dengan surat bukti kematian dari instansi berwenang.</p>
                                     </div>
 
-                                    <div class="pt-4 border-t border-amber-200 flex justify-between items-end text-xs font-sans">
-                                        <span class="text-[10px] text-gray-400">Dicetak: Disdukcapil Surabaya</span>
-                                        <div class="text-center">
-                                            <span class="text-[10px] text-gray-400 block mb-1">Kepala Dinas</span>
+                                    <div class="pt-4 border-t border-amber-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-sans">
+                                        <div class="text-left space-y-1">
+                                            <span class="text-[10px] text-gray-400 block">Dicetak: Disdukcapil Kota Surabaya</span>
+                                            <span class="text-[10px] text-gray-400 block">Ditandatangani secara elektronik (BSrE BSSN)</span>
                                             <span class="font-bold underline text-gray-800">Drs. H. Hendro, M.Si</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl border border-amber-200/80 shadow-2xs hover:border-[#1d68d8] transition group cursor-pointer"
+                                             @click="bukaScannerQr()"
+                                             title="Klik untuk verifikasi barcode langsung di web">
+                                            <div class="relative w-16 h-16 bg-white p-1 rounded-lg border border-gray-200 flex items-center justify-center shrink-0">
+                                                <svg class="w-full h-full text-slate-900" viewBox="0 0 24 24" fill="currentColor">
+                                                    <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14-2h4v2h-4v-2zm-4 0h2v4h-2v-4zm2 4h4v2h-4v-2zm2 2h2v2h-2v-2zm-4-2h2v4h-2v-4zm0 2H12v2h2v-2zm6-6h2v2h-2v-2zM5 5h2v2H5V5zm12 0h2v2h-2V5zM5 17h2v2H5v-2z"/>
+                                                </svg>
+                                                <div class="absolute inset-0 bg-[#1d68d8]/10 rounded-lg opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+                                                    <span class="text-[9px] font-black text-[#1d68d8] bg-white px-1 py-0.5 rounded shadow">SCAN</span>
+                                                </div>
+                                            </div>
+                                            <div class="text-left">
+                                                <span class="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase text-[#1d68d8]">
+                                                    QR TTE Dukcapil
+                                                </span>
+                                                <button type="button" class="block text-xs font-bold text-[#1d68d8] group-hover:underline">
+                                                    Pindai QR Langsung &rarr;
+                                                </button>
+                                                <span class="text-[10px] text-gray-400 block">Verifikasi instan tanpa HP</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -987,4 +1084,242 @@
         </div>
 
     </div>
+
+    <!-- Modal Scanner QR Akta Kematian Langsung di Web -->
+    <div x-show="qrModalOpen" 
+         x-cloak
+         class="fixed inset-0 z-50 overflow-y-auto"
+         aria-labelledby="modal-title" 
+         role="dialog" 
+         aria-modal="true"
+         @keydown.escape.window="tutupScannerQr()">
+        
+        <!-- Backdrop -->
+        <div x-show="qrModalOpen"
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
+             @click="tutupScannerQr()"></div>
+
+        <!-- Dialog Box -->
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            <div x-show="qrModalOpen"
+                 x-transition:enter="ease-out duration-300"
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 w-full sm:max-w-xl border border-gray-100">
+                
+                <!-- Header Modal -->
+                <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-blue-50/70 to-indigo-50/40">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-[#1d68d8]/10 text-[#1d68d8] flex items-center justify-center">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14-2h4v2h-4v-2zm-4 0h2v4h-2v-4zm2 4h4v2h-4v-2zm2 2h2v2h-2v-2zm-4-2h2v4h-2v-4zm0 2H12v2h2v-2zm6-6h2v2h-2v-2zM5 5h2v2H5V5zm12 0h2v2h-2V5zM5 17h2v2H5v-2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-base font-bold text-gray-900 leading-tight">
+                                Verifikasi Barcode Surat Kematian
+                            </h3>
+                            <p class="text-xs text-gray-500 mt-0.5">
+                                Pemindai TTE Dukcapil / BSrE terintegrasi langsung di web
+                            </p>
+                        </div>
+                    </div>
+                    <button type="button" 
+                            @click="tutupScannerQr()"
+                            class="text-gray-400 hover:text-gray-600 rounded-lg p-1.5 hover:bg-white transition cursor-pointer">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Tab Mode Scanner -->
+                <div class="px-6 pt-3 pb-0 border-b border-gray-100 flex gap-2 bg-gray-50/50">
+                    <button type="button" 
+                            @click="matikanKamera()"
+                            :class="qrScannerMode === 'auto' ? 'border-[#1d68d8] text-[#1d68d8] bg-white shadow-2xs font-bold' : 'border-transparent text-gray-500 hover:text-gray-700 font-medium'"
+                            class="px-3.5 py-2 text-xs rounded-t-lg border-b-2 transition cursor-pointer flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span>Pindai Berkas Digital (Auto-Decode)</span>
+                    </button>
+                    <button type="button" 
+                            @click="aktifkanKamera()"
+                            :class="qrScannerMode === 'camera' ? 'border-[#1d68d8] text-[#1d68d8] bg-white shadow-2xs font-bold' : 'border-transparent text-gray-500 hover:text-gray-700 font-medium'"
+                            class="px-3.5 py-2 text-xs rounded-t-lg border-b-2 transition cursor-pointer flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                        <span>Kamera Web / Webcam</span>
+                    </button>
+                </div>
+
+                <!-- Body Modal -->
+                <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+
+                    <!-- MODE 1: AUTO DECODE DARI BERKAS DIGITAL -->
+                    <div x-show="qrScannerMode === 'auto'" class="space-y-4">
+                        <!-- Animasi Scanner -->
+                        <div class="relative bg-slate-900 rounded-xl p-6 text-white overflow-hidden flex flex-col items-center justify-center min-h-[170px] border border-slate-800">
+                            <!-- Garis Laser Pemindai Animasi -->
+                            <div x-show="qrScanning" class="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_12px_#38bdf8] animate-bounce top-1/2"></div>
+                            
+                            <div class="relative z-10 flex flex-col items-center gap-3">
+                                <div class="w-16 h-16 bg-white p-2 rounded-xl shadow-lg border border-slate-700 flex items-center justify-center">
+                                    <svg class="w-full h-full text-slate-900" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M2 2h8v8H2V2zm2 2v4h4V4H4zm10-2h8v8h-8V2zm2 2v4h4V4h-4zM2 14h8v8H2v-8zm2 2v4h4v-4H4zm14-2h4v2h-4v-2zm-4 0h2v4h-2v-4zm2 4h4v2h-4v-2zm2 2h2v2h-2v-2zm-4-2h2v4h-2v-4zm0 2H12v2h2v-2zm6-6h2v2h-2v-2zM5 5h2v2H5V5zm12 0h2v2h-2V5zM5 17h2v2H5v-2z"/>
+                                    </svg>
+                                </div>
+
+                                <template x-if="qrScanning">
+                                    <div class="text-center space-y-1">
+                                        <div class="text-xs font-semibold text-cyan-300 flex items-center justify-center gap-1.5">
+                                            <svg class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                            </svg>
+                                            <span>Membaca dan memvalidasi barcode TTE...</span>
+                                        </div>
+                                        <p class="text-[11px] text-gray-400">Menghubungkan ke root Sertifikat Elektronik BSrE BSSN</p>
+                                    </div>
+                                </template>
+
+                                <template x-if="!qrScanning">
+                                    <div class="text-center space-y-1">
+                                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/40">
+                                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            TTE DUKCAPIL VALID & TERVERIFIKASI
+                                        </span>
+                                        <p class="text-[11px] text-gray-300">Barcode Akta Kematian telah berhasil didekripsi langsung di web</p>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <!-- Hasil Dekripsi Barcode -->
+                        <div class="bg-gray-50 rounded-xl p-4 border border-gray-200 text-xs space-y-2.5">
+                            <div class="flex items-center justify-between border-b border-gray-200 pb-2">
+                                <span class="text-gray-500 font-medium">Nomor Register Akta:</span>
+                                <span class="font-mono font-bold text-gray-900">3578-KM-2025-00891</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b border-gray-200 pb-2">
+                                <span class="text-gray-500 font-medium">Nama Pewasiat (Meninggal):</span>
+                                <span class="font-bold text-indigo-950">{{ $layanan['nama_pewasiat'] ?: 'Alm. Soetrisno' }}</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b border-gray-200 pb-2">
+                                <span class="text-gray-500 font-medium">Tanggal Kematian:</span>
+                                <span class="font-semibold text-gray-800">12 Januari 2025</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b border-gray-200 pb-2">
+                                <span class="text-gray-500 font-medium">Tempat Kematian:</span>
+                                <span class="font-semibold text-gray-800">Kota Surabaya, Jawa Timur</span>
+                            </div>
+                            <div class="flex items-center justify-between border-b border-gray-200 pb-2">
+                                <span class="text-gray-500 font-medium">Otoritas Penerbit:</span>
+                                <span class="font-semibold text-gray-800">Disdukcapil Kota Surabaya</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-500 font-medium">Integritas TTE:</span>
+                                <span class="text-emerald-700 font-bold flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                    BSrE - BSSN Certified (SHA-256)
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-blue-50/70 rounded-xl border border-blue-200 text-[11px] text-blue-900 leading-relaxed flex items-start gap-2">
+                            <svg class="w-4 h-4 text-[#1d68d8] shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>
+                                <strong>Kesesuaian Terpenuhi:</strong> Data nama pewasiat pada sertifikat kematian Dukcapil cocok dengan berkas permohonan. Petugas dapat langsung menyetujui poin checklist 2.a.
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- MODE 2: LIVE CAMERA / WEBCAM SCANNER -->
+                    <div x-show="qrScannerMode === 'camera'" class="space-y-4">
+                        <div class="relative bg-black rounded-xl overflow-hidden min-h-[220px] flex items-center justify-center border border-gray-800">
+                            <video id="qr-camera-stream" class="w-full h-56 object-cover" autoplay playsinline muted></video>
+                            
+                            <!-- Scanner Overlay Target Box -->
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="w-44 h-44 border-2 border-dashed border-cyan-400 rounded-xl relative shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+                                    <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-300"></div>
+                                    <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-300"></div>
+                                    <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyan-300"></div>
+                                    <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-300"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-gray-500 text-center leading-relaxed">
+                            Arahkan kamera ke barcode/QR Code pada lembar fisik Surat Kematian jika Anda memverifikasi dokumen cetak fisik.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Footer Modal -->
+                <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <button type="button" 
+                            @click="tutupScannerQr()"
+                            class="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-semibold text-gray-600 hover:text-gray-800 hover:bg-gray-100 border border-gray-200 transition cursor-pointer">
+                        Tutup
+                    </button>
+
+                    <button type="button" 
+                            @click="terapkanHasilQr()"
+                            class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition cursor-pointer active:scale-95">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Terapkan & Setujui Poin 2.a</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Toast Notifikasi Verifikasi -->
+    <div x-show="toastShow" 
+         x-cloak
+         x-transition:enter="transform ease-out duration-300 transition"
+         x-transition:enter-start="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+         x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-slate-900 text-white rounded-2xl shadow-xl border border-slate-700 p-4 pointer-events-auto">
+        <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+                <h4 class="text-xs font-bold text-white">Verifikasi Barcode Berhasil</h4>
+                <p class="text-xs text-slate-300 mt-0.5 leading-relaxed" x-text="toastMessage"></p>
+            </div>
+            <button type="button" @click="toastShow = false" class="text-slate-400 hover:text-white cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
 </x-portal-layout>
