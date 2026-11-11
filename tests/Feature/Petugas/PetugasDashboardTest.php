@@ -118,4 +118,18 @@ class PetugasDashboardTest extends TestCase
         $response->assertRedirect(route('petugas.dashboard'));
         $response->assertSessionHas('success');
     }
+
+    public function test_petugas_can_view_in_page_qr_scanner_elements_for_akta_kematian(): void
+    {
+        $petugas = $this->createPetugasUser();
+
+        $response = $this->actingAs($petugas)->get(route('petugas.verifikasi.show', ['id' => 1]));
+
+        $response->assertOk();
+        $response->assertSee('Pindai QR Akta Kematian (Web Scan)');
+        $response->assertSee('Verifikasi Barcode Surat Kematian');
+        $response->assertSee('Pindai Berkas Digital (Auto-Decode)');
+        $response->assertSee('TTE DUKCAPIL VALID');
+        $response->assertSee('Terapkan & Setujui Poin 2.a', false);
+    }
 }
