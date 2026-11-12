@@ -49,7 +49,7 @@ Route::get('/dashboard', function () {
 
     $stats = [
         'total' => $userPermohonans->count(),
-        'verifikasi' => $userPermohonans->where('status', 'menunggu_verifikasi')->count(),
+        'verifikasi' => $userPermohonans->whereIn('status', ['menunggu_verifikasi', 'disetujui_pertama', 'proses_muda', 'proses_madya'])->count(),
         'voucher' => $userPermohonans->where('status', 'menunggu_voucher')->count(),
         'siap' => $userPermohonans->where('status', 'selesai')->count(),
     ];

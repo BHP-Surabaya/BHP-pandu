@@ -32,20 +32,6 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Akun Petugas BHP
-        User::firstOrCreate(
-            ['email' => 'petugas@bhp.test'],
-            [
-                'name' => 'Petugas BHP',
-                'password' => bcrypt('password'),
-                'role' => 'petugas',
-                'pekerjaan' => 'Petugas BHP',
-                'status_akun' => 'petugas',
-                'status_verifikasi' => 'terverifikasi',
-                'email_verified_at' => now(),
-            ]
-        );
-
         // Akun KASI (Kepala Seksi)
         User::firstOrCreate(
             ['email' => 'kasi@pandubhp.go.id'],
@@ -116,16 +102,16 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Contoh akun Pemohon
+        // Akun Pemohon / Notaris
         User::firstOrCreate(
-            ['email' => 'pemohon@bhp.test'],
+            ['email' => 'f.tsaqif2004@gmail.com'],
             [
-                'name' => 'Contoh Pemohon',
+                'name' => 'Fernanda Tsaqif',
                 'password' => bcrypt('password'),
                 'role' => 'pemohon',
-                'pekerjaan' => 'Wiraswasta',
-                'jenis_akun' => 'perorangan',
-                'status_akun' => 'perorangan',
+                'pekerjaan' => 'Notaris',
+                'jenis_akun' => 'notaris',
+                'status_akun' => 'notaris',
                 'status_verifikasi' => 'terverifikasi',
                 'email_verified_at' => now(),
             ]
