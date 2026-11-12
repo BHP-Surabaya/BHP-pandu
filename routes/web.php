@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\Bendahara\BendaharaPnbpController;
 use App\Http\Controllers\Kasi\KasiDashboardController;
 use App\Http\Controllers\LayananController;
+use App\Http\Controllers\Madya\MadyaDashboardController;
+use App\Http\Controllers\Muda\MudaDashboardController;
 use App\Http\Controllers\PermohonanWasiatController;
 use App\Http\Controllers\Petugas\PetugasDashboardController;
 use App\Http\Controllers\ProfileController;
@@ -25,6 +27,14 @@ Route::get('/dashboard', function () {
 
     if (auth()->user()->isBendahara()) {
         return redirect()->route('bendahara.verifikasi.index');
+    }
+
+    if (auth()->user()->isKuratorMadya()) {
+        return redirect()->route('madya.dashboard');
+    }
+
+    if (auth()->user()->isKuratorMuda()) {
+        return redirect()->route('muda.dashboard');
     }
 
     if (auth()->user()->isPetugas()) {
@@ -64,6 +74,25 @@ Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')
     Route::get('/history', [PetugasDashboardController::class, 'history'])->name('history');
     Route::get('/verifikasi/{id}', [PetugasDashboardController::class, 'show'])->name('verifikasi.show');
     Route::post('/verifikasi/{id}/tindak-lanjut', [PetugasDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
+});
+
+Route::middleware(['auth', 'role:kurator_muda,muda'])->prefix('muda')->name('muda.')->group(function () {
+    Route::get('/dashboard', [MudaDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/history', [MudaDashboardController::class, 'history'])->name('history');
+    Route::get('/verifikasi/{id}', [MudaDashboardController::class, 'show'])->name('verifikasi.show');
+    Route::post('/verifikasi/{id}/tindak-lanjut', [MudaDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
+    Route::post('/jadwal/{id}/tindak-lanjut', [MudaDashboardController::class, 'tindakLanjutJadwal'])->name('jadwal.tindak-lanjut');
+    Route::post('/dokumen/{id}/terbitkan', [MudaDashboardController::class, 'terbitkanDokumen'])->name('dokumen.terbitkan');
+});
+
+Route::middleware(['auth', 'role:kurator_madya,madya'])->prefix('madya')->name('madya.')->group(function () {
+    Route::get('/dashboard', [MadyaDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/history', [MadyaDashboardController::class, 'history'])->name('history');
+    Route::get('/verifikasi/{id}', [MadyaDashboardController::class, 'show'])->name('verifikasi.show');
+    Route::post('/verifikasi/{id}/tindak-lanjut', [MadyaDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
+    Route::post('/layanan/{id}/buat-ba', [MadyaDashboardController::class, 'buatBa'])->name('layanan.buat-ba');
+    Route::post('/layanan/{id}/cetak-dokumen', [MadyaDashboardController::class, 'cetakDokumen'])->name('layanan.cetak-dokumen');
+    Route::post('/layanan/{id}/arsipkan', [MadyaDashboardController::class, 'arsipkan'])->name('layanan.arsipkan');
 });
 
 Route::middleware(['auth', 'role:kasi,kepala_seksi'])->prefix('kasi')->name('kasi.')->group(function () {

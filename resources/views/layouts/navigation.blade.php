@@ -16,7 +16,15 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
 
-                    @if (Auth::user()->isPetugas())
+                    @if (Auth::user()->isKuratorMadya())
+                        <x-nav-link :href="route('madya.dashboard')" :active="request()->routeIs('madya.dashboard')">
+                            {{ __('Daftar Layanan') }}
+                        </x-nav-link>
+                    @elseif (Auth::user()->isKuratorMuda())
+                        <x-nav-link :href="route('muda.dashboard')" :active="request()->routeIs('muda.dashboard')">
+                            {{ __('Dashboard Kurator Muda') }}
+                        </x-nav-link>
+                    @elseif (Auth::user()->isPetugas())
                         <x-nav-link :href="route('petugas.dashboard')" :active="request()->routeIs('petugas.dashboard')">
                             {{ __('Dashboard Petugas') }}
                         </x-nav-link>
@@ -40,7 +48,15 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        @if (Auth::user()->isPetugas())
+                        @if (Auth::user()->isKuratorMadya())
+                            <x-dropdown-link :href="route('madya.dashboard')">
+                                {{ __('Dashboard Kurator Madya') }}
+                            </x-dropdown-link>
+                        @elseif (Auth::user()->isKuratorMuda())
+                            <x-dropdown-link :href="route('muda.dashboard')">
+                                {{ __('Dashboard Kurator Muda') }}
+                            </x-dropdown-link>
+                        @elseif (Auth::user()->isPetugas())
                             <x-dropdown-link :href="route('petugas.dashboard')">
                                 {{ __('Dashboard Petugas') }}
                             </x-dropdown-link>

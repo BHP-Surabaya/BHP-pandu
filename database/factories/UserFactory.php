@@ -110,4 +110,34 @@ class UserFactory extends Factory
             'status_verifikasi' => 'terverifikasi',
         ]);
     }
+
+    /**
+     * Indicate that the user is a JFKK Muda (Kurator Keperdataan Muda).
+     */
+    public function jfkkMuda(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'Lutfy, S.H.',
+            'email' => 'jfkk.muda@pandubhp.go.id',
+            'role' => 'kurator_muda',
+            'pekerjaan' => 'Kurator Keperdataan Muda',
+            'status_akun' => 'kurator_muda',
+            'status_verifikasi' => 'terverifikasi',
+        ]);
+    }
+
+    /**
+     * Indicate that the user is a JFKK Madya (Kurator Keperdataan Madya).
+     */
+    public function jfkkMadya(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'Inara, S.H., M.H.',
+            'email' => 'jfkk.madya@pandubhp.go.id',
+            'role' => 'kurator_madya',
+            'pekerjaan' => 'Kurator Keperdataan Madya',
+            'status_akun' => 'kurator_madya',
+            'status_verifikasi' => 'terverifikasi',
+        ]);
+    }
 }

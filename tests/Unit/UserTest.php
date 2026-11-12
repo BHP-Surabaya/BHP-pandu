@@ -48,6 +48,24 @@ class UserTest extends TestCase
         $this->assertFalse($pemohon->isKasi());
         $this->assertFalse($bendahara_penerimaan = (new User(['role' => 'bendahara_penerimaan']))->isPemohon());
         $this->assertTrue((new User(['role' => 'bendahara_penerimaan']))->isBendahara());
+
+        $kuratorMadya = new User(['role' => 'kurator_madya', 'pekerjaan' => 'Kurator Keperdataan Madya']);
+        $this->assertTrue($kuratorMadya->isKuratorMadya());
+        $this->assertFalse($kuratorMadya->isKuratorPertama());
+        $this->assertFalse($kuratorMadya->isKuratorMuda());
+        $this->assertSame('Kurator Keperdataan Madya', $kuratorMadya->status_akun_label);
+
+        $kuratorMuda = new User(['role' => 'kurator_muda', 'pekerjaan' => 'Kurator Keperdataan Muda']);
+        $this->assertTrue($kuratorMuda->isKuratorMuda());
+        $this->assertFalse($kuratorMuda->isKuratorPertama());
+        $this->assertFalse($kuratorMuda->isKuratorMadya());
+        $this->assertSame('Kurator Keperdataan Muda', $kuratorMuda->status_akun_label);
+
+        $kuratorPertama = new User(['role' => 'petugas', 'pekerjaan' => 'Kurator Keperdataan Pertama']);
+        $this->assertTrue($kuratorPertama->isKuratorPertama());
+        $this->assertFalse($kuratorPertama->isKuratorMuda());
+        $this->assertFalse($kuratorPertama->isKuratorMadya());
+        $this->assertSame('Kurator Keperdataan Pertama', $kuratorPertama->status_akun_label);
     }
 
     /**

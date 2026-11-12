@@ -74,6 +74,34 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Akun JFKK Muda (Kurator Keperdataan Muda)
+        User::firstOrCreate(
+            ['email' => 'jfkk.muda@pandubhp.go.id'],
+            [
+                'name' => 'Lutfy, S.H.',
+                'password' => bcrypt('password'),
+                'role' => 'kurator_muda',
+                'pekerjaan' => 'Kurator Keperdataan Muda',
+                'status_akun' => 'kurator_muda',
+                'status_verifikasi' => 'terverifikasi',
+                'email_verified_at' => now(),
+            ]
+        );
+
+        // Akun JFKK Madya (Kurator Keperdataan Madya)
+        User::firstOrCreate(
+            ['email' => 'jfkk.madya@pandubhp.go.id'],
+            [
+                'name' => 'Inara, S.H., M.H.',
+                'password' => bcrypt('password'),
+                'role' => 'kurator_madya',
+                'pekerjaan' => 'Kurator Keperdataan Madya',
+                'status_akun' => 'kurator_madya',
+                'status_verifikasi' => 'terverifikasi',
+                'email_verified_at' => now(),
+            ]
+        );
+
         // Akun Bendahara Penerimaan
         User::firstOrCreate(
             ['email' => 'bendahara@pandubhp.go.id'],
