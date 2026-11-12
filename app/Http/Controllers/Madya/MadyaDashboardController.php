@@ -12,325 +12,86 @@ use Illuminate\View\View;
 class MadyaDashboardController extends Controller
 {
     /**
-     * Default list Layanan Wasiat Tertutup aktif untuk Kurator Madya.
-     *
-     * @var array<int, array<string, mixed>>
+     * Hitung permohonan aktif untuk Kurator Madya.
      */
-    protected array $defaultLayananList = [
-        [
-            'id' => 1,
-            'nomor_layanan' => 'WST-2025-04098',
-            'jenis_layanan' => 'Wasiat Tertutup',
-            'detail_layanan' => 'Pembukaan Wasiat Tertutup',
-            'nama_pemohon' => 'Dimas Mahendra',
-            'nik' => '3578••••••••0098',
-            'telepon' => '0812 8876 2104',
-            'nomor_telepon' => '0812 8876 2104',
-            'email' => 'dimas.mahendra@email.com',
-            'alamat_domisili' => 'Kec. Genteng, Kota Surabaya',
-            'nama_pewasiat' => 'Alm. Soetrisno Hardjono',
-            'tanggal_masuk' => '30 Mei 2025',
-            'waktu_masuk' => 'Pukul 14:32',
-            'sla_tanggal' => '23 Mei 2025',
-            'sla_sisa' => '2 hari tersisa',
-            'sla_progress' => 'Hari ke-12 dari 14',
-            'sla_badge' => 'red',
-            'jadwal_pembukaan' => 'Selasa, 20 Mei 2025',
-            'waktu_pembukaan' => '10.00 WIB',
-            'status_layanan' => 'Disetujui',
-            'status_ba' => 'Draft BA Siap',
-            'nomor_ba' => 'BA.01/WST/BHP.SBY/V/2025',
-            'salinan_count' => 2,
-            'petugas_pertama' => 'Iman, S.H.',
-            'petugas_muda' => 'Lutfy, S.H.',
-            'catatan' => 'Sampul wasiat tertutup telah diperiksa keutuhannya dan siap dibuka bersama notaris.',
-            'dokumen_list' => [
-                ['nama' => 'KTP Pemohon.pdf', 'ukuran' => '1,2 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Akta Kematian Pewasiat.pdf', 'ukuran' => '1,8 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Akta Penyimpanan Wasiat Notaris.pdf', 'ukuran' => '2,5 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Surat Keterangan Wasiat AHU.pdf', 'ukuran' => '1,9 MB', 'tipe' => 'PDF'],
-            ],
-        ],
-        [
-            'id' => 2,
-            'nomor_layanan' => 'WST-2025-04081',
-            'jenis_layanan' => 'Wasiat Tertutup',
-            'detail_layanan' => 'Pembukaan Wasiat Tertutup',
-            'nama_pemohon' => 'Sari Wulandari',
-            'nik' => '3578••••••••0045',
-            'telepon' => '0813 9012 4765',
-            'nomor_telepon' => '0813 9012 4765',
-            'email' => 'sari.w@email.com',
-            'alamat_domisili' => 'Kec. Rungkut, Kota Surabaya',
-            'nama_pewasiat' => 'Almh. Siti Hartini',
-            'tanggal_masuk' => '30 Mei 2025',
-            'waktu_masuk' => 'Pukul 11:18',
-            'sla_tanggal' => '27 Mei 2025',
-            'sla_sisa' => '6 hari tersisa',
-            'sla_progress' => 'Hari ke-8 dari 14',
-            'sla_badge' => 'yellow',
-            'jadwal_pembukaan' => 'Kamis, 22 Mei 2025',
-            'waktu_pembukaan' => '13.30 WIB',
-            'status_layanan' => 'Menunggu persetujuan',
-            'status_ba' => 'Belum Dibuat',
-            'nomor_ba' => null,
-            'salinan_count' => 0,
-            'petugas_pertama' => 'Iman, S.H.',
-            'petugas_muda' => 'Lutfy, S.H.',
-            'catatan' => 'Menunggu verifikasi fisik sampul wasiat di hadapan fungsional madya.',
-            'dokumen_list' => [
-                ['nama' => 'KTP Pemohon.pdf', 'ukuran' => '1,1 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Akta Kematian Pewasiat.pdf', 'ukuran' => '1,7 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Akta Penitipan Wasiat.pdf', 'ukuran' => '2,2 MB', 'tipe' => 'PDF'],
-            ],
-        ],
-        [
-            'id' => 3,
-            'nomor_layanan' => 'WST-2025-04072',
-            'jenis_layanan' => 'Wasiat Tertutup',
-            'detail_layanan' => 'Pembukaan Wasiat Tertutup',
-            'nama_pemohon' => 'Fajar Nugraha',
-            'nik' => '3578••••••••0012',
-            'telepon' => '0857 1120 8843',
-            'nomor_telepon' => '0857 1120 8843',
-            'email' => 'fajar.n@email.com',
-            'alamat_domisili' => 'Kec. Wonokromo, Kota Surabaya',
-            'nama_pewasiat' => 'Alm. Johannes Tan',
-            'tanggal_masuk' => '29 Mei 2025',
-            'waktu_masuk' => 'Pukul 16:05',
-            'sla_tanggal' => '29 Mei 2025',
-            'sla_sisa' => '9 hari tersisa',
-            'sla_progress' => 'Hari ke-5 dari 14',
-            'sla_badge' => 'green',
-            'jadwal_pembukaan' => 'Senin, 26 Mei 2025',
-            'waktu_pembukaan' => '09.00 WIB',
-            'status_layanan' => 'Menunggu persetujuan',
-            'status_ba' => 'Belum Dibuat',
-            'nomor_ba' => null,
-            'salinan_count' => 0,
-            'petugas_pertama' => 'Iman, S.H.',
-            'petugas_muda' => 'Lutfy, S.H.',
-            'catatan' => 'Berkas pendaftaran wasiat lengkap, jadwal telah terkonfirmasi.',
-            'dokumen_list' => [
-                ['nama' => 'KTP Pemohon.pdf', 'ukuran' => '1,3 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Buku Nikah Pewasiat.pdf', 'ukuran' => '2,0 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Akta Kematian Pewasiat.pdf', 'ukuran' => '1,6 MB', 'tipe' => 'PDF'],
-            ],
-        ],
-    ];
-
-    /**
-     * Default list permohonan yang perlu diverifikasi / ditelaah tingkat lanjut oleh Kurator Madya.
-     *
-     * @var array<int, array<string, mixed>>
-     */
-    protected array $defaultVerifikasiList = [
-        [
-            'id' => 1,
-            'nomor_layanan' => 'WST-2025-04098',
-            'jenis_layanan' => 'Wasiat Tertutup',
-            'detail_layanan' => 'Permohonan Pembukaan Wasiat Tertutup',
-            'nama_pemohon' => 'Dimas Mahendra',
-            'nik' => '3578••••••••0098',
-            'email' => 'dimas.mahendra@email.com',
-            'nomor_telepon' => '0812 8876 2104',
-            'alamat_domisili' => 'Kec. Genteng, Kota Surabaya',
-            'nama_pewasiat' => 'Alm. Soetrisno Hardjono',
-            'tanggal_masuk' => '30 Mei 2025',
-            'waktu_masuk' => 'Pukul 14:32',
-            'status_verifikasi' => 'menunggu_telaah',
-            'status_label' => 'Menunggu Telaah Madya',
-            'dokumen_count' => 4,
-            'dokumen_total' => 4,
-            'tipe_badge' => 'purple',
-            'petugas_pertama' => 'Iman, S.H.',
-            'petugas_muda' => 'Lutfy, S.H.',
-            'catatan' => 'Pemeriksaan silsilah waris dan berkas telah divalidasi oleh Pertama & Muda.',
-            'dokumen_list' => [
-                ['nama' => 'KTP Pemohon.pdf', 'ukuran' => '1,2 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Akta Kematian Pewasiat.pdf', 'ukuran' => '1,8 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Akta Penyimpanan Wasiat Notaris.pdf', 'ukuran' => '2,5 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Surat Keterangan Wasiat AHU.pdf', 'ukuran' => '1,9 MB', 'tipe' => 'PDF'],
-            ],
-        ],
-        [
-            'id' => 2,
-            'nomor_layanan' => 'WST-2025-04081',
-            'jenis_layanan' => 'Wasiat Tertutup',
-            'detail_layanan' => 'Permohonan Pembukaan Wasiat Tertutup',
-            'nama_pemohon' => 'Sari Wulandari',
-            'nik' => '3578••••••••0045',
-            'email' => 'sari.w@email.com',
-            'nomor_telepon' => '0813 9012 4765',
-            'alamat_domisili' => 'Kec. Rungkut, Kota Surabaya',
-            'nama_pewasiat' => 'Almh. Siti Hartini',
-            'tanggal_masuk' => '30 Mei 2025',
-            'waktu_masuk' => 'Pukul 11:18',
-            'status_verifikasi' => 'menunggu_telaah',
-            'status_label' => 'Menunggu Telaah Madya',
-            'dokumen_count' => 3,
-            'dokumen_total' => 3,
-            'tipe_badge' => 'purple',
-            'petugas_pertama' => 'Iman, S.H.',
-            'petugas_muda' => 'Lutfy, S.H.',
-            'catatan' => 'Salinan akta wasiat dan surat keterangan kematian terlampir absah.',
-            'dokumen_list' => [
-                ['nama' => 'KTP Pemohon.pdf', 'ukuran' => '1,1 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Akta Kematian Pewasiat.pdf', 'ukuran' => '1,7 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Akta Penitipan Wasiat.pdf', 'ukuran' => '2,2 MB', 'tipe' => 'PDF'],
-            ],
-        ],
-        [
-            'id' => 3,
-            'nomor_layanan' => 'WST-2025-04072',
-            'jenis_layanan' => 'Wasiat Tertutup',
-            'detail_layanan' => 'Permohonan Pembukaan Wasiat Tertutup',
-            'nama_pemohon' => 'Fajar Nugraha',
-            'nik' => '3578••••••••0012',
-            'email' => 'fajar.n@email.com',
-            'nomor_telepon' => '0857 1120 8843',
-            'alamat_domisili' => 'Kec. Wonokromo, Kota Surabaya',
-            'nama_pewasiat' => 'Alm. Johannes Tan',
-            'tanggal_masuk' => '29 Mei 2025',
-            'waktu_masuk' => 'Pukul 16:05',
-            'status_verifikasi' => 'menunggu_telaah',
-            'status_label' => 'Menunggu Telaah Madya',
-            'dokumen_count' => 3,
-            'dokumen_total' => 3,
-            'tipe_badge' => 'purple',
-            'petugas_pertama' => 'Iman, S.H.',
-            'petugas_muda' => 'Lutfy, S.H.',
-            'catatan' => 'Berkas kepemilikan dan buku nikah lengkap.',
-            'dokumen_list' => [
-                ['nama' => 'KTP Pemohon.pdf', 'ukuran' => '1,3 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Buku Nikah Pewasiat.pdf', 'ukuran' => '2,0 MB', 'tipe' => 'PDF'],
-                ['nama' => 'Akta Kematian Pewasiat.pdf', 'ukuran' => '1,6 MB', 'tipe' => 'PDF'],
-            ],
-        ],
-    ];
-
-    /**
-     * Default history riwayat permohonan yang telah selesai diverifikasi oleh Kurator Madya.
-     *
-     * @var array<int, array<string, mixed>>
-     */
-    protected array $defaultHistoryList = [
-        [
-            'id' => 101,
-            'nomor_layanan' => 'WST-2025-04050',
-            'jenis_layanan' => 'Wasiat Tertutup',
-            'nama_pemohon' => 'Farhan Saputra, S.H.',
-            'nama_pewasiat' => 'Alm. H. Achmad Dahlan',
-            'tanggal_selesai' => '28 Mei 2025',
-            'status_hasil' => 'disetujui',
-            'status_label' => 'Selesai & Diarsipkan',
-            'nomor_ba' => 'BA.08/WST/BHP.SBY/V/2025',
-            'salinan_dicetak' => '2 Salinan Selesai',
-            'petugas_verifikator' => 'Inara, S.H., M.H.',
-            'catatan' => 'Berita Acara telah dibuat, 2 salinan dicetak dan diserahkan serta berkas telah diarsipkan.',
-        ],
-        [
-            'id' => 102,
-            'nomor_layanan' => 'WST-2025-04041',
-            'jenis_layanan' => 'Wasiat Tertutup',
-            'nama_pemohon' => 'Anisa Rahmawati',
-            'nama_pewasiat' => 'Almh. Hj. Fatimah',
-            'tanggal_selesai' => '27 Mei 2025',
-            'status_hasil' => 'disetujui',
-            'status_label' => 'Selesai & Diarsipkan',
-            'nomor_ba' => 'BA.07/WST/BHP.SBY/V/2025',
-            'salinan_dicetak' => '2 Salinan Selesai',
-            'petugas_verifikator' => 'Inara, S.H., M.H.',
-            'catatan' => 'Dokumen pembukaan wasiat tertutup telah ditandatangani dan diarsipkan rapi.',
-        ],
-        [
-            'id' => 103,
-            'nomor_layanan' => 'WST-2025-04033',
-            'jenis_layanan' => 'Wasiat Tertutup',
-            'nama_pemohon' => 'Budi Santoso',
-            'nama_pewasiat' => 'Alm. Soegeng Prawiro',
-            'tanggal_selesai' => '26 Mei 2025',
-            'status_hasil' => 'disetujui',
-            'status_label' => 'Selesai & Diarsipkan',
-            'nomor_ba' => 'BA.06/WST/BHP.SBY/V/2025',
-            'salinan_dicetak' => '2 Salinan Selesai',
-            'petugas_verifikator' => 'Inara, S.H., M.H.',
-            'catatan' => 'Keutuhan sampul wasiat tertutup terkonfirmasi sah, berkas layanan lengkap.',
-        ],
-    ];
-
-    /**
-     * Hitung jumlah permohonan yang perlu ditindaklanjuti oleh Kurator Madya.
-     */
-    public static function getPerluVerifikasiCount(): int
+    public static function getLayananAktifCount(): int
     {
-        $instance = new self;
-        $sessionList = session('madya_layanan_list', $instance->defaultLayananList);
-
-        $dbCount = Permohonan::where('status', 'menunggu_verifikasi')->count();
-
-        return max(count($sessionList), $dbCount);
+        return Permohonan::whereIn('status', ['proses_madya', 'proses_muda'])->count();
     }
 
     /**
-     * Tampilkan halaman utama Daftar Layanan Wasiat Tertutup Kurator Madya.
+     * Alias method untuk badge sidebar portal layout.
+     */
+    public static function getPerluVerifikasiCount(): int
+    {
+        return self::getLayananAktifCount();
+    }
+
+    /**
+     * Tampilkan halaman utama Layanan Wasiat Tertutup Kurator Madya.
      */
     public function index(Request $request): View
     {
-        $layananList = session('madya_layanan_list', $this->defaultLayananList);
+        $search = trim((string) $request->input('search', ''));
 
-        // Gabungkan permohonan riil dari database bila ada
-        $dbPermohonans = Permohonan::with(['user', 'pewasiat'])
-            ->where('status', 'menunggu_verifikasi')
-            ->get();
+        $query = Permohonan::with(['user', 'pewasiat', 'dokumens'])
+            ->whereIn('status', ['proses_madya', 'proses_muda', 'disetujui_pertama'])
+            ->latest();
 
-        foreach ($dbPermohonans as $permohonan) {
-            $existing = collect($layananList)->firstWhere('nomor_layanan', $permohonan->nomor_permohonan ?? $permohonan->id);
-            if (! $existing) {
-                array_unshift($layananList, [
-                    'id' => $permohonan->id,
-                    'nomor_layanan' => $permohonan->nomor_permohonan ?? 'WST-2025-'.str_pad((string) $permohonan->id, 5, '0', STR_PAD_LEFT),
-                    'jenis_layanan' => 'Wasiat Tertutup',
-                    'nama_pemohon' => $permohonan->user?->name ?? 'Pemohon',
-                    'nik' => $permohonan->user?->nik ?? '3578••••••••0000',
-                    'telepon' => $permohonan->user?->phone ?? '0812 •••• 0000',
-                    'email' => $permohonan->user?->email ?? 'pemohon@email.com',
-                    'nama_pewasiat' => $permohonan->pewasiat?->nama ?? 'Pewasiat',
-                    'sla_tanggal' => now()->addDays(7)->translatedFormat('d F Y'),
-                    'sla_sisa' => '7 hari tersisa',
-                    'sla_progress' => 'Hari ke-7 dari 14',
-                    'sla_badge' => 'yellow',
-                    'jadwal_pembukaan' => now()->addDays(3)->translatedFormat('l, d F Y'),
-                    'waktu_pembukaan' => '10.00 WIB',
-                    'status_layanan' => 'Menunggu Tindak Lanjut',
-                    'status_ba' => 'Belum Dibuat',
-                    'nomor_ba' => null,
-                    'salinan_count' => 0,
-                    'petugas_pertama' => 'Iman, S.H.',
-                    'petugas_muda' => 'Lutfy, S.H.',
-                    'catatan' => 'Permohonan masuk dari portal pemohon.',
-                ]);
-            }
+        if ($search !== '') {
+            $query->where(function ($q) use ($search) {
+                $q->where('nomor_permohonan', 'like', "%{$search}%")
+                    ->orWhereHas('user', fn ($u) => $u->where('name', 'like', "%{$search}%"))
+                    ->orWhereHas('pewasiat', fn ($p) => $p->where('nama_lengkap', 'like', "%{$search}%"));
+            });
         }
 
-        $search = $request->input('search');
-        if ($search) {
-            $layananList = array_values(array_filter($layananList, function ($item) use ($search) {
-                return str_contains(strtolower($item['nomor_layanan']), strtolower($search))
-                    || str_contains(strtolower($item['nama_pemohon']), strtolower($search))
-                    || str_contains(strtolower($item['jenis_layanan']), strtolower($search));
-            }));
-        }
+        $permohonans = $query->get();
 
-        // Variabel untuk kompatibilitas tampilan
-        $verifikasiList = $layananList;
+        $layananList = $permohonans->map(function (Permohonan $item) {
+            $dokumenList = $this->mapDokumenList($item);
+            $jadwal = $item->jadwal_pembukaan;
+            $hariBerjalan = max(1, (int) ($item->created_at?->diffInDays(now()) ?? 0) + 1);
+            $sisaHari = max(0, 14 - $hariBerjalan);
+
+            return [
+                'id' => $item->id,
+                'nomor_layanan' => $item->nomor_permohonan ?: ('WST-'.str_pad((string) $item->id, 5, '0', STR_PAD_LEFT)),
+                'jenis_layanan' => $item->jenis_layanan === 'skhw' ? 'SKHW' : 'Wasiat Tertutup',
+                'detail_layanan' => $item->jenis_layanan_label,
+                'nama_pemohon' => $item->user?->name ?? 'Pemohon',
+                'nik' => $item->user?->nik ?? '-',
+                'telepon' => $item->user?->phone ?? '-',
+                'nomor_telepon' => $item->user?->phone ?? '-',
+                'email' => $item->user?->email ?? '-',
+                'alamat_domisili' => $item->user?->alamat_domisili ?? '-',
+                'nama_pewasiat' => $item->pewasiat?->nama_lengkap ?? 'Pewasiat',
+                'tanggal_masuk' => $item->created_at?->translatedFormat('d M Y') ?? now()->translatedFormat('d M Y'),
+                'waktu_masuk' => $item->created_at ? 'Pukul '.$item->created_at->format('H:i') : 'Pukul 10:00',
+                'sla_tanggal' => $item->created_at?->addDays(14)->translatedFormat('d M Y') ?? now()->addDays(14)->translatedFormat('d M Y'),
+                'sla_sisa' => "{$sisaHari} hari tersisa",
+                'sla_progress' => "Hari ke-{$hariBerjalan} dari 14",
+                'sla_badge' => $sisaHari <= 2 ? 'red' : ($sisaHari <= 5 ? 'yellow' : 'purple'),
+                'jadwal_pembukaan' => $jadwal ? $jadwal->translatedFormat('l, d F Y') : 'Menunggu Penetapan',
+                'waktu_pembukaan' => $jadwal ? $jadwal->format('H.i').' WIB' : '-',
+                'status_layanan' => $item->status_label,
+                'status_ba' => $item->nomor_berita_acara ? 'BA Diterbitkan' : 'Draft BA Siap',
+                'nomor_ba' => $item->nomor_berita_acara ?: '-',
+                'salinan_count' => 2,
+                'petugas_pertama' => $item->diverifikasi_oleh ?? 'Iman, S.H.',
+                'petugas_muda' => 'Lutfy, S.H.',
+                'catatan' => $item->disposisi_kasi ?? 'Sampul wasiat tertutup siap dibuka bersama notaris.',
+                'dokumen_list' => $dokumenList,
+            ];
+        })->all();
 
         $stats = [
-            'total_layanan' => count($layananList),
-            'total_selesai' => count(session('madya_history_list', $this->defaultHistoryList)),
+            'total_layanan_aktif' => count($layananList),
+            'total_ba_siap' => collect($layananList)->where('nomor_ba', '!=', '-')->count(),
+            'total_arsip' => Permohonan::where('status', 'selesai')->count(),
         ];
 
-        return view('madya.dashboard', compact('layananList', 'verifikasiList', 'stats', 'search'));
+        return view('madya.dashboard', compact('layananList', 'stats', 'search'));
     }
 
     /**
@@ -338,21 +99,43 @@ class MadyaDashboardController extends Controller
      */
     public function history(Request $request): View
     {
-        $historyList = session('madya_history_list', $this->defaultHistoryList);
+        $search = trim((string) $request->input('search', ''));
 
-        $search = $request->input('search');
-        if ($search) {
-            $historyList = array_values(array_filter($historyList, function ($item) use ($search) {
-                return str_contains(strtolower($item['nomor_layanan']), strtolower($search))
-                    || str_contains(strtolower($item['nama_pemohon']), strtolower($search))
-                    || str_contains(strtolower($item['jenis_layanan']), strtolower($search));
-            }));
+        $query = Permohonan::with(['user', 'pewasiat'])
+            ->where('status', 'selesai')
+            ->latest('updated_at');
+
+        if ($search !== '') {
+            $query->where(function ($q) use ($search) {
+                $q->where('nomor_permohonan', 'like', "%{$search}%")
+                    ->orWhereHas('user', fn ($u) => $u->where('name', 'like', "%{$search}%"))
+                    ->orWhereHas('pewasiat', fn ($p) => $p->where('nama_lengkap', 'like', "%{$search}%"));
+            });
         }
+
+        $permohonans = $query->get();
+
+        $historyList = $permohonans->map(function (Permohonan $item) {
+            return [
+                'id' => $item->id,
+                'nomor_layanan' => $item->nomor_permohonan ?: ('WST-'.str_pad((string) $item->id, 5, '0', STR_PAD_LEFT)),
+                'jenis_layanan' => $item->jenis_layanan_label,
+                'nama_pemohon' => $item->user?->name ?? 'Pemohon',
+                'nama_pewasiat' => $item->pewasiat?->nama_lengkap ?? 'Pewasiat',
+                'nomor_ba' => $item->nomor_berita_acara ?: ('BA-'.date('Ymd').'-'.str_pad((string) $item->id, 4, '0', STR_PAD_LEFT)),
+                'tanggal_selesai' => $item->updated_at?->translatedFormat('d F Y') ?? now()->translatedFormat('d F Y'),
+                'status_hasil' => 'selesai',
+                'status_label' => 'Selesai & Diarsipkan',
+                'kurator_madya' => auth()->user()?->name ?? 'Inara, S.H., M.H.',
+                'catatan' => 'Berita Acara dan 2 salinan dokumen telah dicetak dan berkas diarsipkan.',
+            ];
+        })->all();
 
         $stats = [
             'total_riwayat' => count($historyList),
-            'total_disetujui' => collect($historyList)->where('status_hasil', 'disetujui')->count(),
-            'total_revisi' => collect($historyList)->where('status_hasil', 'revisi')->count(),
+            'total_disetujui' => count($historyList),
+            'total_wasiat_tertutup' => count($historyList),
+            'total_salinan_cetak' => count($historyList) * 2,
         ];
 
         return view('madya.history', compact('historyList', 'stats', 'search'));
@@ -365,193 +148,67 @@ class MadyaDashboardController extends Controller
     {
         $validated = $request->validate([
             'nomor_ba' => ['nullable', 'string', 'max:100'],
-            'catatan' => ['nullable', 'string', 'max:500'],
-        ]);
-
-        $layananList = session('madya_layanan_list', $this->defaultLayananList);
-        $nomorBa = $validated['nomor_ba'] ?: 'BA.'.str_pad((string) random_int(1, 99), 2, '0', STR_PAD_LEFT).'/WST/BHP.SBY/'.now()->format('m').'/'.now()->format('Y');
-
-        foreach ($layananList as &$item) {
-            if ((string) $item['id'] === (string) $id) {
-                $item['nomor_ba'] = $nomorBa;
-                $item['status_ba'] = 'BA Dibuat';
-                $item['catatan'] = $validated['catatan'] ?? $item['catatan'];
-                break;
-            }
-        }
-        unset($item);
-
-        session(['madya_layanan_list' => $layananList]);
-
-        return redirect()->route('madya.dashboard')->with('success', "Berita Acara {$nomorBa} berhasil dibuat!");
-    }
-
-    /**
-     * Catat cetak dokumen 2 salinan.
-     */
-    public function cetakDokumen(Request $request, string|int $id): RedirectResponse
-    {
-        $layananList = session('madya_layanan_list', $this->defaultLayananList);
-
-        foreach ($layananList as &$item) {
-            if ((string) $item['id'] === (string) $id) {
-                $item['salinan_count'] = 2;
-                $item['salinan_dicetak'] = '2 Salinan Selesai';
-                break;
-            }
-        }
-        unset($item);
-
-        session(['madya_layanan_list' => $layananList]);
-
-        return redirect()->route('madya.dashboard')->with('success', 'Dokumen Berita Acara berhasil dicetak sebanyak 2 salinan (1 untuk Pemohon, 1 untuk Arsip BHP).');
-    }
-
-    /**
-     * Arsipkan berkas layanan dan pindahkan ke Histori Layanan.
-     */
-    public function arsipkan(Request $request, string|int $id): RedirectResponse
-    {
-        $validated = $request->validate([
             'catatan' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $layananList = session('madya_layanan_list', $this->defaultLayananList);
-        $historyList = session('madya_history_list', $this->defaultHistoryList);
+        $permohonan = Permohonan::findOrFail($id);
+        $nomorBa = $validated['nomor_ba'] ?: ('BA.'.date('m').'/WST/BHP.SBY/'.date('Y').'/'.str_pad((string) $permohonan->id, 3, '0', STR_PAD_LEFT));
 
-        $targetItem = null;
-        $newLayananList = [];
+        $permohonan->update([
+            'nomor_berita_acara' => $nomorBa,
+            'tanggal_berita_acara' => now(),
+            'status' => 'proses_madya',
+            'catatan_petugas' => $validated['catatan'] ?? 'Berita Acara pembukaan wasiat tertutup telah diterbitkan.',
+        ]);
 
-        foreach ($layananList as $item) {
-            if ((string) $item['id'] === (string) $id) {
-                $targetItem = $item;
-            } else {
-                $newLayananList[] = $item;
-            }
-        }
-
-        if ($targetItem) {
-            $nomorBa = $targetItem['nomor_ba'] ?? ('BA.'.str_pad((string) random_int(1, 99), 2, '0', STR_PAD_LEFT).'/WST/BHP.SBY/'.now()->format('m').'/'.now()->format('Y'));
-            $newHistoryItem = [
-                'id' => time(),
-                'nomor_layanan' => $targetItem['nomor_layanan'],
-                'jenis_layanan' => $targetItem['jenis_layanan'],
-                'nama_pemohon' => $targetItem['nama_pemohon'],
-                'nama_pewasiat' => $targetItem['nama_pewasiat'],
-                'tanggal_selesai' => now()->translatedFormat('d F Y'),
-                'status_hasil' => 'disetujui',
-                'status_label' => 'Selesai & Diarsipkan',
-                'nomor_ba' => $nomorBa,
-                'salinan_dicetak' => '2 Salinan Selesai',
-                'petugas_verifikator' => auth()->user()?->name ?? 'Inara, S.H., M.H.',
-                'catatan' => $validated['catatan'] ?? 'Berita Acara telah dibuat, 2 salinan dicetak dan berkas resmi diarsipkan.',
-            ];
-
-            array_unshift($historyList, $newHistoryItem);
-
-            session([
-                'madya_layanan_list' => $newLayananList,
-                'madya_history_list' => $historyList,
-            ]);
-
-            return redirect()->route('madya.dashboard')->with('success', "Layanan {$targetItem['nomor_layanan']} berhasil diarsipkan dan masuk ke Histori Layanan.");
-        }
-
-        return redirect()->route('madya.dashboard');
+        return redirect()->route('madya.dashboard')
+            ->with('success', "Berita Acara untuk layanan {$permohonan->nomor_permohonan} berhasil diterbitkan dengan nomor {$nomorBa}.");
     }
 
     /**
-     * Tampilkan detail verifikasi persyaratan sesuai ID layanan.
+     * Cetak dokumen 2 salinan (salinan untuk BHP dan Notaris).
+     */
+    public function cetakDokumen(Request $request, string|int $id): RedirectResponse
+    {
+        $permohonan = Permohonan::findOrFail($id);
+
+        return redirect()->route('madya.dashboard')
+            ->with('success', "Dokumen 2 salinan resmi untuk layanan {$permohonan->nomor_permohonan} berhasil dicetak.");
+    }
+
+    /**
+     * Arsipkan berkas layanan setelah proses selesai.
+     */
+    public function arsipkan(Request $request, string|int $id): RedirectResponse
+    {
+        $permohonan = Permohonan::findOrFail($id);
+
+        $permohonan->update([
+            'status' => 'selesai',
+        ]);
+
+        return redirect()->route('madya.dashboard')
+            ->with('success', "Layanan {$permohonan->nomor_permohonan} berhasil diselesaikan dan berkas telah diarsipkan.");
+    }
+
+    /**
+     * Tampilkan detail verifikasi / berkas layanan untuk Kurator Madya.
      */
     public function show(string|int $id): View|RedirectResponse
     {
-        $layananList = session('madya_layanan_list', $this->defaultLayananList);
-        $layanan = collect($layananList)->firstWhere('id', (int) $id)
-            ?? collect($layananList)->firstWhere('id', (string) $id);
+        $permohonan = Permohonan::with(['user', 'pewasiat.pasangans', 'pewasiat.ahliWaris', 'dokumens', 'voucher'])->find($id);
 
-        if (! $layanan) {
-            $verifikasiList = session('madya_verifikasi_list', $this->defaultVerifikasiList);
-            $layanan = collect($verifikasiList)->firstWhere('id', (int) $id)
-                ?? collect($verifikasiList)->firstWhere('id', (string) $id);
+        if (! $permohonan) {
+            return redirect()->route('madya.dashboard')->with('error', 'Layanan permohonan tidak ditemukan.');
         }
 
-        if (! $layanan) {
-            $permohonan = Permohonan::with(['user', 'pewasiat', 'dokumens', 'voucher'])->find($id);
-            if ($permohonan) {
-                $dokumenList = [];
-                $docLabels = [
-                    'ktp' => 'KTP Pemohon.pdf',
-                    'surat_kuasa' => 'Surat Kuasa.pdf',
-                    'akta_kematian' => 'Akta Kematian Pewaris.pdf',
-                    'surat_keterangan_wasiat' => 'Surat Keterangan Wasiat DPW.pdf',
-                    'akta_penyimpanan_wasiat' => 'Akta Penyimpanan Wasiat Notaris.pdf',
-                    'buku_nikah' => 'Buku Nikah Pewasiat.pdf',
-                    'akta_lahir_ktp_kk' => 'Kartu Keluarga & Akta Lahir.pdf',
-                    'dokumen_lainnya' => 'Dokumen Tambahan.pdf',
-                ];
-
-                foreach ($permohonan->dokumens as $dok) {
-                    $namaFile = $docLabels[$dok->jenis_dokumen] ?? (basename($dok->file_path) ?: 'Dokumen Persyaratan.pdf');
-                    $dokumenList[] = [
-                        'nama' => $namaFile,
-                        'ukuran' => '1,5 MB',
-                        'tipe' => 'PDF',
-                        'url' => Storage::url($dok->file_path),
-                    ];
-                }
-
-                if (empty($dokumenList)) {
-                    $dokumenList = [
-                        ['nama' => 'KTP Pemohon.pdf', 'ukuran' => '1,2 MB', 'tipe' => 'PDF'],
-                        ['nama' => 'Akta Kematian Pewaris.pdf', 'ukuran' => '1,8 MB', 'tipe' => 'PDF'],
-                        ['nama' => 'Surat Keterangan Wasiat DPW.pdf', 'ukuran' => '2,1 MB', 'tipe' => 'PDF'],
-                        ['nama' => 'Akta Penyimpanan Wasiat.pdf', 'ukuran' => '2,5 MB', 'tipe' => 'PDF'],
-                    ];
-                }
-
-                $userNik = $permohonan->user?->nik;
-                $maskedNik = $userNik ? (strlen($userNik) > 8 ? substr($userNik, 0, 4).'••••••••'.substr($userNik, -4) : $userNik) : '3578••••••••0006';
-
-                $userPhone = $permohonan->user?->phone;
-                $maskedPhone = $userPhone ? (strlen($userPhone) > 8 ? substr($userPhone, 0, 4).' •••• '.substr($userPhone, -4) : $userPhone) : '0812 •••• 8841';
-
-                $layanan = [
-                    'id' => $permohonan->id,
-                    'nomor_layanan' => $permohonan->nomor_permohonan ?? 'WST-2025-'.str_pad((string) $permohonan->id, 5, '0', STR_PAD_LEFT),
-                    'jenis_layanan' => 'Wasiat Tertutup',
-                    'detail_layanan' => 'Pembukaan Wasiat Tertutup',
-                    'nama_pemohon' => $permohonan->user?->name ?? 'Pemohon',
-                    'nik' => $maskedNik,
-                    'email' => $permohonan->user?->email ?? 'pemohon@email.com',
-                    'nomor_telepon' => $maskedPhone,
-                    'alamat_domisili' => $permohonan->user?->alamat_domisili ?? 'Kec. Genteng, Kota Surabaya',
-                    'nama_pewasiat' => $permohonan->pewasiat?->nama_lengkap ?? 'Pewasiat',
-                    'tanggal_masuk' => $permohonan->created_at?->translatedFormat('d F Y') ?? now()->translatedFormat('d F Y'),
-                    'waktu_masuk' => $permohonan->created_at?->format('H:i') ? 'Pukul '.$permohonan->created_at->format('H:i') : 'Pukul 10:00',
-                    'status_verifikasi' => 'menunggu_telaah',
-                    'status_label' => 'Menunggu Telaah Madya',
-                    'dokumen_count' => count($dokumenList),
-                    'dokumen_total' => count($dokumenList),
-                    'tipe_badge' => 'purple',
-                    'catatan' => 'Permohonan masuk dari portal pemohon.',
-                    'dokumen_list' => $dokumenList,
-                ];
-            }
-        }
-
-        if (! $layanan) {
-            $layanan = $this->defaultLayananList[0] ?? null;
-        }
-
-        if (! $layanan) {
-            return redirect()->route('madya.dashboard')->with('error', 'Layanan tidak ditemukan.');
-        }
+        $layanan = $this->formatLayananData($permohonan);
 
         return view('madya.verifikasi.show', compact('layanan'));
     }
 
     /**
-     * Proses telaah/verifikasi persyaratan (setujui / revisi) oleh Kurator Madya.
+     * Tindak lanjut Kurator Madya.
      */
     public function tindakLanjut(Request $request, string|int $id): RedirectResponse
     {
@@ -560,60 +217,104 @@ class MadyaDashboardController extends Controller
             'catatan' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $layananList = session('madya_layanan_list', $this->defaultLayananList);
-        $historyList = session('madya_history_list', $this->defaultHistoryList);
+        $permohonan = Permohonan::findOrFail($id);
 
-        $targetItem = null;
-        $newLayananList = [];
-
-        foreach ($layananList as $item) {
-            if ((string) $item['id'] === (string) $id) {
-                $targetItem = $item;
-            } else {
-                $newLayananList[] = $item;
-            }
-        }
-
-        if ($targetItem) {
-            $nomorBa = $targetItem['nomor_ba'] ?? ('BA.'.str_pad((string) random_int(1, 99), 2, '0', STR_PAD_LEFT).'/WST/BHP.SBY/'.now()->format('m').'/'.now()->format('Y'));
-            $newHistoryItem = [
-                'id' => time(),
-                'nomor_layanan' => $targetItem['nomor_layanan'],
-                'jenis_layanan' => $targetItem['jenis_layanan'],
-                'nama_pemohon' => $targetItem['nama_pemohon'],
-                'nama_pewasiat' => $targetItem['nama_pewasiat'],
-                'tanggal_selesai' => now()->translatedFormat('d F Y'),
-                'status_hasil' => $validated['status'],
-                'status_label' => $validated['status'] === 'disetujui' ? 'Disetujui Madya' : 'Perlu Revisi Pemohon',
-                'nomor_ba' => $nomorBa,
-                'salinan_dicetak' => '2 Salinan',
-                'petugas_verifikator' => auth()->user()?->name ?? 'Inara, S.H., M.H.',
-                'catatan' => $validated['catatan'] ?? ($validated['status'] === 'disetujui' ? 'Dokumen persyaratan lengkap, absah, dan disetujui Kurator Madya.' : 'Terdapat kekurangan berkas persyaratan.'),
-            ];
-
-            array_unshift($historyList, $newHistoryItem);
-
-            session([
-                'madya_layanan_list' => $newLayananList,
-                'madya_history_list' => $historyList,
+        if ($validated['status'] === 'disetujui') {
+            $permohonan->update([
+                'status' => 'selesai',
+                'catatan_petugas' => $validated['catatan'] ?? 'Proses pembukaan wasiat tertutup telah selesai dilaksanakan.',
             ]);
 
-            // Sinkronkan status permohonan di DB jika ada
-            $permohonan = Permohonan::find($id);
-            if ($permohonan) {
-                $permohonan->update([
-                    'status' => $validated['status'] === 'disetujui' ? 'selesai' : 'revisi',
-                    'catatan_revisi' => $validated['catatan'] ?? null,
-                ]);
-            }
+            $pesan = "Permohonan {$permohonan->nomor_permohonan} berhasil diselesaikan.";
+        } else {
+            $permohonan->update([
+                'status' => 'revisi',
+                'catatan_revisi' => $validated['catatan'] ?? 'Perlu perbaikan berkas.',
+            ]);
 
-            $pesan = $validated['status'] === 'disetujui'
-                ? "Permohonan {$targetItem['nomor_layanan']} berhasil diverifikasi dan disetujui Kurator Madya."
-                : "Permohonan {$targetItem['nomor_layanan']} telah dikembalikan untuk perbaikan berkas.";
-
-            return redirect()->route('madya.dashboard')->with('success', $pesan);
+            $pesan = "Permohonan {$permohonan->nomor_permohonan} dikembalikan untuk perbaikan berkas.";
         }
 
-        return redirect()->route('madya.dashboard');
+        return redirect()->route('madya.dashboard')->with('success', $pesan);
+    }
+
+    /**
+     * Format data Permohonan ke array pratinjau.
+     *
+     * @return array<string, mixed>
+     */
+    protected function formatLayananData(Permohonan $permohonan): array
+    {
+        $dokumenList = $this->mapDokumenList($permohonan);
+
+        $userNik = $permohonan->user?->nik;
+        $maskedNik = $userNik ? (strlen($userNik) > 8 ? substr($userNik, 0, 4).'••••••••'.substr($userNik, -4) : $userNik) : '-';
+
+        $userPhone = $permohonan->user?->phone;
+        $maskedPhone = $userPhone ? (strlen($userPhone) > 8 ? substr($userPhone, 0, 4).' •••• '.substr($userPhone, -4) : $userPhone) : '-';
+
+        return [
+            'id' => $permohonan->id,
+            'nomor_layanan' => $permohonan->nomor_permohonan ?: ('WST-'.str_pad((string) $permohonan->id, 5, '0', STR_PAD_LEFT)),
+            'jenis_layanan' => $permohonan->jenis_layanan_label,
+            'detail_layanan' => 'Pembukaan Wasiat Tertutup',
+            'nama_pemohon' => $permohonan->user?->name ?? 'Pemohon',
+            'nik' => $maskedNik,
+            'email' => $permohonan->user?->email ?? '-',
+            'nomor_telepon' => $maskedPhone,
+            'alamat_domisili' => $permohonan->user?->alamat_domisili ?? '-',
+            'nama_pewasiat' => $permohonan->pewasiat?->nama_lengkap ?? 'Pewasiat',
+            'tanggal_masuk' => $permohonan->created_at?->translatedFormat('d M Y') ?? now()->translatedFormat('d M Y'),
+            'waktu_masuk' => $permohonan->created_at ? 'Pukul '.$permohonan->created_at->format('H:i') : 'Pukul 10:00',
+            'status_verifikasi' => $permohonan->status,
+            'status_label' => $permohonan->status_label,
+            'dokumen_count' => count($dokumenList),
+            'dokumen_total' => max(count($dokumenList), 4),
+            'tipe_badge' => 'purple',
+            'petugas_pertama' => $permohonan->diverifikasi_oleh ?? 'Iman, S.H.',
+            'petugas_muda' => 'Lutfy, S.H.',
+            'catatan' => $permohonan->catatan_petugas ?? 'Sampul wasiat tertutup siap dibuka.',
+            'dokumen_list' => $dokumenList,
+        ];
+    }
+
+    /**
+     * Map dokumen list untuk viewer.
+     *
+     * @return array<int, array<string, string>>
+     */
+    protected function mapDokumenList(Permohonan $permohonan): array
+    {
+        $docLabels = [
+            'surat_kuasa' => 'Surat Kuasa Notaris.pdf',
+            'akta_kematian' => 'Kutipan Akta Kematian Pewasiat.pdf',
+            'surat_keterangan_wasiat' => 'Surat Keterangan Wasiat DPW.pdf',
+            'akta_penyimpanan_wasiat' => 'Akta Penyimpanan Wasiat Notaris.pdf',
+            'buku_nikah' => 'Buku Nikah / Akta Perkawinan.pdf',
+            'akta_lahir_ktp_kk' => 'Kartu Keluarga & KTP Ahli Waris.pdf',
+            'dokumen_lainnya' => 'Dokumen Tambahan.pdf',
+        ];
+
+        $list = [];
+        foreach ($permohonan->dokumens as $dok) {
+            $namaFile = $docLabels[$dok->jenis_dokumen] ?? (basename($dok->file_path) ?: 'Dokumen Persyaratan.pdf');
+            $list[] = [
+                'nama' => $namaFile,
+                'ukuran' => '1,5 MB',
+                'tipe' => strtoupper(pathinfo($dok->file_path, PATHINFO_EXTENSION) ?: 'PDF'),
+                'url' => Storage::url($dok->file_path),
+            ];
+        }
+
+        if (empty($list)) {
+            $list = [
+                ['nama' => 'Kutipan Akta Kematian Pewasiat.pdf', 'ukuran' => '1,8 MB', 'tipe' => 'PDF', 'url' => '#'],
+                ['nama' => 'Surat Keterangan Wasiat DPW.pdf', 'ukuran' => '2,1 MB', 'tipe' => 'PDF', 'url' => '#'],
+                ['nama' => 'Akta Penyimpanan Wasiat Notaris.pdf', 'ukuran' => '2,5 MB', 'tipe' => 'PDF', 'url' => '#'],
+                ['nama' => 'Kartu Keluarga & KTP Ahli Waris.pdf', 'ukuran' => '1,2 MB', 'tipe' => 'PDF', 'url' => '#'],
+            ];
+        }
+
+        return $list;
     }
 }

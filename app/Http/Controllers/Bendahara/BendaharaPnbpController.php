@@ -15,169 +15,77 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class BendaharaPnbpController extends Controller
 {
     /**
-     * Default list permohonan PNBP untuk verifikasi (simulasi dan default wireframe).
-     *
-     * @var array<int, array<string, mixed>>
+     * Hitung permohonan yang perlu diverifikasi pembayaran PNBP-nya.
      */
-    protected array $defaultPnbpList = [
-        [
-            'id' => 1,
-            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00015',
-            'jenis_layanan' => 'Pendaftaran Wasiat',
-            'nama_pemohon' => 'Bambang Sudarsono',
-            'nama_pewasiat' => 'Alm. Soetrisno',
-            'tanggal_masuk' => '21 Okt 2026',
-            'tanggal_masuk_iso' => '2026-10-21',
-            'status_pnbp' => 'sudah_bayar',
-            'nominal_tagihan' => 200000,
-            'sla_hari_berjalan' => 2,
-            'sla_hari_sisa' => 12,
-            'sla_status' => 'normal',
-            'is_expired' => false,
-            'keterangan_sla' => 'Telah dibayar. Menunggu input NTPN & Upload Voucher.',
-        ],
-        [
-            'id' => 2,
-            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00016',
-            'jenis_layanan' => 'Pelaporan Wasiat Tertutup',
-            'nama_pemohon' => 'Sri Rahayu Ningsih',
-            'nama_pewasiat' => 'Almh. Siti Hartini',
-            'tanggal_masuk' => '20 Okt 2026',
-            'tanggal_masuk_iso' => '2026-10-20',
-            'status_pnbp' => 'sudah_bayar',
-            'nominal_tagihan' => 200000,
-            'sla_hari_berjalan' => 3,
-            'sla_hari_sisa' => 11,
-            'sla_status' => 'normal',
-            'is_expired' => false,
-            'keterangan_sla' => 'Telah dibayar via Teller BNI. Menunggu verifikasi berkas voucher.',
-        ],
-        [
-            'id' => 3,
-            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.09-00012',
-            'jenis_layanan' => 'Surat Keterangan Hak Waris (SKHW)',
-            'nama_pemohon' => 'Dewi Lestari, S.H.',
-            'nama_pewasiat' => 'Alm. Johannes Tan',
-            'tanggal_masuk' => '17 Okt 2026',
-            'tanggal_masuk_iso' => '2026-10-17',
-            'status_pnbp' => 'belum_bayar',
-            'nominal_tagihan' => 250000,
-            'sla_hari_berjalan' => 6,
-            'sla_hari_sisa' => 8,
-            'sla_status' => 'normal',
-            'is_expired' => false,
-            'keterangan_sla' => 'Kode billing Simponi aktif. Sisa waktu 8 hari untuk pelunasan.',
-        ],
-        [
-            'id' => 4,
-            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00017',
-            'jenis_layanan' => 'Wasiat Terbuka',
-            'nama_pemohon' => 'Hadi Kurniawan',
-            'nama_pewasiat' => 'Alm. Raden Mas Wardoyo',
-            'tanggal_masuk' => '11 Okt 2026',
-            'tanggal_masuk_iso' => '2026-10-11',
-            'status_pnbp' => 'belum_bayar',
-            'nominal_tagihan' => 200000,
-            'sla_hari_berjalan' => 12,
-            'sla_hari_sisa' => 2,
-            'sla_status' => 'warning',
-            'is_expired' => false,
-            'keterangan_sla' => 'PERINGATAN SLA: Sisa 2 hari sebelum kode billing kadaluarsa!',
-        ],
-        [
-            'id' => 5,
-            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00018',
-            'jenis_layanan' => 'Pendaftaran Wasiat',
-            'nama_pemohon' => 'Fajar Pratama',
-            'nama_pewasiat' => 'Almh. Maria Ulfah',
-            'tanggal_masuk' => '05 Okt 2026',
-            'tanggal_masuk_iso' => '2026-10-05',
-            'status_pnbp' => 'belum_bayar',
-            'nominal_tagihan' => 200000,
-            'sla_hari_berjalan' => 18,
-            'sla_hari_sisa' => 0,
-            'sla_status' => 'expired',
-            'is_expired' => true,
-            'keterangan_sla' => 'SLA 14 Hari Terlampaui. Billing kadaluarsa dan pemohon harus mendaftar ulang.',
-        ],
-    ];
+    public static function getPerluVerifikasiCount(): int
+    {
+        return Permohonan::whereHas('voucher', function ($q) {
+            $q->where('status_pembayaran', '!=', 'lunas');
+        })->count();
+    }
 
     /**
-     * Default riwayat verifikasi PNBP yang telah lunas.
-     *
-     * @var array<int, array<string, mixed>>
+     * Alias method for badge count in sidebar.
      */
-    protected array $defaultHistoryList = [
-        [
-            'id' => 101,
-            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00010',
-            'jenis_layanan' => 'Pendaftaran Wasiat',
-            'nama_pemohon' => 'Ahmad Dahlan',
-            'nama_pewasiat' => 'Alm. H. Ridwan',
-            'tanggal_masuk' => '14 Okt 2026',
-            'ntpn' => '261015B789456123',
-            'nominal' => 200000,
-            'tanggal_bayar' => '15 Okt 2026',
-            'tanggal_bayar_iso' => '2026-10-15',
-            'tanggal_verifikasi' => '15 Okt 2026, 14.30 WIB',
-            'file_voucher_url' => null,
-            'file_voucher_nama' => 'VOUCHER-PNBP-W15-00010.pdf',
-            'diverifikasi_oleh' => 'Bendahara Penerimaan BHP',
-            'status' => 'Lunas',
-        ],
-        [
-            'id' => 102,
-            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.09-00009',
-            'jenis_layanan' => 'Surat Keterangan Hak Waris (SKHW)',
-            'nama_pemohon' => 'Megawati Susanto',
-            'nama_pewasiat' => 'Alm. Susanto Widjaja',
-            'tanggal_masuk' => '13 Okt 2026',
-            'ntpn' => '261014C123987456',
-            'nominal' => 250000,
-            'tanggal_bayar' => '14 Okt 2026',
-            'tanggal_bayar_iso' => '2026-10-14',
-            'tanggal_verifikasi' => '14 Okt 2026, 11.15 WIB',
-            'file_voucher_url' => null,
-            'file_voucher_nama' => 'BUKTI-BAYAR-SKHW-00009.pdf',
-            'diverifikasi_oleh' => 'Bendahara Penerimaan BHP',
-            'status' => 'Lunas',
-        ],
-        [
-            'id' => 103,
-            'nomor_layanan' => 'W15.AHU.AHU.1.AH.06.01-00008',
-            'jenis_layanan' => 'Pelaporan Wasiat Tertutup',
-            'nama_pemohon' => 'Indra Wijaya',
-            'nama_pewasiat' => 'Almh. Ny. Hendrawati',
-            'tanggal_masuk' => '10 Okt 2026',
-            'ntpn' => '261011A654321987',
-            'nominal' => 200000,
-            'tanggal_bayar' => '11 Okt 2026',
-            'tanggal_bayar_iso' => '2026-10-11',
-            'tanggal_verifikasi' => '11 Okt 2026, 16.00 WIB',
-            'file_voucher_url' => null,
-            'file_voucher_nama' => 'VOUCHER-SIMPONI-00008.jpg',
-            'diverifikasi_oleh' => 'Bendahara Penerimaan BHP',
-            'status' => 'Lunas',
-        ],
-    ];
+    public static function getPendingCount(): int
+    {
+        return self::getPerluVerifikasiCount();
+    }
 
     /**
      * Tampilkan halaman utama Verifikasi PNBP.
      */
     public function index(Request $request): View
     {
-        $pnbpList = session('bendahara_pnbp_list', $this->defaultPnbpList);
-
-        // Ambil data dari database dan gabungkan secara dinamis
-        $pnbpList = $this->mergeWithDatabaseRecords($pnbpList);
-        session(['bendahara_pnbp_list' => $pnbpList]);
-
-        // Filter status
         $statusFilter = $request->query('status', 'all');
         $search = trim((string) $request->query('q', ''));
 
+        $query = Permohonan::with(['user', 'pewasiat', 'voucher'])
+            ->whereHas('voucher')
+            ->latest();
+
+        $permohonans = $query->get();
+
+        $pnbpList = $permohonans->map(function (Permohonan $item) {
+            $voucher = $item->voucher;
+            $created = $item->created_at ?? now();
+            $hariBerjalan = max(1, (int) $created->diffInDays(now()) + 1);
+            $sisaHari = max(0, 14 - $hariBerjalan);
+            $isExpired = $hariBerjalan > 14;
+
+            $slaStatus = 'normal';
+            if ($isExpired) {
+                $slaStatus = 'expired';
+            } elseif ($hariBerjalan >= 10) {
+                $slaStatus = 'warning';
+            }
+
+            $statusPnbp = $voucher?->status_pembayaran ?? 'belum_bayar';
+            if ($statusPnbp === 'lunas') {
+                $statusPnbp = 'sudah_bayar';
+            }
+
+            return [
+                'id' => $item->id,
+                'nomor_layanan' => $item->nomor_permohonan ?: ('W15.AHU-'.str_pad((string) $item->id, 5, '0', STR_PAD_LEFT)),
+                'jenis_layanan' => $item->jenis_layanan_label,
+                'nama_pemohon' => $item->user?->name ?? 'Pemohon',
+                'nama_pewasiat' => $item->pewasiat?->nama_lengkap ?? 'Pewasiat',
+                'tanggal_masuk' => $created->translatedFormat('d M Y'),
+                'tanggal_masuk_iso' => $created->format('Y-m-d'),
+                'status_pnbp' => $statusPnbp,
+                'nominal_tagihan' => (int) ($voucher?->nominal ?: 200000),
+                'nomor_voucher' => $voucher?->nomor_voucher ?? '-',
+                'ntpn' => $voucher?->ntpn,
+                'sla_hari_berjalan' => $hariBerjalan,
+                'sla_hari_sisa' => $sisaHari,
+                'sla_status' => $slaStatus,
+                'is_expired' => $isExpired,
+                'keterangan_sla' => $isExpired ? 'SLA 14 Hari Terlampaui.' : ($statusPnbp === 'sudah_bayar' ? 'Telah diverifikasi lunas.' : "Sisa waktu {$sisaHari} hari untuk pelunasan billing Simponi."),
+            ];
+        })->all();
+
         $filteredList = collect($pnbpList)->filter(function ($item) use ($statusFilter, $search) {
-            // Filter status
             if ($statusFilter === 'sudah_bayar' && ($item['status_pnbp'] ?? '') !== 'sudah_bayar') {
                 return false;
             }
@@ -188,138 +96,81 @@ class BendaharaPnbpController extends Controller
                 return false;
             }
 
-            // Filter pencarian
             if ($search !== '') {
                 $needle = mb_strtolower($search);
                 $haystack = mb_strtolower(
                     ($item['nomor_layanan'] ?? '').' '.
                     ($item['jenis_layanan'] ?? '').' '.
                     ($item['nama_pemohon'] ?? '').' '.
-                    ($item['nama_pewasiat'] ?? '')
+                    ($item['nama_pewasiat'] ?? '').' '.
+                    ($item['nomor_voucher'] ?? '')
                 );
 
-                return str_contains($haystack, $needle);
+                if (! str_contains($haystack, $needle)) {
+                    return false;
+                }
             }
 
             return true;
         })->values()->all();
 
-        // Statistik ringkasan untuk header dashboard
         $stats = [
-            'total_verifikasi' => count($pnbpList),
+            'total_semua' => count($pnbpList),
             'sudah_bayar' => collect($pnbpList)->where('status_pnbp', 'sudah_bayar')->count(),
             'belum_bayar' => collect($pnbpList)->where('status_pnbp', 'belum_bayar')->where('is_expired', false)->count(),
             'kadaluarsa' => collect($pnbpList)->where('is_expired', true)->count(),
-            'total_terverifikasi' => count(session('bendahara_history_list', $this->defaultHistoryList)),
+            'total_nominal_sudah_bayar' => collect($pnbpList)->where('status_pnbp', 'sudah_bayar')->sum('nominal_tagihan'),
         ];
 
         return view('bendahara.verifikasi', [
             'pnbpList' => $filteredList,
             'stats' => $stats,
-            'statusFilter' => $statusFilter,
+            'currentFilter' => $statusFilter,
             'search' => $search,
         ]);
     }
 
     /**
-     * Proses tindak lanjut untuk permohonan yang sudah bayar:
-     * Mengisi NTPN, Nominal, Tanggal Bayar, dan Upload Voucher.
+     * Proses tindak lanjut verifikasi PNBP (input NTPN dan berkas bukti setor).
      */
-    public function tindakLanjut(Request $request, string $id): RedirectResponse
+    public function tindakLanjut(Request $request, string|int $id): RedirectResponse
     {
         $validated = $request->validate([
             'ntpn' => ['required', 'string', 'min:8', 'max:50'],
-            'nominal' => ['required', 'numeric', 'min:0'],
+            'nominal' => ['required', 'numeric', 'min:1000'],
             'tanggal_bayar' => ['required', 'date'],
-            'file_voucher' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
             'catatan' => ['nullable', 'string', 'max:500'],
-        ], [
-            'ntpn.required' => 'Nomor Transaksi Penerimaan Negara (NTPN) wajib diisi.',
-            'nominal.required' => 'Nominal pembayaran PNBP wajib diisi.',
-            'tanggal_bayar.required' => 'Tanggal pembayaran wajib dipilih.',
-            'file_voucher.mimes' => 'File voucher harus berformat PDF, JPG, JPEG, atau PNG.',
-            'file_voucher.max' => 'Ukuran file voucher maksimal 5MB.',
+            'file_voucher' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
         ]);
 
-        $fileUrl = null;
-        $fileNama = null;
+        $cleanId = (int) str_replace('db_', '', (string) $id);
+        $permohonan = Permohonan::with('voucher')->findOrFail($cleanId);
+        $voucher = $permohonan->voucher;
 
+        $filePath = null;
         if ($request->hasFile('file_voucher')) {
-            $file = $request->file('file_voucher');
-            $fileNama = 'VOUCHER_'.time().'_'.$file->getClientOriginalName();
-            $path = $file->storeAs('vouchers', $fileNama, 'public');
-            $fileUrl = Storage::url($path);
+            $filePath = $request->file('file_voucher')->store("vouchers/{$permohonan->id}", 'public');
         }
 
-        $pnbpList = session('bendahara_pnbp_list', $this->defaultPnbpList);
-        $pnbpList = $this->mergeWithDatabaseRecords($pnbpList);
-
-        $targetItem = null;
-        $remainingList = [];
-
-        foreach ($pnbpList as $item) {
-            if ((string) $item['id'] === (string) $id) {
-                $targetItem = $item;
-            } else {
-                $remainingList[] = $item;
-            }
+        if (! $voucher) {
+            $voucher = new Voucher([
+                'permohonan_id' => $permohonan->id,
+                'nomor_voucher' => 'VCH-'.date('Ymd').'-'.str_pad((string) $permohonan->id, 4, '0', STR_PAD_LEFT),
+            ]);
         }
 
-        if (! $targetItem) {
-            return redirect()->route('bendahara.verifikasi.index')
-                ->with('error', 'Data layanan PNBP tidak ditemukan.');
+        $voucher->ntpn = strtoupper(trim($validated['ntpn']));
+        $voucher->nominal = (int) $validated['nominal'];
+        $voucher->tanggal_bayar = $validated['tanggal_bayar'];
+        $voucher->status_pembayaran = 'lunas';
+        if ($filePath) {
+            $voucher->file_voucher = $filePath;
         }
-
-        // Simpan ke database jika item berasal dari database
-        if (str_starts_with((string) $id, 'db_')) {
-            $dbId = (int) str_replace('db_', '', $id);
-            $permohonan = Permohonan::find($dbId);
-
-            if ($permohonan) {
-                $voucher = $permohonan->voucher ?: new Voucher(['permohonan_id' => $permohonan->id]);
-                $voucher->nomor_voucher = $voucher->nomor_voucher ?: 'VCH-'.date('Ymd').'-'.str_pad((string) $permohonan->id, 4, '0', STR_PAD_LEFT);
-                $voucher->ntpn = $validated['ntpn'];
-                $voucher->nominal = (int) $validated['nominal'];
-                $voucher->tanggal_bayar = $validated['tanggal_bayar'];
-                $voucher->status_pembayaran = 'lunas';
-                if ($fileUrl) {
-                    $voucher->file_voucher = $fileUrl;
-                }
-                $voucher->catatan = $validated['catatan'] ?? null;
-                $voucher->save();
-            }
-        }
-
-        // Pindahkan item ke riwayat verifikasi
-        $historyList = session('bendahara_history_list', $this->defaultHistoryList);
-
-        $newHistoryItem = [
-            'id' => time(),
-            'nomor_layanan' => $targetItem['nomor_layanan'],
-            'jenis_layanan' => $targetItem['jenis_layanan'],
-            'nama_pemohon' => $targetItem['nama_pemohon'],
-            'nama_pewasiat' => $targetItem['nama_pewasiat'],
-            'tanggal_masuk' => $targetItem['tanggal_masuk'],
-            'ntpn' => strtoupper(trim($validated['ntpn'])),
-            'nominal' => (int) $validated['nominal'],
-            'tanggal_bayar' => Carbon::parse($validated['tanggal_bayar'])->translatedFormat('d M Y'),
-            'tanggal_bayar_iso' => $validated['tanggal_bayar'],
-            'tanggal_verifikasi' => now()->translatedFormat('d M Y, H.i').' WIB',
-            'file_voucher_url' => $fileUrl,
-            'file_voucher_nama' => $fileNama ?: 'Voucher-'.strtoupper(trim($validated['ntpn'])).'.pdf',
-            'diverifikasi_oleh' => auth()->user()->name ?? 'Bendahara Penerimaan',
-            'status' => 'Lunas',
-        ];
-
-        array_unshift($historyList, $newHistoryItem);
-
-        session([
-            'bendahara_pnbp_list' => $remainingList,
-            'bendahara_history_list' => $historyList,
-        ]);
+        $voucher->catatan = $validated['catatan'] ?? null;
+        $voucher->save();
 
         return redirect()->route('bendahara.verifikasi.index')
-            ->with('success', "Verifikasi PNBP layanan {$targetItem['nomor_layanan']} berhasil disimpan! NTPN: {$validated['ntpn']}.");
+            ->with('success', "Verifikasi PNBP layanan {$permohonan->nomor_permohonan} berhasil disimpan! NTPN: {$validated['ntpn']}.");
     }
 
     /**
@@ -327,11 +178,38 @@ class BendaharaPnbpController extends Controller
      */
     public function history(Request $request): View
     {
-        $historyList = session('bendahara_history_list', $this->defaultHistoryList);
-
         $search = trim((string) $request->query('q', ''));
         $dateFrom = $request->query('date_from');
         $dateTo = $request->query('date_to');
+
+        $query = Permohonan::with(['user', 'pewasiat', 'voucher'])
+            ->whereHas('voucher', fn ($q) => $q->where('status_pembayaran', 'lunas'))
+            ->latest();
+
+        $permohonans = $query->get();
+
+        $historyList = $permohonans->map(function (Permohonan $item) {
+            $voucher = $item->voucher;
+            $tanggalBayarIso = $voucher?->tanggal_bayar ? Carbon::parse($voucher->tanggal_bayar)->format('Y-m-d') : null;
+
+            return [
+                'id' => $item->id,
+                'nomor_layanan' => $item->nomor_permohonan ?: ('W15.AHU-'.str_pad((string) $item->id, 5, '0', STR_PAD_LEFT)),
+                'jenis_layanan' => $item->jenis_layanan_label,
+                'nama_pemohon' => $item->user?->name ?? 'Pemohon',
+                'nama_pewasiat' => $item->pewasiat?->nama_lengkap ?? 'Pewasiat',
+                'tanggal_masuk' => $item->created_at?->translatedFormat('d M Y') ?? now()->translatedFormat('d M Y'),
+                'ntpn' => $voucher?->ntpn ?? '-',
+                'nominal' => (int) ($voucher?->nominal ?: 200000),
+                'tanggal_bayar' => $voucher?->tanggal_bayar ? Carbon::parse($voucher->tanggal_bayar)->translatedFormat('d M Y') : '-',
+                'tanggal_bayar_iso' => $tanggalBayarIso,
+                'tanggal_verifikasi' => $voucher?->updated_at?->translatedFormat('d M Y, H.i').' WIB' ?? '-',
+                'file_voucher_url' => $voucher?->file_voucher ? Storage::url($voucher->file_voucher) : null,
+                'file_voucher_nama' => $voucher?->file_voucher ? basename($voucher->file_voucher) : null,
+                'diverifikasi_oleh' => 'Bendahara Penerimaan BHP',
+                'status' => 'Lunas',
+            ];
+        })->all();
 
         $filteredHistory = collect($historyList)->filter(function ($item) use ($search, $dateFrom, $dateTo) {
             if ($search !== '') {
@@ -364,11 +242,14 @@ class BendaharaPnbpController extends Controller
             return true;
         })->values()->all();
 
-        $totalNominal = collect($filteredHistory)->sum('nominal');
+        $stats = [
+            'total_transaksi' => count($filteredHistory),
+            'total_nominal' => collect($filteredHistory)->sum('nominal'),
+        ];
 
         return view('bendahara.history', [
             'historyList' => $filteredHistory,
-            'totalNominal' => $totalNominal,
+            'stats' => $stats,
             'search' => $search,
             'dateFrom' => $dateFrom,
             'dateTo' => $dateTo,
@@ -376,142 +257,40 @@ class BendaharaPnbpController extends Controller
     }
 
     /**
-     * Export data riwayat PNBP ke CSV / Excel format.
+     * Ekspor riwayat verifikasi PNBP ke CSV format.
      */
     public function export(Request $request): StreamedResponse
     {
-        $historyList = session('bendahara_history_list', $this->defaultHistoryList);
+        $query = Permohonan::with(['user', 'pewasiat', 'voucher'])
+            ->whereHas('voucher', fn ($q) => $q->where('status_pembayaran', 'lunas'))
+            ->latest();
 
-        $filename = 'Laporan-Verifikasi-PNBP-'.date('Ymd-His').'.csv';
+        $permohonans = $query->get();
 
-        $headers = [
-            'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
-            'Pragma' => 'no-cache',
-            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
-            'Expires' => '0',
-        ];
+        $fileName = 'Riwayat-PNBP-'.date('Ymd-His').'.csv';
 
-        $callback = function () use ($historyList) {
+        return response()->streamDownload(function () use ($permohonans) {
             $handle = fopen('php://output', 'w');
-            // Menulis UTF-8 BOM agar Excel dapat membuka karakter dengan benar
-            fwrite($handle, "\xEF\xBB\xBF");
-
-            fputcsv($handle, [
-                'No',
-                'Nomor Layanan',
-                'Jenis Layanan',
-                'Nama Pemohon',
-                'Nama Pewasiat',
-                'NTPN',
-                'Nominal (Rp)',
-                'Tanggal Bayar',
-                'Tanggal Verifikasi',
-                'Petugas Verifikator',
-                'Status',
-            ], ';');
+            fputcsv($handle, ['No', 'Nomor Layanan', 'Jenis Layanan', 'Pemohon', 'Pewasiat', 'NTPN', 'Nominal (Rp)', 'Tanggal Bayar', 'Status']);
 
             $no = 1;
-            foreach ($historyList as $row) {
+            foreach ($permohonans as $item) {
                 fputcsv($handle, [
                     $no++,
-                    $row['nomor_layanan'] ?? '',
-                    $row['jenis_layanan'] ?? '',
-                    $row['nama_pemohon'] ?? '',
-                    $row['nama_pewasiat'] ?? '',
-                    $row['ntpn'] ?? '',
-                    $row['nominal'] ?? 0,
-                    $row['tanggal_bayar'] ?? '',
-                    $row['tanggal_verifikasi'] ?? '',
-                    $row['diverifikasi_oleh'] ?? '',
-                    $row['status'] ?? '',
-                ], ';');
+                    $item->nomor_permohonan,
+                    $item->jenis_layanan_label,
+                    $item->user?->name ?? 'Pemohon',
+                    $item->pewasiat?->nama_lengkap ?? 'Pewasiat',
+                    $item->voucher?->ntpn ?? '-',
+                    $item->voucher?->nominal ?? 200000,
+                    $item->voucher?->tanggal_bayar ?? '-',
+                    'Lunas',
+                ]);
             }
-
             fclose($handle);
-        };
-
-        return response()->stream($callback, 200, $headers);
-    }
-
-    /**
-     * Hitung jumlah antrean PNBP yang belum bayar untuk badge sidebar.
-     */
-    public static function getPendingCount(): int
-    {
-        $instance = new self;
-        $list = session('bendahara_pnbp_list', $instance->defaultPnbpList);
-
-        try {
-            $list = $instance->mergeWithDatabaseRecords($list);
-        } catch (\Throwable) {
-            // fallback
-        }
-
-        return collect($list)->where('status_pnbp', 'belum_bayar')->count();
-    }
-
-    /**
-     * Sinkronkan dengan entri permohonan yang ada di database.
-     *
-     * @param  array<int, array<string, mixed>>  $currentList
-     * @return array<int, array<string, mixed>>
-     */
-    protected function mergeWithDatabaseRecords(array $currentList): array
-    {
-        try {
-            $dbPermohonans = Permohonan::with(['user', 'pewasiat', 'voucher'])
-                ->latest()
-                ->get();
-
-            foreach ($dbPermohonans as $permohonan) {
-                $nomor = $permohonan->nomor_permohonan ?: ('W15.AHU.AHU.1.AH.06.01-'.str_pad((string) $permohonan->id, 5, '0', STR_PAD_LEFT));
-
-                $exists = collect($currentList)->contains('nomor_layanan', $nomor);
-                if (! $exists) {
-                    $voucher = $permohonan->voucher;
-                    $isLunas = $voucher?->isLunas() ?? false;
-                    $statusPnbp = $isLunas ? 'sudah_bayar' : 'belum_bayar';
-
-                    // Hitung SLA 14 Hari
-                    $createdAt = $permohonan->created_at ?? now();
-                    $daysRunning = (int) $createdAt->diffInDays(now());
-                    $daysRemaining = max(0, 14 - $daysRunning);
-                    $isExpired = (! $isLunas && $daysRunning > 14);
-
-                    $slaStatus = 'normal';
-                    if ($isExpired) {
-                        $slaStatus = 'expired';
-                    } elseif ($daysRemaining <= 3) {
-                        $slaStatus = 'warning';
-                    }
-
-                    array_unshift($currentList, [
-                        'id' => 'db_'.$permohonan->id,
-                        'nomor_layanan' => $nomor,
-                        'jenis_layanan' => 'Pendaftaran Wasiat Tertutup',
-                        'nama_pemohon' => $permohonan->user?->name ?? 'Pemohon',
-                        'nama_pewasiat' => $permohonan->pewasiat?->nama_lengkap ?? $permohonan->pewasiat?->nama_pewasiat ?? 'Pewasiat',
-                        'tanggal_masuk' => $createdAt->translatedFormat('d M Y'),
-                        'tanggal_masuk_iso' => $createdAt->format('Y-m-d'),
-                        'status_pnbp' => $statusPnbp,
-                        'nominal_tagihan' => $voucher?->nominal ?: 200000,
-                        'sla_hari_berjalan' => $daysRunning,
-                        'sla_hari_sisa' => $daysRemaining,
-                        'sla_status' => $slaStatus,
-                        'is_expired' => $isExpired,
-                        'keterangan_sla' => $isExpired
-                            ? 'SLA 14 Hari Terlampaui. Pemohon harus mendaftar ulang.'
-                            : ($isLunas
-                                ? 'Telah dibayar. Menunggu input NTPN & Bukti Voucher.'
-                                : "Sisa waktu {$daysRemaining} hari dalam SLA 14 hari."),
-                    ]);
-                }
-            }
-        } catch (\Throwable) {
-            // Ignored if DB table not available
-        }
-
-        return $currentList;
+        }, $fileName, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"{$fileName}\"",
+        ]);
     }
 }

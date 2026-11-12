@@ -101,13 +101,29 @@
                                             <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
                                                 Menunggu Verifikasi
                                             </span>
+                                        @elseif ($p->status === 'revisi')
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                                                Perlu Revisi
+                                            </span>
+                                        @elseif ($p->status === 'disetujui_pertama')
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                                                Verifikasi Berkas Disetujui
+                                            </span>
+                                        @elseif ($p->status === 'proses_muda')
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">
+                                                Verifikasi Lanjutan & Penjadwalan
+                                            </span>
+                                        @elseif ($p->status === 'proses_madya')
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-cyan-50 text-cyan-700 border border-cyan-200">
+                                                Sidang & Berita Acara
+                                            </span>
                                         @elseif ($p->status === 'selesai')
                                             <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                                                 Selesai
                                             </span>
                                         @else
                                             <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-gray-100 text-gray-700">
-                                                {{ ucfirst($p->status) }}
+                                                {{ $p->status_label }}
                                             </span>
                                         @endif
                                     </td>
