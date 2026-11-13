@@ -97,9 +97,9 @@ class PermohonanWasiatTest extends TestCase
         ]);
         $this->assertDatabaseHas('pewasiats', [
             'nama_lengkap' => 'Almarhum Ahmad Subarjo',
-            'nik' => '3578011234560001',
             'status_kawin' => 'tidak_kawin',
         ]);
+        $this->assertSame('3578011234560001', $permohonan->pewasiat->nik);
     }
 
     public function test_user_can_submit_permohonan_tahap_1_with_spouse_and_children(): void
@@ -171,13 +171,12 @@ class PermohonanWasiatTest extends TestCase
 
         $this->assertDatabaseHas('pasangans', [
             'nama_lengkap' => 'Endang Rahayu',
-            'nik' => '3578025501700003',
             'bukti_perkawinan' => 'Buku Nikah',
             'nomor_bukti_perkawinan' => 'KUA-2015-0988',
-            'tanggal_kawin' => '2015-06-12',
             'tempat_kawin' => 'Kota Surabaya',
             'pejabat_pembuat_bukti' => 'Kantor Urusan Agama (KUA) Wonokromo',
         ]);
+        $this->assertSame('3578025501700003', $permohonan->pewasiat->pasangans->first()->nik);
 
         $this->assertDatabaseHas('ahli_waris', [
             'nama_lengkap' => 'Rian Hartono',

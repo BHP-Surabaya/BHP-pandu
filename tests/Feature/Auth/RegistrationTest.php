@@ -54,10 +54,13 @@ class RegistrationTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'email' => 'pemohon@example.com',
-            'nik' => '3578012345678901',
             'phone' => '081234567890',
             'role' => 'pemohon',
         ]);
+
+        $createdUser = User::where('email', 'pemohon@example.com')->first();
+        $this->assertNotNull($createdUser);
+        $this->assertSame('3578012345678901', $createdUser->nik);
     }
 
     public function test_new_users_can_register_with_pekerjaan_notaris(): void
