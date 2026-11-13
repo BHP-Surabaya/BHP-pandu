@@ -61,7 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isKuratorMadya(): bool
     {
-        return in_array($this->role, ['kurator_madya', 'madya'], true)
+        return in_array($this->role, ['kurator_madya', 'madya', 'jfkk_madya'], true)
             || ($this->role === 'petugas' && str_contains(strtolower($this->pekerjaan ?? ''), 'madya'));
     }
 
@@ -70,7 +70,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isKuratorMuda(): bool
     {
-        return in_array($this->role, ['kurator_muda', 'muda'], true)
+        return in_array($this->role, ['kurator_muda', 'muda', 'jfkk_muda'], true)
             || ($this->role === 'petugas' && str_contains(strtolower($this->pekerjaan ?? ''), 'muda'));
     }
 
@@ -79,7 +79,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isKuratorPertama(): bool
     {
-        return in_array($this->role, ['kurator_pertama', 'pertama'], true)
+        return in_array($this->role, ['kurator_pertama', 'pertama', 'jfkk_pertama'], true)
             || ($this->role === 'petugas' && ! $this->isKuratorMuda() && ! $this->isKuratorMadya());
     }
 
@@ -97,6 +97,20 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isBendahara(): bool
     {
         return in_array($this->role, ['bendahara', 'bendahara_penerimaan'], true);
+    }
+
+    /**
+     * Check if the user is an authorized internal BHP staff or admin.
+     */
+    public function isBhpStaff(): bool
+    {
+        return $this->isPetugas()
+            || $this->isKuratorPertama()
+            || $this->isKuratorMuda()
+            || $this->isKuratorMadya()
+            || $this->isKasi()
+            || $this->isBendahara()
+            || $this->isMasterAdmin();
     }
 
     /**
@@ -247,6 +261,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'verified_at' => 'datetime',
             'password' => 'hashed',
+            'nik' => 'encrypted',
         ];
     }
 }

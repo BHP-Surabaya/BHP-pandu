@@ -9,6 +9,7 @@ use App\Http\Controllers\Muda\MudaDashboardController;
 use App\Http\Controllers\PermohonanWasiatController;
 use App\Http\Controllers\Petugas\PetugasDashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SecureDocumentController;
 use App\Models\Permohonan;
 use Illuminate\Support\Facades\Route;
 
@@ -125,6 +126,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/layanan/{slug}', [LayananController::class, 'show'])->name('layanan.pengembangan');
+
+    // Secure Document Delivery Routes (Private Storage Streaming & Protected Downloads)
+    Route::prefix('secure')->name('secure.')->group(function () {
+        Route::get('/dokumen/{id}', [SecureDocumentController::class, 'showDokumen'])->name('dokumen.show');
+        Route::get('/dokumen/{id}/download', [SecureDocumentController::class, 'downloadDokumen'])->name('dokumen.download');
+        Route::get('/voucher/{id}', [SecureDocumentController::class, 'showVoucher'])->name('voucher.show');
+        Route::get('/user-dokumen/{userId}/{type}', [SecureDocumentController::class, 'showUserDokumen'])->name('user-dokumen.show');
+    });
 });
 
 require __DIR__.'/auth.php';

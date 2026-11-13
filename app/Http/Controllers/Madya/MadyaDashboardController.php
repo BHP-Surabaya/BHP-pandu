@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Madya;
 
 use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
+use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class MadyaDashboardController extends Controller
@@ -161,6 +161,15 @@ class MadyaDashboardController extends Controller
             'catatan_petugas' => $validated['catatan'] ?? 'Berita Acara pembukaan wasiat tertutup telah diterbitkan.',
         ]);
 
+        $user = auth()->user();
+        AuditLogger::log(
+            action: 'buat_ba_madya',
+            permohonan: $permohonan,
+            description: "Kurator Madya {$user->name} menerbitkan Berita Acara {$nomorBa} untuk permohonan {$permohonan->nomor_permohonan}.",
+            resource: $permohonan,
+            details: ['nomor_berita_acara' => $nomorBa]
+        );
+
         return redirect()->route('madya.dashboard')
             ->with('success', "Berita Acara untuk layanan {$permohonan->nomor_permohonan} berhasil diterbitkan dengan nomor {$nomorBa}.");
     }
@@ -186,6 +195,14 @@ class MadyaDashboardController extends Controller
         $permohonan->update([
             'status' => 'selesai',
         ]);
+
+        $user = auth()->user();
+        AuditLogger::log(
+            action: 'arsipkan_madya',
+            permohonan: $permohonan,
+            description: "Kurator Madya {$user->name} menyelesaikan layanan wasiat tertutup {$permohonan->nomor_permohonan} dan mengarsipkan seluruh berkas fisik.",
+            resource: $permohonan
+        );
 
         return redirect()->route('madya.dashboard')
             ->with('success', "Layanan {$permohonan->nomor_permohonan} berhasil diselesaikan dan berkas telah diarsipkan.");
@@ -302,7 +319,8 @@ class MadyaDashboardController extends Controller
                 'nama' => $namaFile,
                 'ukuran' => '1,5 MB',
                 'tipe' => strtoupper(pathinfo($dok->file_path, PATHINFO_EXTENSION) ?: 'PDF'),
-                'url' => Storage::url($dok->file_path),
+                'url' => route('secure.dokumen.show', $dok->id),
+                'download_url' => route('secure.dokumen.download', $dok->id),
             ];
         }
 

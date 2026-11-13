@@ -23,6 +23,19 @@ class AhliWaris extends Model
     ];
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'nik' => 'encrypted',
+            'tanggal_lahir' => 'date',
+        ];
+    }
+
+    /**
      * Get the pewasiat that owns the ahli waris.
      */
     public function pewasiat(): BelongsTo

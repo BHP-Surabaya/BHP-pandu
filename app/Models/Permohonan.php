@@ -120,4 +120,12 @@ class Permohonan extends Model
     {
         return $this->hasOne(Voucher::class);
     }
+
+    /**
+     * Get the audit logs for the permohonan.
+     */
+    public function auditLogs(): HasMany
+    {
+        return $this->hasMany(AuditLog::class)->latest('created_at');
+    }
 }

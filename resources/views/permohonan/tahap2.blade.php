@@ -162,7 +162,7 @@
                                 <div class="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold mt-1.5">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                     <span>Sudah Diunggah</span>
-                                    <a href="{{ Storage::url($docSuratKuasa->file_path) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
+                                    <a href="{{ route('secure.dokumen.show', $docSuratKuasa->id) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
                                 </div>
                             </template>
                         @endif
@@ -216,7 +216,7 @@
                                 <div class="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold mt-1.5">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                     <span>Sudah Diunggah</span>
-                                    <a href="{{ Storage::url($docAktaKematian->file_path) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
+                                    <a href="{{ route('secure.dokumen.show', $docAktaKematian->id) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
                                 </div>
                             </template>
                         @else
@@ -279,7 +279,7 @@
                                 <div class="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold mt-1.5">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                     <span>Sudah Diunggah</span>
-                                    <a href="{{ Storage::url($docSuratWasiat->file_path) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
+                                    <a href="{{ route('secure.dokumen.show', $docSuratWasiat->id) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
                                 </div>
                             </template>
                         @else
@@ -342,7 +342,7 @@
                                 <div class="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold mt-1.5">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                     <span>Sudah Diunggah</span>
-                                    <a href="{{ Storage::url($docAktaPenyimpanan->file_path) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
+                                    <a href="{{ route('secure.dokumen.show', $docAktaPenyimpanan->id) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
                                 </div>
                             </template>
                         @else
@@ -405,7 +405,7 @@
                                 <div class="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold mt-1.5">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                     <span>Sudah Diunggah</span>
-                                    <a href="{{ Storage::url($docBukuNikah->file_path) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
+                                    <a href="{{ route('secure.dokumen.show', $docBukuNikah->id) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
                                 </div>
                             </template>
                         @else
@@ -468,7 +468,7 @@
                                 <div class="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold mt-1.5">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                     <span>Sudah Diunggah</span>
-                                    <a href="{{ Storage::url($docAktaLahir->file_path) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
+                                    <a href="{{ route('secure.dokumen.show', $docAktaLahir->id) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
                                 </div>
                             </template>
                         @else
@@ -531,7 +531,7 @@
                                 <div class="flex items-center gap-1.5 text-xs text-emerald-600 font-semibold mt-1.5">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                                     <span>Sudah Diunggah</span>
-                                    <a href="{{ Storage::url($docLainnya->file_path) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
+                                    <a href="{{ route('secure.dokumen.show', $docLainnya->id) }}" target="_blank" class="underline text-gray-500 hover:text-gray-800 ml-1">(Lihat Berkas)</a>
                                 </div>
                             </template>
                         @else

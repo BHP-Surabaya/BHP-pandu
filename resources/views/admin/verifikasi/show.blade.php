@@ -272,7 +272,7 @@
 
                                 @if ($user->sk_notaris)
                                     <div class="pt-2">
-                                        <a href="{{ asset('storage/' . $user->sk_notaris) }}" 
+                                        <a href="{{ route('secure.user-dokumen.show', [$user->id, 'sk_notaris']) }}" 
                                            target="_blank" 
                                            class="w-full py-2.5 px-3 rounded-lg bg-white border border-blue-200 hover:bg-blue-50 text-[#0066d6] font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
@@ -305,7 +305,7 @@
 
                                 @if ($user->sk_ppat)
                                     <div class="pt-2">
-                                        <a href="{{ asset('storage/' . $user->sk_ppat) }}" 
+                                        <a href="{{ route('secure.user-dokumen.show', [$user->id, 'sk_ppat']) }}" 
                                            target="_blank" 
                                            class="w-full py-2.5 px-3 rounded-lg bg-white border border-blue-200 hover:bg-blue-50 text-[#0066d6] font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
@@ -342,7 +342,7 @@
 
                                 @if ($user->berita_acara_sumpah)
                                     <div class="pt-2">
-                                        <a href="{{ asset('storage/' . $user->berita_acara_sumpah) }}" 
+                                        <a href="{{ route('secure.user-dokumen.show', [$user->id, 'berita_acara_sumpah']) }}" 
                                            target="_blank" 
                                            class="w-full py-2.5 px-3 rounded-lg bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-700 font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
@@ -375,7 +375,7 @@
 
                                 @if ($user->id_card_pengacara)
                                     <div class="pt-2">
-                                        <a href="{{ asset('storage/' . $user->id_card_pengacara) }}" 
+                                        <a href="{{ route('secure.user-dokumen.show', [$user->id, 'id_card_pengacara']) }}" 
                                            target="_blank" 
                                            class="w-full py-2.5 px-3 rounded-lg bg-white border border-indigo-200 hover:bg-indigo-50 text-indigo-700 font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>

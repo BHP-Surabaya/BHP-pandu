@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Muda;
 
 use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
+use App\Services\AuditLogger;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class MudaDashboardController extends Controller
@@ -189,6 +189,15 @@ class MudaDashboardController extends Controller
         ]);
 
         $permohonan = Permohonan::findOrFail($id);
+        $user = auth()->user();
+
+        AuditLogger::log(
+            action: 'verifikasi_muda',
+            permohonan: $permohonan,
+            description: "Kurator Muda {$user->name} melakukan telaah lanjutan permohonan {$permohonan->nomor_permohonan} dengan status {$validated['status']}.",
+            resource: $permohonan,
+            details: ['status' => $validated['status'], 'catatan' => $validated['catatan'] ?? null]
+        );
 
         if ($validated['status'] === 'disetujui') {
             $permohonan->update([
@@ -247,6 +256,15 @@ class MudaDashboardController extends Controller
                 'status' => 'proses_madya',
                 'disposisi_kasi' => $validated['catatan'] ?? 'Jadwal pembukaan wasiat tertutup telah ditetapkan.',
             ]);
+
+            $user = auth()->user();
+            AuditLogger::log(
+                action: 'jadwal_muda',
+                permohonan: $permohonan,
+                description: "Kurator Muda {$user->name} menetapkan jadwal pembukaan wasiat {$permohonan->nomor_permohonan} pada {$jadwalDt->translatedFormat('d F Y, H:i')} WIB di {$permohonan->tempat_pembukaan}.",
+                resource: $permohonan,
+                details: ['jadwal' => $jadwalDt->toIso8601String(), 'lokasi' => $permohonan->tempat_pembukaan]
+            );
 
             $pesan = "Jadwal pembukaan wasiat {$permohonan->nomor_permohonan} berhasil ditetapkan untuk tanggal {$jadwalDt->translatedFormat('d F Y, H:i')} WIB. Berkas diteruskan ke Kurator Madya.";
         } else {
@@ -347,7 +365,8 @@ class MudaDashboardController extends Controller
                 'nama' => $namaFile,
                 'ukuran' => '1,5 MB',
                 'tipe' => strtoupper(pathinfo($dok->file_path, PATHINFO_EXTENSION) ?: 'PDF'),
-                'url' => Storage::url($dok->file_path),
+                'url' => route('secure.dokumen.show', $dok->id),
+                'download_url' => route('secure.dokumen.download', $dok->id),
             ];
         }
 
