@@ -264,7 +264,7 @@ class PermohonanWasiatTest extends TestCase
 
     public function test_user_can_upload_documents_in_tahap_2(): void
     {
-        Storage::fake('public');
+        Storage::fake('local');
 
         $user = User::factory()->notaris()->create();
         $permohonan = Permohonan::create([
@@ -295,7 +295,7 @@ class PermohonanWasiatTest extends TestCase
         ]);
 
         $doc = Dokumen::where('permohonan_id', $permohonan->id)->where('jenis_dokumen', 'surat_kuasa')->first();
-        Storage::disk('public')->assertExists($doc->file_path);
+        Storage::disk('local')->assertExists($doc->file_path);
     }
 
     public function test_user_can_view_tahap_3_guide(): void

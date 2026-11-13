@@ -62,7 +62,7 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register_with_pekerjaan_notaris(): void
     {
-        Storage::fake('public');
+        Storage::fake('local');
 
         $skNotaris = UploadedFile::fake()->create('sk_notaris.pdf', 500, 'application/pdf');
         $skPpat = UploadedFile::fake()->create('sk_ppat.pdf', 500, 'application/pdf');
@@ -92,8 +92,8 @@ class RegistrationTest extends TestCase
         $this->assertNotNull($user->sk_notaris);
         $this->assertNotNull($user->sk_ppat);
 
-        Storage::disk('public')->assertExists($user->sk_notaris);
-        Storage::disk('public')->assertExists($user->sk_ppat);
+        Storage::disk('local')->assertExists($user->sk_notaris);
+        Storage::disk('local')->assertExists($user->sk_ppat);
     }
 
     public function test_sk_notaris_sk_ppat_and_alamat_kantor_are_required_when_pekerjaan_is_notaris(): void
@@ -112,7 +112,7 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register_with_pekerjaan_pengacara(): void
     {
-        Storage::fake('public');
+        Storage::fake('local');
 
         $baSumpah = UploadedFile::fake()->create('ba_sumpah.pdf', 500, 'application/pdf');
         $idCard = UploadedFile::fake()->create('id_card_pengacara.jpg', 500, 'image/jpeg');
@@ -140,8 +140,8 @@ class RegistrationTest extends TestCase
         $this->assertNotNull($user->berita_acara_sumpah);
         $this->assertNotNull($user->id_card_pengacara);
 
-        Storage::disk('public')->assertExists($user->berita_acara_sumpah);
-        Storage::disk('public')->assertExists($user->id_card_pengacara);
+        Storage::disk('local')->assertExists($user->berita_acara_sumpah);
+        Storage::disk('local')->assertExists($user->id_card_pengacara);
     }
 
     public function test_berita_acara_sumpah_and_id_card_pengacara_are_required_when_pekerjaan_is_pengacara(): void

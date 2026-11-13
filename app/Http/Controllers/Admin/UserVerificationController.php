@@ -184,6 +184,7 @@ class UserVerificationController extends Controller
         ]);
 
         foreach ($filesToDelete as $filePath) {
+            Storage::disk('local')->delete($filePath);
             Storage::disk('public')->delete($filePath);
         }
 

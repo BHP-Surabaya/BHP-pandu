@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class MadyaDashboardController extends Controller
@@ -302,7 +301,8 @@ class MadyaDashboardController extends Controller
                 'nama' => $namaFile,
                 'ukuran' => '1,5 MB',
                 'tipe' => strtoupper(pathinfo($dok->file_path, PATHINFO_EXTENSION) ?: 'PDF'),
-                'url' => Storage::url($dok->file_path),
+                'url' => route('secure.dokumen.show', $dok->id),
+                'download_url' => route('secure.dokumen.download', $dok->id),
             ];
         }
 

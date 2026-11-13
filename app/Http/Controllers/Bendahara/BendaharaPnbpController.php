@@ -8,7 +8,6 @@ use App\Models\Voucher;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -149,7 +148,7 @@ class BendaharaPnbpController extends Controller
 
         $filePath = null;
         if ($request->hasFile('file_voucher')) {
-            $filePath = $request->file('file_voucher')->store("vouchers/{$permohonan->id}", 'public');
+            $filePath = $request->file('file_voucher')->store("vouchers/{$permohonan->id}", 'local');
         }
 
         if (! $voucher) {
@@ -204,7 +203,7 @@ class BendaharaPnbpController extends Controller
                 'tanggal_bayar' => $voucher?->tanggal_bayar ? Carbon::parse($voucher->tanggal_bayar)->translatedFormat('d M Y') : '-',
                 'tanggal_bayar_iso' => $tanggalBayarIso,
                 'tanggal_verifikasi' => $voucher?->updated_at?->translatedFormat('d M Y, H.i').' WIB' ?? '-',
-                'file_voucher_url' => $voucher?->file_voucher ? Storage::url($voucher->file_voucher) : null,
+                'file_voucher_url' => $voucher?->file_voucher ? route('secure.voucher.show', $voucher->id) : null,
                 'file_voucher_nama' => $voucher?->file_voucher ? basename($voucher->file_voucher) : null,
                 'diverifikasi_oleh' => 'Bendahara Penerimaan BHP',
                 'status' => 'Lunas',
