@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Bendahara;
 use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
 use App\Models\Voucher;
+use App\Services\AuditLogger;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -167,6 +168,15 @@ class BendaharaPnbpController extends Controller
         }
         $voucher->catatan = $validated['catatan'] ?? null;
         $voucher->save();
+
+        $user = auth()->user();
+        AuditLogger::log(
+            action: 'verifikasi_pnbp',
+            permohonan: $permohonan,
+            description: "Bendahara {$user->name} memverifikasi pembayaran PNBP untuk permohonan {$permohonan->nomor_permohonan} dengan NTPN {$validated['ntpn']}.",
+            resource: $voucher,
+            details: ['ntpn' => $validated['ntpn'], 'nominal' => $validated['nominal']]
+        );
 
         return redirect()->route('bendahara.verifikasi.index')
             ->with('success', "Verifikasi PNBP layanan {$permohonan->nomor_permohonan} berhasil disimpan! NTPN: {$validated['ntpn']}.");

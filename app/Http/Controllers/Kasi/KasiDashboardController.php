@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Kasi;
 
 use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
+use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -276,6 +277,15 @@ class KasiDashboardController extends Controller
             'tanggal_disposisi' => now(),
             'status' => $nextStatus,
         ]);
+
+        $user = auth()->user();
+        AuditLogger::log(
+            action: 'disposisi_kasi',
+            permohonan: $permohonan,
+            description: "Kasi {$user->name} melakukan disposisi permohonan {$permohonan->nomor_permohonan} kepada PIC {$picStr} dengan prioritas {$validated['prioritas']}.",
+            resource: $permohonan,
+            details: ['pic' => $validated['pic'], 'prioritas' => $validated['prioritas'] ?? 'biasa']
+        );
 
         return redirect()->route('kasi.dashboard')
             ->with('success', "Layanan {$permohonan->nomor_permohonan} berhasil didisposisikan ke Petugas PIC: {$picStr}");

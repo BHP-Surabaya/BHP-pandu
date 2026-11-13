@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Petugas;
 
 use App\Http\Controllers\Controller;
 use App\Models\Permohonan;
+use App\Services\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -129,6 +130,15 @@ class PetugasDashboardController extends Controller
         ]);
 
         $permohonan = Permohonan::findOrFail($id);
+        $user = auth()->user();
+
+        AuditLogger::log(
+            action: 'verifikasi_pertama',
+            permohonan: $permohonan,
+            description: "Kurator Pertama {$user->name} memverifikasi permohonan {$permohonan->nomor_permohonan} dengan status {$validated['status']}.",
+            resource: $permohonan,
+            details: ['status' => $validated['status'], 'catatan' => $validated['catatan'] ?? null]
+        );
 
         if ($validated['status'] === 'disetujui') {
             $permohonan->update([

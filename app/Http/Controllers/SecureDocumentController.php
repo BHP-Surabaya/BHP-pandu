@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dokumen;
 use App\Models\User;
 use App\Models\Voucher;
+use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -26,6 +27,14 @@ class SecureDocumentController extends Controller
             abort(403, 'Akses ditolak: Anda tidak memiliki wewenang untuk mengakses dokumen ini.');
         }
 
+        AuditLogger::log(
+            action: 'view_dokumen',
+            permohonan: $dokumen->permohonan,
+            description: "Pengguna {$user->name} ({$user->role}) melihat berkas {$dokumen->jenis_dokumen}.",
+            resource: $dokumen,
+            details: ['jenis_dokumen' => $dokumen->jenis_dokumen, 'file_path' => $dokumen->file_path]
+        );
+
         return $this->streamFile($dokumen->file_path, false);
     }
 
@@ -43,6 +52,14 @@ class SecureDocumentController extends Controller
         if (! $isOwner && ! $isStaff) {
             abort(403, 'Akses ditolak: Anda tidak memiliki wewenang untuk mengunduh dokumen ini.');
         }
+
+        AuditLogger::log(
+            action: 'download_dokumen',
+            permohonan: $dokumen->permohonan,
+            description: "Pengguna {$user->name} ({$user->role}) mengunduh berkas {$dokumen->jenis_dokumen}.",
+            resource: $dokumen,
+            details: ['jenis_dokumen' => $dokumen->jenis_dokumen, 'file_path' => $dokumen->file_path]
+        );
 
         return $this->streamFile($dokumen->file_path, true);
     }
@@ -65,6 +82,14 @@ class SecureDocumentController extends Controller
         if (empty($voucher->file_voucher)) {
             abort(404, 'Berkas fisik voucher belum diunggah.');
         }
+
+        AuditLogger::log(
+            action: 'view_voucher',
+            permohonan: $voucher->permohonan,
+            description: "Pengguna {$user->name} ({$user->role}) melihat bukti bayar voucher PNBP {$voucher->nomor_voucher}.",
+            resource: $voucher,
+            details: ['nomor_voucher' => $voucher->nomor_voucher, 'ntpn' => $voucher->ntpn]
+        );
 
         return $this->streamFile($voucher->file_voucher, false);
     }
