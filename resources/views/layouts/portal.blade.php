@@ -309,6 +309,8 @@
                             <p class="text-[10px] text-blue-200/80 font-medium truncate">
                                 @if (Auth::user()->isMasterAdmin())
                                     Master Admin
+                                @elseif (Auth::user()->isKepalaBhp())
+                                    Kepala Balai Harta Peninggalan
                                 @elseif (Auth::user()->isKasi())
                                     Kepala Seksi
                                 @elseif (Auth::user()->isBendahara())

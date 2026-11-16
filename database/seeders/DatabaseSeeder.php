@@ -32,6 +32,20 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // Akun Kepala Balai Harta Peninggalan (BHP) Surabaya
+        User::firstOrCreate(
+            ['email' => 'kepala@pandubhp.go.id'],
+            [
+                'name' => 'Hendra Andy Satya Gurning, S.H., M.H.',
+                'password' => bcrypt('password'),
+                'role' => 'kepala_bhp',
+                'pekerjaan' => 'Kepala Balai Harta Peninggalan Surabaya',
+                'status_akun' => 'kepala_bhp',
+                'status_verifikasi' => 'terverifikasi',
+                'email_verified_at' => now(),
+            ]
+        );
+
         // Akun KASI (Kepala Seksi)
         User::firstOrCreate(
             ['email' => 'kasi@pandubhp.go.id'],

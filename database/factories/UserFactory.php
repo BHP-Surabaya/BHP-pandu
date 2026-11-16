@@ -83,6 +83,21 @@ class UserFactory extends Factory
     }
 
     /**
+     * Indicate that the user is a Kepala BHP.
+     */
+    public function kepalaBhp(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'name' => 'Hendra Andy Satya Gurning, S.H., M.H.',
+            'email' => 'kepala@pandubhp.go.id',
+            'role' => 'kepala_bhp',
+            'pekerjaan' => 'Kepala Balai Harta Peninggalan Surabaya',
+            'status_akun' => 'kepala_bhp',
+            'status_verifikasi' => 'terverifikasi',
+        ]);
+    }
+
+    /**
      * Indicate that the user is a KASI (Kepala Seksi).
      */
     public function kasi(): static
