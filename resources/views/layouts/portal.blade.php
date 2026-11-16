@@ -205,19 +205,50 @@
                                 </svg>
                                 <span>History Verifikasi</span>
                             </a>
-                        @elseif (Auth::user()?->isPetugas())
-                            <!-- Section Title -->
+                        @elseif (Auth::user()?->isPetugas() || Auth::user()?->isKuratorPertama())
+                            @php
+                                $siapProsesCount = \App\Http\Controllers\Petugas\PetugasGatewayController::getSiapProsesCount();
+                                $terkirimCount = \App\Http\Controllers\Petugas\PetugasGatewayController::getTerkirimCount();
+                                $perluVerifikasiCount = \App\Http\Controllers\Petugas\PetugasDashboardController::getPerluVerifikasiCount();
+                            @endphp
+
+                            <!-- Section Title: Menu Utama -->
                             <div class="px-2 pt-2 pb-1">
                                 <p class="text-[11px] font-bold tracking-wider text-blue-200/60 uppercase">
                                     MENU UTAMA
                                 </p>
                             </div>
 
-                            @php
-                                $perluVerifikasiCount = \App\Http\Controllers\Petugas\PetugasDashboardController::getPerluVerifikasiCount();
-                            @endphp
+                            <!-- 1. Proses Barcode & e-TTD -->
+                            <a href="{{ route('petugas.gateway.index') }}" 
+                               class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('petugas.gateway.index') ? 'bg-[#1d68d8] text-white shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 15.75h1.5m-1.5 3h1.5m3-3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+                                </svg>
+                                <span>Proses Barcode&amp;e-Ttd</span>
+                                @if ($siapProsesCount > 0)
+                                    <span class="ms-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-blue-400 text-blue-950 shadow-sm">
+                                        {{ $siapProsesCount }}
+                                    </span>
+                                @endif
+                            </a>
 
-                            <!-- Verifikasi Persyaratan -->
+                            <!-- 2. Riwayat Pengiriman -->
+                            <a href="{{ route('petugas.gateway.riwayat') }}" 
+                               class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('petugas.gateway.riwayat') ? 'bg-[#1d68d8] text-white shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                                </svg>
+                                <span>Riwayat Pengiriman</span>
+                                @if ($terkirimCount > 0)
+                                    <span class="ms-auto inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-emerald-400 text-emerald-950 shadow-sm">
+                                        {{ $terkirimCount }}
+                                    </span>
+                                @endif
+                            </a>
+
+                            <!-- 3. Verifikasi Persyaratan -->
                             <a href="{{ route('petugas.dashboard') }}" 
                                class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition {{ request()->routeIs('petugas.dashboard', 'petugas.verifikasi.*') ? 'bg-[#1d68d8] text-white shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
                                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -231,7 +262,7 @@
                                 @endif
                             </a>
 
-                            <!-- History Verifikasi -->
+                            <!-- 4. History Verifikasi -->
                             <a href="{{ route('petugas.history') }}" 
                                class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('petugas.history*') ? 'bg-[#1d68d8] text-white font-semibold shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
                                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -241,6 +272,19 @@
                                 </svg>
                                 <span>History Verifikasi</span>
                             </a>
+
+                            <!-- Gateway End-Process Card & Reset Button -->
+                            <div class="mt-4 p-3 bg-white/5 border border-white/10 rounded-2xl text-[11px] space-y-2">
+                                <div class="font-bold text-white text-xs">Gateway End-Process</div>
+                                <div class="text-[10px] text-blue-200/70 leading-tight">Penyematan Barcode &amp; e-TTD oleh Penanggungjawab</div>
+                                <form action="{{ route('petugas.gateway.reset') }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="w-full py-1.5 px-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[10px] font-semibold transition border border-white/15 flex items-center justify-center gap-1.5 cursor-pointer">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                        <span>Pulihkan Data Awal</span>
+                                    </button>
+                                </form>
+                            </div>
                         @else
                             <!-- Layanan (Replaces Dashboard) -->
                             <a href="{{ route('dashboard') }}" 

@@ -8,6 +8,7 @@ use App\Http\Controllers\Madya\MadyaDashboardController;
 use App\Http\Controllers\Muda\MudaDashboardController;
 use App\Http\Controllers\PermohonanWasiatController;
 use App\Http\Controllers\Petugas\PetugasDashboardController;
+use App\Http\Controllers\Petugas\PetugasGatewayController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Permohonan;
 use Illuminate\Support\Facades\Route;
@@ -69,11 +70,18 @@ Route::middleware(['auth', 'role:master_admin'])->prefix('admin')->name('admin.'
     Route::delete('/verifikasi/{user}', [UserVerificationController::class, 'destroy'])->name('verifikasi.destroy');
 });
 
-Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')->group(function () {
+Route::middleware(['auth', 'role:petugas,kurator_pertama'])->prefix('petugas')->name('petugas.')->group(function () {
     Route::get('/dashboard', [PetugasDashboardController::class, 'index'])->name('dashboard');
     Route::get('/history', [PetugasDashboardController::class, 'history'])->name('history');
     Route::get('/verifikasi/{id}', [PetugasDashboardController::class, 'show'])->name('verifikasi.show');
     Route::post('/verifikasi/{id}/tindak-lanjut', [PetugasDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
+
+    // Gateway Layanan (Proses Barcode & e-TTD, Riwayat Pengiriman)
+    Route::get('/gateway', [PetugasGatewayController::class, 'index'])->name('gateway.index');
+    Route::get('/gateway/riwayat', [PetugasGatewayController::class, 'riwayat'])->name('gateway.riwayat');
+    Route::get('/gateway/{id}/download', [PetugasGatewayController::class, 'download'])->name('gateway.download');
+    Route::post('/gateway/{id}/upload-kirim', [PetugasGatewayController::class, 'uploadKirim'])->name('gateway.upload-kirim');
+    Route::post('/gateway/reset', [PetugasGatewayController::class, 'resetData'])->name('gateway.reset');
 });
 
 Route::middleware(['auth', 'role:kurator_muda,muda'])->prefix('muda')->name('muda.')->group(function () {
