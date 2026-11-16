@@ -80,11 +80,12 @@ class KepalaDashboardTest extends TestCase
         $response = $this->actingAs($kepala)->get(route('kepala.tindak-lanjut'));
 
         $response->assertOk();
-        $response->assertSee('Tindak Lanjut');
-        $response->assertSee('Atensi Layanan');
+        $response->assertSee('Tindak Lanjut Dokumen Hukum');
+        $response->assertSee('Perlu Persetujuan');
+        $response->assertSee('Perwalian');
     }
 
-    public function test_kepala_bhp_can_submit_arahan_tindak_lanjut(): void
+    public function test_kepala_bhp_can_approve_dokumen_hukum(): void
     {
         $kepala = $this->createKepalaBhpUser();
         $pemohon = $this->createPemohonUser();
@@ -93,19 +94,19 @@ class KepalaDashboardTest extends TestCase
             'user_id' => $pemohon->id,
             'nomor_permohonan' => 'W15.AHU.BHP.04.04-8888',
             'jenis_layanan' => 'skhw',
-            'status' => 'proses_muda',
+            'status' => 'proses_madya',
         ]);
 
-        $response = $this->actingAs($kepala)->post(route('kepala.tindak-lanjut.store', $permohonan->id), [
-            'arahan' => 'Segera selesaikan telaah berkas dan koordinasikan dengan pihak BPN.',
+        $response = $this->actingAs($kepala)->post(route('kepala.tindak-lanjut.setujui', $permohonan->id), [
+            'catatan' => 'Segera sematkan Barcode & TTE prioritas hari ini.',
         ]);
 
-        $response->assertRedirect();
+        $response->assertRedirect(route('kepala.tindak-lanjut'));
         $response->assertSessionHas('success');
 
         $this->assertDatabaseHas('permohonans', [
             'id' => $permohonan->id,
-            'catatan_petugas' => 'Arahan Kepala BHP: Segera selesaikan telaah berkas dan koordinasikan dengan pihak BPN.',
+            'status' => 'disetujui_pertama',
         ]);
     }
 

@@ -66,13 +66,43 @@ class KepalaDashboardController extends Controller
      */
     public function tindakLanjut(Request $request): View
     {
-        $realPermohonans = Permohonan::with(['user', 'pewasiat', 'voucher'])->latest()->get();
-        $layananList = collect($this->buildLayananSlaList($realPermohonans))
-            ->where('status_sla', 'terlambat')
-            ->values()
-            ->all();
+        $perluList = $this->buildTindakLanjutList();
+        $disetujuiList = $this->buildDisetujuiList();
 
-        return view('kepala.tindak-lanjut', compact('layananList'));
+        $activeTab = $request->input('tab', 'perlu');
+
+        return view('kepala.tindak-lanjut', compact('perluList', 'disetujuiList', 'activeTab'));
+    }
+
+    /**
+     * Setujui dokumen hukum dan teruskan ke Akun Pertama untuk Barcode & TTE.
+     */
+    public function setujuiDokumen(Request $request, int $id): RedirectResponse
+    {
+        $validated = $request->validate([
+            'catatan' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $permohonan = Permohonan::find($id);
+        $user = $request->user();
+
+        if ($permohonan) {
+            $permohonan->update([
+                'status' => 'disetujui_pertama',
+                'catatan_petugas' => 'Disetujui Kepala BHP. Diteruskan ke Akun Pertama untuk Barcode & TTE.'.($validated['catatan'] ? ' Catatan: '.$validated['catatan'] : ''),
+            ]);
+
+            AuditLogger::log(
+                action: 'persetujuan_kepala_bhp',
+                permohonan: $permohonan,
+                description: "Kepala BHP {$user->name} menyetujui dokumen hukum {$permohonan->nomor_permohonan} dan meneruskan ke Akun Pertama untuk penyematan Barcode & TTE.",
+                resource: $permohonan,
+                details: ['catatan' => $validated['catatan'] ?? null]
+            );
+        }
+
+        return redirect()->route('kepala.tindak-lanjut')
+            ->with('success', 'Dokumen hukum berhasil disetujui dan diteruskan ke Akun Pertama untuk penyematan Barcode & Tanda Tangan Elektronik (TTE).');
     }
 
     /**
@@ -344,5 +374,225 @@ class KepalaDashboardController extends Controller
         ];
 
         return array_merge($history, $baselineHistory);
+    }
+
+    /**
+     * Susun daftar permohonan yang perlu persetujuan pimpinan (Screenshot Mockup).
+     */
+    protected function buildTindakLanjutList(): array
+    {
+        return [
+            [
+                'id' => 101,
+                'jenis_layanan' => 'Perwalian',
+                'nomor_berkas' => 'W15.AHU.BHP.04.02-0941',
+                'tanggal_masuk' => '24 Okt 2026',
+                'nama_pemohon' => 'Siti Aminah Kusuma',
+                'wilayah' => 'Kab. Sidoarjo',
+                'hari_berjalan' => 17,
+                'standar_sla' => 14,
+                'sla_status' => 'lebih',
+                'sla_label' => 'SLA Lebih',
+                'sla_persen' => 100,
+                'dokumen' => [
+                    'judul' => 'BERITA ACARA SUMPAH & PENETAPAN WALI PENGAWAS',
+                    'nomor' => 'W15.AHU.BHP.04.02-0941',
+                    'tanggal_registrasi' => '24 Okt 2026',
+                    'pemeriksa' => 'Bagus Santoso, S.H., M.H. (JFKK Madya)',
+                    'dasar_hukum' => [
+                        'Kitab Undang-Undang Hukum Perdata Pasal 366 tentang Tugas Balai Harta Peninggalan sebagai Wali Pengawas.',
+                        'Penetapan Pengadilan Negeri Sidoarjo Nomor 318/Pdt.P/2026/PN.Sda tertanggal 29 Oktober 2026.',
+                    ],
+                    'substansi' => [
+                        'Menetapkan pencatatan pengawasan perwalian atas anak di bawah umur bernama Rafi Pratama Kusuma (11 tahun) dengan wali ibu kandung Siti Aminah Kusuma.',
+                        'Mewajibkan Wali untuk menyerahkan daftar inventaris harta kekayaan anak di bawah perwalian selambat-lambatnya 30 (tiga puluh) hari kalender sejak penetapan ini dikeluarkan.',
+                    ],
+                ],
+            ],
+            [
+                'id' => 102,
+                'jenis_layanan' => 'Penerbitan SKHW',
+                'nomor_berkas' => 'W15.AHU.BHP.04.01-1102',
+                'tanggal_masuk' => '09 Nov 2026',
+                'nama_pemohon' => 'Hendra Wijaya, S.H.',
+                'wilayah' => 'Kota Surabaya',
+                'hari_berjalan' => 11,
+                'standar_sla' => 14,
+                'sla_status' => 'mendekati',
+                'sla_label' => 'SLA Mendekati',
+                'sla_persen' => 78,
+                'dokumen' => [
+                    'judul' => 'SURAT KETERANGAN HAK WARIS (SKHW)',
+                    'nomor' => 'W15.AHU.BHP.04.01-1102',
+                    'tanggal_registrasi' => '09 Nov 2026',
+                    'pemeriksa' => 'Inara, S.H., M.H. (JFKK Madya)',
+                    'dasar_hukum' => [
+                        'Pasal 111 ayat (1) huruf c Peraturan Menteri Agraria dan Tata Ruang / BPN No. 16 Tahun 2021.',
+                        'Buku Register Bukti Hak Waris Balai Harta Peninggalan Surabaya.',
+                    ],
+                    'substansi' => [
+                        'Menyatakan dan menetapkan para ahli waris yang sah menurut hukum perdata barat dari almarhum Go Soen Ho.',
+                        'Menerbitkan legalitas hak waris guna keperluan administrasi perbankan dan pertanahan para ahli waris.',
+                    ],
+                ],
+            ],
+            [
+                'id' => 103,
+                'jenis_layanan' => 'Penatausahaan UPK',
+                'nomor_berkas' => 'W15.AHU.BHP.04.06-0612',
+                'tanggal_masuk' => '02 Nov 2026',
+                'nama_pemohon' => 'Dr. Budi Santoso, Sp.B.',
+                'wilayah' => 'Kota Surabaya',
+                'hari_berjalan' => 11,
+                'standar_sla' => 14,
+                'sla_status' => 'mendekati',
+                'sla_label' => 'SLA Mendekati',
+                'sla_persen' => 78,
+                'dokumen' => [
+                    'judul' => 'SURAT PENETAPAN PENCAIRAN UANG PIHAK KETIGA (KONSINYASI)',
+                    'nomor' => 'W15.AHU.BHP.04.06-0612',
+                    'tanggal_registrasi' => '02 Nov 2026',
+                    'pemeriksa' => 'Bagus Santoso, S.H., M.H. (JFKK Madya)',
+                    'dasar_hukum' => [
+                        'Penetapan Pengadilan Negeri Surabaya tentang Konsinyasi Uang Ganti Kerugian Pengadaan Tanah.',
+                        'Peraturan Menteri Hukum dan HAM RI tentang Penatausahaan Uang Pihak Ketiga pada BHP.',
+                    ],
+                    'substansi' => [
+                        'Menyetujui pencairan dana titipan ganti kerugian pengadaan fasilitas umum kepada pihak termohon yang sah.',
+                    ],
+                ],
+            ],
+            [
+                'id' => 104,
+                'jenis_layanan' => 'Kepailitan',
+                'nomor_berkas' => 'W15.AHU.BHP.04.05-0319',
+                'tanggal_masuk' => '04 Nov 2026',
+                'nama_pemohon' => 'PT Samudra Jaya Abadi (Dalam Pailit)',
+                'wilayah' => 'Kota Gresik',
+                'hari_berjalan' => 8,
+                'standar_sla' => 14,
+                'sla_status' => 'aman',
+                'sla_label' => 'SLA Aman',
+                'sla_persen' => 57,
+                'dokumen' => [
+                    'judul' => 'BERITA ACARA VERIFIKASI TAGIHAN KREDITOR KEPAILITAN',
+                    'nomor' => 'W15.AHU.BHP.04.05-0319',
+                    'tanggal_registrasi' => '04 Nov 2026',
+                    'pemeriksa' => 'Inara, S.H., M.H. (JFKK Madya)',
+                    'dasar_hukum' => [
+                        'Undang-Undang No. 37 Tahun 2004 tentang Kepailitan dan Penundaan Kewajiban Pembayaran Utang.',
+                    ],
+                    'substansi' => [
+                        'Mengesahkan daftar tagihan piutang kreditor konkuren, separatis, dan preferen dalam proses kepailitan debitur.',
+                    ],
+                ],
+            ],
+            [
+                'id' => 105,
+                'jenis_layanan' => 'Mewakili dan/atau Mengurus Harta Tidak Terurus',
+                'nomor_berkas' => 'W15.AHU.BHP.04.04-0188',
+                'tanggal_masuk' => '05 Nov 2026',
+                'nama_pemohon' => 'Kantor Pertanahan Kota Kediri',
+                'wilayah' => 'Kota Kediri',
+                'hari_berjalan' => 7,
+                'standar_sla' => 14,
+                'sla_status' => 'aman',
+                'sla_label' => 'SLA Aman',
+                'sla_persen' => 50,
+                'dokumen' => [
+                    'judul' => 'PENETAPAN PENGURUSAN HARTA PENINGGALAN TIDAK TERURUS',
+                    'nomor' => 'W15.AHU.BHP.04.04-0188',
+                    'tanggal_registrasi' => '05 Nov 2026',
+                    'pemeriksa' => 'Bagus Santoso, S.H., M.H. (JFKK Madya)',
+                    'dasar_hukum' => [
+                        'Pasal 1126 s/d 1130 Kitab Undang-Undang Hukum Perdata (KUHPerdata).',
+                    ],
+                    'substansi' => [
+                        'Menetapkan Balai Harta Peninggalan Surabaya sebagai kurator pengurus atas harta peninggalan tidak terurus guna inventarisasi aset dan penyelesaian utang piutang.',
+                    ],
+                ],
+            ],
+            [
+                'id' => 106,
+                'jenis_layanan' => 'Pembukaan dan Pembacaan Wasiat Tertutup/Rahasia',
+                'nomor_berkas' => 'W15.AHU.BHP.04.03-2044',
+                'tanggal_masuk' => '10 Nov 2026',
+                'nama_pemohon' => 'Notaris Felicia Tanoto, S.H., M.Kn.',
+                'wilayah' => 'Kota Malang',
+                'hari_berjalan' => 3,
+                'standar_sla' => 14,
+                'sla_status' => 'aman',
+                'sla_label' => 'SLA Aman',
+                'sla_persen' => 21,
+                'dokumen' => [
+                    'judul' => 'BERITA ACARA SIDANG PEMBUKAAN WASIAT TERTUTUP',
+                    'nomor' => 'W15.AHU.BHP.04.03-2044',
+                    'tanggal_registrasi' => '10 Nov 2026',
+                    'pemeriksa' => 'Inara, S.H., M.H. (JFKK Madya)',
+                    'dasar_hukum' => [
+                        'Pasal 937 dan Pasal 942 Kitab Undang-Undang Hukum Perdata.',
+                    ],
+                    'substansi' => [
+                        'Mencatat pembukaan naskah akta wasiat rahasia yang tersimpan dalam amplop tertutup bersegel di hadapan notaris dan saksi-saksi.',
+                    ],
+                ],
+            ],
+            [
+                'id' => 107,
+                'jenis_layanan' => 'Mewakili Pemisah Harta Peninggalan',
+                'nomor_berkas' => 'W15.AHU.BHP.04.08-0115',
+                'tanggal_masuk' => '11 Nov 2026',
+                'nama_pemohon' => 'Lina Marlina, S.T.',
+                'wilayah' => 'Kota Mojokerto',
+                'hari_berjalan' => 2,
+                'standar_sla' => 14,
+                'sla_status' => 'aman',
+                'sla_label' => 'SLA Aman',
+                'sla_persen' => 14,
+                'dokumen' => [
+                    'judul' => 'PENETAPAN PEMISAHAN HARTA PENINGGALAN (BOEDELSCHEIDING)',
+                    'nomor' => 'W15.AHU.BHP.04.08-0115',
+                    'tanggal_registrasi' => '11 Nov 2026',
+                    'pemeriksa' => 'Bagus Santoso, S.H., M.H. (JFKK Madya)',
+                    'dasar_hukum' => [
+                        'Pasal 1071 Kitab Undang-Undang Hukum Perdata.',
+                    ],
+                    'substansi' => [
+                        'Pemisahan bagian harta peninggalan waris para ahli waris guna mencegah terjadinya sengketa pembagian boedel.',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Susun daftar permohonan yang telah disetujui Kepala BHP.
+     */
+    protected function buildDisetujuiList(): array
+    {
+        return [
+            [
+                'id' => 201,
+                'jenis_layanan' => 'Pendaftaran Wasiat Tercatat',
+                'nomor_berkas' => 'W15.AHU.BHP.04.01-0850',
+                'tanggal_masuk' => '01 Nov 2026',
+                'tanggal_disetujui' => '15 Nov 2026',
+                'nama_pemohon' => 'Notaris Yohanes S., S.H.',
+                'wilayah' => 'Kota Surabaya',
+                'status_tahap' => 'Telah Diteruskan ke Akun Pertama (Penyematan Barcode & TTE)',
+                'dokumen' => [
+                    'judul' => 'BUKTI PENDAFTARAN AKTA WASIAT',
+                    'nomor' => 'W15.AHU.BHP.04.01-0850',
+                    'tanggal_registrasi' => '01 Nov 2026',
+                    'pemeriksa' => 'Inara, S.H., M.H. (JFKK Madya)',
+                    'dasar_hukum' => [
+                        'Instruksi Presiden Republik Indonesia tentang Pelaporan Wasiat Notaris.',
+                    ],
+                    'substansi' => [
+                        'Pengesahan dan pencatatan nomor register wasiat umum notaris ke dalam database wasiat pusat BHP.',
+                    ],
+                ],
+            ],
+        ];
     }
 }

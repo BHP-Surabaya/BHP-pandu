@@ -112,6 +112,7 @@ Route::middleware(['auth', 'role:kepala_bhp,kepala_balai'])->prefix('kepala')->n
     Route::get('/dashboard', [KepalaDashboardController::class, 'index'])->name('dashboard');
     Route::get('/tindak-lanjut', [KepalaDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
     Route::post('/tindak-lanjut/{id}', [KepalaDashboardController::class, 'simpanTindakLanjut'])->name('tindak-lanjut.store');
+    Route::post('/tindak-lanjut/{id}/setujui', [KepalaDashboardController::class, 'setujuiDokumen'])->name('tindak-lanjut.setujui');
     Route::get('/history', [KepalaDashboardController::class, 'history'])->name('history');
 });
 
