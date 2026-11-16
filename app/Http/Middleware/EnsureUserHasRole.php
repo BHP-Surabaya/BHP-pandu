@@ -22,6 +22,7 @@ class EnsureUserHasRole
             || (in_array('kepala_bhp', $roles, true) && $user->isKepalaBhp())
             || (in_array('kurator_madya', $roles, true) && $user->isKuratorMadya())
             || (in_array('kurator_muda', $roles, true) && $user->isKuratorMuda())
+            || ((in_array('petugas', $roles, true) || in_array('kurator_pertama', $roles, true)) && $user->isKuratorPertama())
         );
 
         abort_unless($authorized, 403);
