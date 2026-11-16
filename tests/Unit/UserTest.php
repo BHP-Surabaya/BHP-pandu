@@ -56,7 +56,7 @@ class UserTest extends TestCase
         $this->assertFalse($kepalaBhp->isKasi());
         $this->assertFalse($kepalaBhp->isPetugas());
         $this->assertFalse($kepalaBhp->isPemohon());
-        $this->assertSame('Kepala Balai Harta Peninggalan', $kepalaBhp->status_akun_label);
+        $this->assertSame('Kepala BHP Surabaya', $kepalaBhp->status_akun_label);
 
         $kepalaBalai = new User(['role' => 'kepala_balai']);
         $this->assertTrue($kepalaBalai->isKepalaBhp());
@@ -88,10 +88,12 @@ class UserTest extends TestCase
         $singleWord = new User(['name' => 'Petugas']);
         $twoWords = new User(['name' => 'BHP Surabaya']);
         $multipleWords = new User(['name' => 'Balai Harta Peninggalan']);
+        $titledUser = new User(['name' => 'Dr. H. Prasetyo Wibowo']);
 
         $this->assertSame('PE', $singleWord->initials);
         $this->assertSame('BS', $twoWords->initials);
         $this->assertSame('BP', $multipleWords->initials);
+        $this->assertSame('PW', $titledUser->initials);
     }
 
     /**

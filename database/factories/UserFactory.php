@@ -88,7 +88,7 @@ class UserFactory extends Factory
     public function kepalaBhp(): static
     {
         return $this->state(fn (array $attributes) => [
-            'name' => 'Hendra Andy Satya Gurning, S.H., M.H.',
+            'name' => 'Dr. H. Prasetyo Wibowo',
             'email' => 'kepala@pandubhp.go.id',
             'role' => 'kepala_bhp',
             'pekerjaan' => 'Kepala Balai Harta Peninggalan Surabaya',

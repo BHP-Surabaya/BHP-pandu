@@ -196,7 +196,7 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         if ($this->isKepalaBhp()) {
-            return 'Kepala Balai Harta Peninggalan';
+            return 'Kepala BHP Surabaya';
         }
 
         if ($this->isKasi()) {
@@ -255,7 +255,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getInitialsAttribute(): string
     {
-        $words = preg_split('/\s+/', trim($this->name));
+        $cleanedName = preg_replace('/^((dr\.|h\.|hj\.|prof\.|drs\.|dra\.|ir\.)\s*)+/i', '', trim($this->name));
+        $words = preg_split('/\s+/', trim((string) $cleanedName));
         if (count($words) >= 2) {
             return strtoupper(mb_substr($words[0], 0, 1).mb_substr(end($words), 0, 1));
         }

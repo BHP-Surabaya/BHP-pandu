@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\Bendahara\BendaharaPnbpController;
 use App\Http\Controllers\Kasi\KasiDashboardController;
+use App\Http\Controllers\Kepala\KepalaDashboardController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\Madya\MadyaDashboardController;
 use App\Http\Controllers\Muda\MudaDashboardController;
@@ -20,6 +21,10 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     if (auth()->user()->isMasterAdmin()) {
         return redirect()->route('admin.verifikasi.index');
+    }
+
+    if (auth()->user()->isKepalaBhp()) {
+        return redirect()->route('kepala.dashboard');
     }
 
     if (auth()->user()->isKasi()) {
@@ -101,6 +106,13 @@ Route::middleware(['auth', 'role:kasi,kepala_seksi'])->prefix('kasi')->name('kas
     Route::get('/history', [KasiDashboardController::class, 'history'])->name('history');
     Route::post('/disposisi/{id}', [KasiDashboardController::class, 'disposisi'])->name('disposisi');
     Route::post('/tindak-lanjut/{id}', [KasiDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
+});
+
+Route::middleware(['auth', 'role:kepala_bhp,kepala_balai'])->prefix('kepala')->name('kepala.')->group(function () {
+    Route::get('/dashboard', [KepalaDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/tindak-lanjut', [KepalaDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
+    Route::post('/tindak-lanjut/{id}', [KepalaDashboardController::class, 'simpanTindakLanjut'])->name('tindak-lanjut.store');
+    Route::get('/history', [KepalaDashboardController::class, 'history'])->name('history');
 });
 
 Route::middleware(['auth', 'role:bendahara,bendahara_penerimaan'])->prefix('bendahara')->name('bendahara.')->group(function () {
