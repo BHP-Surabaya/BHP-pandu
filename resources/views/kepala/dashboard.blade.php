@@ -94,107 +94,146 @@
         @endif
 
         <!-- ======================================================== -->
-        <!-- KARTU STATISTIK REKAPITULASI LAYANAN (GRID RAPI) -->
+        <!-- KARTU RINGKASAN REKAPITULASI LAYANAN & SLA (MODEL SEJAJAR PERSIS KASI) -->
         <!-- ======================================================== -->
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5 sm:gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
             <!-- Card 1: Total Layanan -->
-            <div class="bg-gradient-to-br from-[#0c2a55] to-[#143c72] rounded-2xl p-4.5 text-white shadow-xs flex flex-col justify-between col-span-2 sm:col-span-1 lg:col-span-1">
-                <div class="flex items-center justify-between">
-                    <span class="text-[11px] font-bold text-blue-200 uppercase tracking-wider">
-                        Total Layanan
-                    </span>
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <div class="bg-white rounded-2xl border border-gray-100 p-4 sm:p-4.5 shadow-xs hover:shadow-md hover:border-blue-200 hover:-translate-y-0.5 transition-all duration-200 group flex items-center gap-3.5 sm:gap-4">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-blue-50 text-blue-600 border border-blue-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                    </svg>
                 </div>
-                <div class="my-2">
-                    <span class="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <span class="text-3xl sm:text-4xl font-black text-gray-900 leading-none shrink-0 tracking-tight">
                         {{ $stats['total_layanan'] }}
                     </span>
+                    <div class="min-w-0 flex flex-col justify-center">
+                        <span class="text-xs sm:text-sm font-bold text-gray-800 leading-snug truncate">
+                            Total Layanan
+                        </span>
+                        <span class="text-[11px] sm:text-xs font-semibold text-blue-600 leading-snug truncate">
+                            10 Jenis Publik
+                        </span>
+                    </div>
                 </div>
-                <span class="text-[10px] text-blue-200/80 font-medium">
-                    10 Jenis Layanan Publik
-                </span>
             </div>
 
-            <!-- Card 2: Pendaftaran Wasiat -->
-            <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-xs hover:shadow-md hover:border-sky-200 transition group flex flex-col justify-between">
-                <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                    Wasiat Tercatat
-                </span>
-                <div class="my-2 flex items-baseline gap-2">
-                    <span class="text-3xl font-black text-gray-900 tracking-tight">
+            <!-- Card 2: Pendaftaran Wasiat Tercatat -->
+            <div class="bg-white rounded-2xl border border-gray-100 p-4 sm:p-4.5 shadow-xs hover:shadow-md hover:border-sky-200 hover:-translate-y-0.5 transition-all duration-200 group flex items-center gap-3.5 sm:gap-4">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-sky-50 text-sky-600 border border-sky-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                    </svg>
+                </div>
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <span class="text-3xl sm:text-4xl font-black text-gray-900 leading-none shrink-0 tracking-tight">
                         {{ $stats['pendaftaran_wasiat'] }}
                     </span>
+                    <div class="min-w-0 flex flex-col justify-center">
+                        <span class="text-xs sm:text-sm font-bold text-gray-800 leading-snug truncate">
+                            Wasiat Tercatat
+                        </span>
+                        <span class="text-[11px] sm:text-xs font-semibold text-sky-600 leading-snug truncate">
+                            Registrasi Notaris
+                        </span>
+                    </div>
                 </div>
-                <span class="text-[10px] text-sky-600 font-semibold truncate">
-                    Registrasi Notaris
-                </span>
             </div>
 
-            <!-- Card 3: Pembukaan Wasiat -->
-            <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-xs hover:shadow-md hover:border-purple-200 transition group flex flex-col justify-between">
-                <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                    Wasiat Tertutup
-                </span>
-                <div class="my-2 flex items-baseline gap-2">
-                    <span class="text-3xl font-black text-gray-900 tracking-tight">
+            <!-- Card 3: Pembukaan Wasiat Tertutup -->
+            <div class="bg-white rounded-2xl border border-gray-100 p-4 sm:p-4.5 shadow-xs hover:shadow-md hover:border-purple-200 hover:-translate-y-0.5 transition-all duration-200 group flex items-center gap-3.5 sm:gap-4">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-purple-50 text-purple-600 border border-purple-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                </div>
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <span class="text-3xl sm:text-4xl font-black text-gray-900 leading-none shrink-0 tracking-tight">
                         {{ $stats['pembukaan_wasiat'] }}
                     </span>
+                    <div class="min-w-0 flex flex-col justify-center">
+                        <span class="text-xs sm:text-sm font-bold text-gray-800 leading-snug truncate">
+                            Wasiat Tertutup
+                        </span>
+                        <span class="text-[11px] sm:text-xs font-semibold text-purple-600 leading-snug truncate">
+                            Sidang Pembukaan
+                        </span>
+                    </div>
                 </div>
-                <span class="text-[10px] text-purple-600 font-semibold truncate">
-                    Sidang Pembukaan
-                </span>
             </div>
 
-            <!-- Card 4: Harta Orang Tidak Hadir & Tidak Terurus -->
-            <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-xs hover:shadow-md hover:border-teal-200 transition group flex flex-col justify-between">
-                <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                    Harta Kurator
-                </span>
-                <div class="my-2 flex items-baseline gap-2">
-                    <span class="text-3xl font-black text-gray-900 tracking-tight">
+            <!-- Card 4: Harta Kurator -->
+            <div class="bg-white rounded-2xl border border-gray-100 p-4 sm:p-4.5 shadow-xs hover:shadow-md hover:border-teal-200 hover:-translate-y-0.5 transition-all duration-200 group flex items-center gap-3.5 sm:gap-4">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-teal-50 text-teal-600 border border-teal-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.333A48.42 48.42 0 0012 9.75c-2.551 0-5.056.2-7.5.583V21" />
+                    </svg>
+                </div>
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <span class="text-3xl sm:text-4xl font-black text-gray-900 leading-none shrink-0 tracking-tight">
                         {{ $stats['harta_tidak_hadir'] + $stats['harta_tidak_terurus'] }}
                     </span>
+                    <div class="min-w-0 flex flex-col justify-center">
+                        <span class="text-xs sm:text-sm font-bold text-gray-800 leading-snug truncate">
+                            Harta Kurator
+                        </span>
+                        <span class="text-[11px] sm:text-xs font-semibold text-teal-600 leading-snug truncate">
+                            Afwezigheid &amp; Boedel
+                        </span>
+                    </div>
                 </div>
-                <span class="text-[10px] text-teal-600 font-semibold truncate">
-                    Afwezigheid &amp; Boedel
-                </span>
             </div>
 
             <!-- Card 5: Kepailitan & UPK -->
-            <div class="bg-white rounded-2xl border border-gray-100 p-4 shadow-xs hover:shadow-md hover:border-indigo-200 transition group flex flex-col justify-between">
-                <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                    Kepailitan &amp; UPK
-                </span>
-                <div class="my-2 flex items-baseline gap-2">
-                    <span class="text-3xl font-black text-gray-900 tracking-tight">
+            <div class="bg-white rounded-2xl border border-gray-100 p-4 sm:p-4.5 shadow-xs hover:shadow-md hover:border-indigo-200 hover:-translate-y-0.5 transition-all duration-200 group flex items-center gap-3.5 sm:gap-4">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />
+                    </svg>
+                </div>
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <span class="text-3xl sm:text-4xl font-black text-gray-900 leading-none shrink-0 tracking-tight">
                         {{ $stats['kepailitan'] + $stats['uang_pihak_ketiga'] }}
                     </span>
+                    <div class="min-w-0 flex flex-col justify-center">
+                        <span class="text-xs sm:text-sm font-bold text-gray-800 leading-snug truncate">
+                            Kepailitan &amp; UPK
+                        </span>
+                        <span class="text-[11px] sm:text-xs font-semibold text-indigo-600 leading-snug truncate">
+                            Konsinyasi &amp; Pailit
+                        </span>
+                    </div>
                 </div>
-                <span class="text-[10px] text-indigo-600 font-semibold truncate">
-                    Konsinyasi &amp; Pailit
-                </span>
             </div>
 
-            <!-- Card 6: Atensi SLA Terlambat (Warning Red) -->
+            <!-- Card 6: SLA Terlambat (Warning Red) -->
             <div @click="filterSla = (filterSla === 'terlambat' ? 'all' : 'terlambat')" 
-                 class="bg-rose-50/70 border border-rose-200/80 rounded-2xl p-4 shadow-xs hover:shadow-md hover:border-rose-300 transition cursor-pointer group flex flex-col justify-between">
-                <div class="flex items-center justify-between">
-                    <span class="text-[11px] font-bold text-rose-700 uppercase tracking-wider">
-                        SLA Terlambat
-                    </span>
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
-                    </span>
+                 class="bg-white rounded-2xl border border-rose-100 p-4 sm:p-4.5 shadow-xs hover:shadow-md hover:border-rose-300 hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer flex items-center gap-3.5 sm:gap-4">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-rose-50 text-rose-600 border border-rose-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                    </svg>
                 </div>
-                <div class="my-2 flex items-baseline gap-2">
-                    <span class="text-3xl font-black text-rose-600 tracking-tight">
+                <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                    <span class="text-3xl sm:text-4xl font-black text-rose-600 leading-none shrink-0 tracking-tight">
                         {{ $stats['layanan_terlambat'] }}
                     </span>
+                    <div class="min-w-0 flex flex-col justify-center">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs sm:text-sm font-bold text-gray-800 leading-snug truncate">
+                                SLA Terlambat
+                            </span>
+                            <span class="relative flex h-2 w-2 shrink-0">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+                            </span>
+                        </div>
+                        <span class="text-[11px] sm:text-xs font-bold text-rose-600 leading-snug truncate">
+                            &gt; 14 Hari (Atensi)
+                        </span>
+                    </div>
                 </div>
-                <span class="text-[10px] text-rose-700 font-bold truncate">
-                    &gt; 14 Hari Kerja (Atensi)
-                </span>
             </div>
         </div>
 
