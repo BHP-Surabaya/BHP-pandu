@@ -29,6 +29,11 @@
             const q = this.searchQuery.toLowerCase();
             const text = ((item.nomor_berkas || '') + ' ' + (item.jenis_layanan || '') + ' ' + (item.nama_pemohon || '') + ' ' + (item.wilayah || '')).toLowerCase();
             return text.includes(q);
+        },
+
+        isAlreadyApproved(item) {
+            if (!item) return false;
+            return Boolean(item.status_tahap) || this.disetujuiList.some(d => d.id === item.id);
         }
     }">
 
@@ -84,16 +89,16 @@
             </div>
 
             <!-- Tab Buttons (Perlu Persetujuan & Sudah Disetujui) -->
-            <div class="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl self-start md:self-auto shrink-0">
+            <div class="flex items-center gap-1 bg-gray-100/90 border border-gray-200/70 p-1 rounded-xl self-start md:self-auto shrink-0">
                 <button type="button" 
                         @click="activeTab = 'perlu'" 
-                        :class="activeTab === 'perlu' ? 'bg-[#0c2a55] text-white shadow-xs font-bold' : 'text-gray-600 hover:text-gray-900 font-semibold'"
+                        :class="activeTab === 'perlu' ? 'bg-[#0f172a] text-white shadow-xs font-bold' : 'text-gray-600 hover:text-gray-900 font-medium'"
                         class="px-4 py-2 rounded-lg text-xs transition cursor-pointer">
                     Perlu Persetujuan ({{ count($perluList) }})
                 </button>
                 <button type="button" 
                         @click="activeTab = 'disetujui'" 
-                        :class="activeTab === 'disetujui' ? 'bg-[#0c2a55] text-white shadow-xs font-bold' : 'text-gray-600 hover:text-gray-900 font-semibold'"
+                        :class="activeTab === 'disetujui' ? 'bg-[#0f172a] text-white shadow-xs font-bold' : 'text-gray-600 hover:text-gray-900 font-medium'"
                         class="px-4 py-2 rounded-lg text-xs transition cursor-pointer">
                     Sudah Disetujui ({{ count($disetujuiList) }})
                 </button>
@@ -229,37 +234,74 @@
                                 No Urut
                             </th>
                             <th scope="col" class="py-3 px-5 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                                Jenis Layanan &amp; Nomor Berkas
+                                Jenis Layanan
                             </th>
                             <th scope="col" class="py-3 px-5 text-[10px] font-bold uppercase tracking-wider text-gray-400">
                                 Nama Pemohon
                             </th>
-                            <th scope="col" class="py-3 px-5 text-[10px] font-bold uppercase tracking-wider text-gray-400">
-                                Tanggal Disetujui
+                            <th scope="col" class="py-3 px-5 text-[10px] font-bold uppercase tracking-wider text-gray-400 w-64">
+                                SLA
                             </th>
-                            <th scope="col" class="py-3 px-5 text-[10px] font-bold uppercase tracking-wider text-gray-400 text-center">
-                                Status Alur
+                            <th scope="col" class="py-3 px-5 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                Aksi
                             </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-xs">
                         <template x-for="(item, idx) in disetujuiList" :key="item.id">
                             <tr class="hover:bg-slate-50/70 transition" x-show="isItemVisible(item)">
+                                <!-- No Urut -->
                                 <td class="py-4 px-5 font-bold text-gray-400 text-center" x-text="idx + 1"></td>
+
+                                <!-- Jenis Layanan & Nomor Berkas -->
                                 <td class="py-4 px-5">
-                                    <span class="font-extrabold text-gray-900 text-sm block" x-text="item.jenis_layanan"></span>
-                                    <span class="text-[11px] text-gray-400 block mt-0.5" x-text="item.nomor_berkas"></span>
+                                    <span class="font-extrabold text-gray-900 text-sm block leading-tight" x-text="item.jenis_layanan"></span>
+                                    <span class="text-[11px] text-gray-400 block mt-0.5" x-text="item.nomor_berkas + ' • Masuk ' + item.tanggal_masuk"></span>
                                 </td>
+
+                                <!-- Nama Pemohon & Wilayah -->
                                 <td class="py-4 px-5">
-                                    <span class="font-bold text-gray-800 block" x-text="item.nama_pemohon"></span>
-                                    <span class="text-[11px] text-gray-500 block" x-text="item.wilayah"></span>
+                                    <span class="font-bold text-gray-900 text-sm block leading-tight" x-text="item.nama_pemohon"></span>
+                                    <span class="text-[11px] text-gray-500 block mt-0.5" x-text="item.wilayah"></span>
                                 </td>
-                                <td class="py-4 px-5 font-semibold text-gray-700" x-text="item.tanggal_disetujui"></td>
-                                <td class="py-4 px-5 text-center">
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200">
-                                        <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                                        <span x-text="item.status_tahap"></span>
-                                    </span>
+
+                                <!-- SLA Progress Bar & Status -->
+                                <td class="py-4 px-5">
+                                    <div class="space-y-1.5">
+                                        <!-- Header SLA Text & Icon -->
+                                        <div class="flex items-center gap-1.5 text-emerald-600 font-extrabold text-xs">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <span x-text="item.hari_berjalan + ' / ' + item.standar_sla + ' Hari • ' + (item.sla_label || 'SLA Aman')"></span>
+                                        </div>
+
+                                        <!-- Progress Bar Line -->
+                                        <div class="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+                                            <div class="h-1.5 rounded-full bg-emerald-500 transition-all duration-300"
+                                                 :style="'width: ' + Math.min(100, item.sla_persen || 36) + '%'"></div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!-- Aksi & Status Masuk Akun Pertama -->
+                                <td class="py-4 px-5">
+                                    <div class="flex items-center gap-4">
+                                        <!-- Tombol Preview Dokumen Hukum -->
+                                        <button type="button" 
+                                                @click="openPreviewModal(item)"
+                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-semibold shadow-2xs transition cursor-pointer shrink-0">
+                                            <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                            <span>Preview Dokumen Hukum</span>
+                                        </button>
+
+                                        <!-- Status Masuk Akun Pertama (Menunggu Barcode & TTE) -->
+                                        <span class="text-xs font-semibold text-gray-700 whitespace-nowrap" 
+                                              x-text="item.status_tahap || 'Masuk Akun Pertama (Menunggu Barcode & TTE)'"></span>
+                                    </div>
                                 </td>
                             </tr>
                         </template>
@@ -393,7 +435,16 @@
                     <!-- Modal Actions Footer -->
                     <div class="pt-3 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
                         <div class="text-gray-500 font-medium">
-                            Status saat ini: <span class="font-bold text-amber-600">Menunggu Persetujuan Kepala BHP</span>
+                            <template x-if="isAlreadyApproved(selectedItem)">
+                                <div>
+                                    Status saat ini: <span class="font-bold text-emerald-600">Disetujui - Menunggu Barcode &amp; TTE di Akun Pertama</span>
+                                </div>
+                            </template>
+                            <template x-if="!isAlreadyApproved(selectedItem)">
+                                <div>
+                                    Status saat ini: <span class="font-bold text-amber-600">Menunggu Persetujuan Kepala BHP</span>
+                                </div>
+                            </template>
                         </div>
                         <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
                             <button type="button" 
@@ -401,11 +452,13 @@
                                     class="px-4 py-2 rounded-xl bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 font-semibold transition cursor-pointer">
                                 Tutup Pratinjau
                             </button>
-                            <button type="button" 
-                                    @click="previewModalOpen = false; openConfirmModal(selectedItem)" 
-                                    class="px-4 py-2 rounded-xl bg-[#0066d6] hover:bg-[#0055b8] text-white font-bold transition shadow-xs cursor-pointer">
-                                Setuju &amp; Teruskan ke Akun Pertama
-                            </button>
+                            <template x-if="!isAlreadyApproved(selectedItem)">
+                                <button type="button" 
+                                        @click="previewModalOpen = false; openConfirmModal(selectedItem)" 
+                                        class="px-4 py-2 rounded-xl bg-[#0066d6] hover:bg-[#0055b8] text-white font-bold transition shadow-xs cursor-pointer">
+                                    Setuju &amp; Teruskan ke Akun Pertama
+                                </button>
+                            </template>
                         </div>
                     </div>
                 </div>
