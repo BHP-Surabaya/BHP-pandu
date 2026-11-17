@@ -1,5 +1,5 @@
 <x-guest-layout :full-bleed="true">
-    <div class="relative min-h-screen w-full flex items-center justify-center overflow-x-hidden bg-slate-950 py-6 sm:py-10 px-4 sm:px-8">
+    <div class="relative min-h-screen w-full flex flex-col justify-between overflow-x-hidden bg-slate-950 py-4 sm:py-6 px-4 sm:px-8">
         <!-- Background Image of BHP Surabaya Building -->
         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700 scale-100" 
              style="background-image: url('{{ asset('images/bg-gedung-bhp-clean.jpg') }}');">
@@ -8,8 +8,11 @@
         <!-- Rich Cinematic Dual-Flank Overlay (Strong contrast for branding & card, clear center view) -->
         <div class="absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r from-slate-950/90 via-slate-950/50 to-slate-950/85 backdrop-blur-[1px]"></div>
 
+        <!-- Top Spacer for Balanced Vertical Centering -->
+        <div class="hidden lg:block h-2"></div>
+
         <!-- Main Content Area: Floating Two-Column Layout (Opsi 2) -->
-        <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-8 sm:gap-12 lg:gap-16">
+        <div class="relative z-10 w-full max-w-6xl mx-auto my-auto flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-8 sm:gap-12 lg:gap-16">
             
             <!-- Left Side: Hero Brand & Official Tagline (Floating Refined) -->
             <div class="w-full lg:max-w-xl text-white flex flex-col items-center text-center lg:items-start lg:text-left select-none">
@@ -192,6 +195,18 @@
                     </form>
                 </div>
             </div>
+        </div>
+
+        <!-- Bottom Web Area: Official Accreditation & Endorsement Logos (RAW ASSET PANDU BHP-2) -->
+        <div class="relative z-10 w-full max-w-4xl mx-auto mt-6 sm:mt-8 pt-2 pb-1 flex flex-col items-center select-none">
+            <div class="inline-flex items-center justify-center px-4 sm:px-8 py-2 sm:py-2.5 rounded-2xl sm:rounded-full bg-slate-900/75 backdrop-blur-md border border-white/20 shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
+                <img src="{{ asset('images/footer-logos-bhp.png') }}" 
+                     alt="Kementerian Hukum RI, BerAKHLAK, Bangga Melayani Bangsa, Wilayah Bebas dari Korupsi (WBK), ISO" 
+                     class="h-6 sm:h-7 lg:h-8 w-auto max-w-full object-contain drop-shadow" />
+            </div>
+            <p class="text-[10px] sm:text-[11px] text-white/60 font-normal tracking-wide mt-2 drop-shadow-sm text-center">
+                &copy; {{ date('Y') }} Balai Harta Peninggalan Surabaya &bull; Kementerian Hukum Republik Indonesia
+            </p>
         </div>
     </div>
 </x-guest-layout>
