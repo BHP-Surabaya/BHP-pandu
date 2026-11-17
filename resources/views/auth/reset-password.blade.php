@@ -15,48 +15,19 @@
             <div class="w-full lg:max-w-xl text-white flex flex-col items-center text-center lg:items-start lg:text-left select-none">
                 
                 <!-- Logo & Brand Header -->
-                <div class="flex items-center gap-3.5 sm:gap-5 mb-2 sm:mb-4">
-                    <!-- BHP Pillars Building Icon (Exact Vector Replica) -->
-                    <div class="flex-shrink-0 drop-shadow-[0_4px_10px_rgba(0,0,0,0.3)]">
-                        <svg class="w-11 h-11 sm:w-16 sm:h-16 lg:w-[72px] lg:h-[72px]" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Roof Pediment Triangle -->
-                            <path d="M32 6L4 23H60L32 6Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
-                            <!-- Inner Triangular Cutout -->
-                            <polygon points="32,13 14,22 50,22" fill="#143c72"/>
-                            <!-- Upper Architrave Bar -->
-                            <rect x="6" y="24.5" width="52" height="4" rx="1.5" fill="white"/>
-                            <!-- Left Pillar (White) -->
-                            <rect x="12" y="31" width="7" height="20" rx="1.5" fill="white"/>
-                            <!-- Center Pillar (Golden Yellow) -->
-                            <rect x="28.5" y="31" width="7" height="20" rx="1.5" fill="#F59E0B"/>
-                            <!-- Right Pillar (White) -->
-                            <rect x="45" y="31" width="7" height="20" rx="1.5" fill="white"/>
-                            <!-- Base Steps -->
-                            <rect x="6" y="53" width="52" height="3.5" rx="1" fill="white"/>
-                            <rect x="2" y="58" width="60" height="4" rx="1.5" fill="white"/>
-                        </svg>
-                    </div>
-
-                    <!-- App Title -->
-                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)] leading-none">
-                        <span class="text-white">Pandu</span><span class="text-[#FBBF24]">BHP</span>
-                    </h1>
+                <div class="mb-2 sm:mb-3">
+                    <h1 class="sr-only">PanduBHP - Balai Harta Peninggalan Surabaya</h1>
+                    <img src="{{ asset('images/logo-pandubhp-clean.png') }}" 
+                         alt="PanduBHP" 
+                         class="h-12 sm:h-16 lg:h-[76px] w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.45)]" />
                 </div>
 
-                <!-- Subtitle / Application Description -->
-                <p class="text-sm sm:text-lg lg:text-[21px] font-medium text-white/95 leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
-                    Sistem Pendukung Administrasi Terpadu<br class="hidden sm:inline" />
-                    Balai Harta Peninggalan Surabaya
-                </p>
-
-                <!-- Yellow Accent Line (Desktop / Tablet) -->
-                <div class="hidden lg:block w-14 h-1 sm:h-[4px] bg-[#FBBF24] rounded-full my-5 sm:my-6 shadow-[0_2px_6px_rgba(0,0,0,0.2)]"></div>
-
-                <!-- Motto (Desktop / Tablet) -->
-                <p class="hidden lg:block text-sm sm:text-base text-white/90 font-normal leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]">
-                    Melayani dengan Integritas,<br />
-                    Menuju Kepastian Hukum
-                </p>
+                <!-- Official Tagline (PASTI SETIA) -->
+                <div class="w-full max-w-[380px] sm:max-w-[460px] lg:max-w-[500px]">
+                    <img src="{{ asset('images/tagline-pasti-setia.png') }}" 
+                         alt="PASTI SETIA - Profesional Akuntabel Sinergi Transparan Inovatif | Santun Empati Tanggap Integritas Amanah" 
+                         class="w-full h-auto object-contain drop-shadow-[0_6px_20px_rgba(0,0,0,0.35)]" />
+                </div>
             </div>
 
             <!-- Right Side: Frosted Glass Reset Password Card -->

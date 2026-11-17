@@ -19,39 +19,17 @@
 
                 <!-- Brand & Logo (Anchored at Top) -->
                 <div class="flex flex-col items-center text-center relative z-10 w-full">
-                    <!-- BHP Pillars Building Icon (Exact Vector Replica) -->
-                    <div class="inline-flex items-center justify-center p-3 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/15 shadow-inner">
-                        <svg class="w-12 h-12 sm:w-14 sm:h-14 drop-shadow-md" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Roof Pediment Triangle -->
-                            <path d="M32 6L4 23H60L32 6Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
-                            <!-- Inner Triangular Cutout -->
-                            <polygon points="32,13 14,22 50,22" fill="#143c72"/>
-                            <!-- Upper Architrave Bar -->
-                            <rect x="6" y="24.5" width="52" height="4" rx="1.5" fill="white"/>
-                            <!-- Left Pillar (White) -->
-                            <rect x="12" y="31" width="7" height="20" rx="1.5" fill="white"/>
-                            <!-- Center Pillar (Golden Yellow) -->
-                            <rect x="28.5" y="31" width="7" height="20" rx="1.5" fill="#F59E0B"/>
-                            <!-- Right Pillar (White) -->
-                            <rect x="45" y="31" width="7" height="20" rx="1.5" fill="white"/>
-                            <!-- Base Steps -->
-                            <rect x="6" y="53" width="52" height="3.5" rx="1" fill="white"/>
-                            <rect x="2" y="58" width="60" height="4" rx="1.5" fill="white"/>
-                        </svg>
+                    <h1 class="sr-only">PanduBHP - Balai Harta Peninggalan Surabaya</h1>
+                    <img src="{{ asset('images/logo-pandubhp-clean.png') }}" 
+                         alt="PanduBHP" 
+                         class="h-10 sm:h-12 w-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.45)]" />
+
+                    <!-- Official Tagline (PASTI SETIA) -->
+                    <div class="mt-2.5 w-full max-w-[280px]">
+                        <img src="{{ asset('images/tagline-pasti-setia.png') }}" 
+                             alt="PASTI SETIA - Profesional Akuntabel Sinergi Transparan Inovatif | Santun Empati Tanggap Integritas Amanah" 
+                             class="w-full h-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)]" />
                     </div>
-
-                    <!-- Title -->
-                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight mt-4 leading-none drop-shadow-sm">
-                        <span class="text-white">Pandu</span><span class="text-[#FBBF24]">BHP</span>
-                    </h1>
-
-                    <!-- Subtitle -->
-                    <p class="text-xs sm:text-sm font-medium text-blue-100/90 mt-2 leading-relaxed">
-                        Balai Harta Peninggalan Surabaya
-                    </p>
-
-                    <!-- Yellow Accent Bar -->
-                    <div class="w-12 h-1 bg-[#FBBF24] rounded-full mt-3 shadow-sm"></div>
                 </div>
 
                 <!-- Center Highlights (Keeps sidebar vertically stable & attractive) -->
