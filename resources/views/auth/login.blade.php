@@ -1,74 +1,61 @@
 <x-guest-layout :full-bleed="true">
-    <div class="relative min-h-screen w-full flex items-center justify-center overflow-x-hidden bg-slate-950 py-6 sm:py-10 px-4 sm:px-6 lg:px-8">
+    <div class="relative min-h-screen w-full flex items-center justify-center overflow-x-hidden bg-slate-950 py-6 sm:py-10 px-4 sm:px-8">
         <!-- Background Image of BHP Surabaya Building -->
         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700 scale-100" 
              style="background-image: url('{{ asset('images/bg-gedung-bhp-clean.jpg') }}');">
         </div>
 
-        <!-- Cinematic Gradient Overlay with subtle backdrop blur -->
-        <div class="absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r from-slate-950/80 via-slate-950/55 to-slate-950/75 backdrop-blur-[2px]"></div>
+        <!-- Rich Cinematic Dual-Flank Overlay (Strong contrast for branding & card, clear center view) -->
+        <div class="absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r from-slate-950/90 via-slate-950/50 to-slate-950/85 backdrop-blur-[1px]"></div>
 
-        <!-- Unified Glass Container (Opsi 1) -->
-        <div class="relative z-10 w-full max-w-5xl mx-auto">
-            <div class="backdrop-blur-2xl bg-slate-900/75 border border-white/20 rounded-2xl sm:rounded-3xl shadow-[0_25px_70px_rgba(0,0,0,0.65)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 transition-all duration-300">
+        <!-- Main Content Area: Floating Two-Column Layout (Opsi 2) -->
+        <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-8 sm:gap-12 lg:gap-16">
+            
+            <!-- Left Side: Hero Brand & Official Tagline (Floating Refined) -->
+            <div class="w-full lg:max-w-xl text-white flex flex-col items-center text-center lg:items-start lg:text-left select-none">
                 
-                <!-- Left Column: Official Branding & Institutional Lockup -->
-                <div class="lg:col-span-7 relative p-6 sm:p-8 lg:p-10 flex flex-col justify-between bg-gradient-to-br from-[#071d41]/90 via-[#0b2868]/85 to-[#061633]/95 border-b lg:border-b-0 lg:border-r border-white/10 select-none overflow-hidden">
-                    <!-- Soft ambient background glows -->
-                    <div class="absolute -top-20 -left-20 w-64 h-64 bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
-                    <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
-
-                    <!-- Top: Ministry of Law Institutional Lockup -->
-                    <div class="flex items-center gap-3 relative z-10 pb-4 border-b border-white/10">
-                        <img src="{{ asset('images/pengayoman.svg') }}" alt="Kementerian Hukum RI" class="w-8 h-8 sm:w-9 sm:h-9 object-contain drop-shadow" />
-                        <div class="leading-tight">
-                            <div class="text-[11px] sm:text-xs font-bold tracking-wider text-amber-300 uppercase">Kementerian Hukum RI</div>
-                            <div class="text-[10px] sm:text-[11px] text-white/80 font-medium">Kantor Wilayah Jawa Timur</div>
-                        </div>
-                    </div>
-
-                    <!-- Center: PanduBHP Master Logo & PASTI SETIA Tagline -->
-                    <div class="my-6 lg:my-auto py-2 relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left">
-                        <div class="mb-3 sm:mb-4">
-                            <h1 class="sr-only">PanduBHP - Balai Harta Peninggalan Surabaya</h1>
-                            <img src="{{ asset('images/logo-pandubhp-clean.png') }}" 
-                                 alt="PanduBHP" 
-                                 class="h-12 sm:h-14 lg:h-16 w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.45)]" />
-                        </div>
-
-                        <!-- Official Tagline Badge (PASTI SETIA) -->
-                        <div class="w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[440px]">
-                            <img src="{{ asset('images/tagline-pasti-setia.png') }}" 
-                                 alt="PASTI SETIA - Profesional Akuntabel Sinergi Transparan Inovatif | Santun Empati Tanggap Integritas Amanah" 
-                                 class="w-full h-auto object-contain drop-shadow-[0_6px_20px_rgba(0,0,0,0.35)]" />
-                        </div>
-
-                        <p class="text-xs sm:text-[13px] text-white/75 mt-3 sm:mt-4 leading-relaxed max-w-md hidden sm:block">
-                            Sistem Pendukung Administrasi Terpadu Layanan Hukum Balai Harta Peninggalan Surabaya.
-                        </p>
-                    </div>
-
-                    <!-- Bottom: Security & Legal Office Footer -->
-                    <div class="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] sm:text-xs text-white/70 relative z-10">
-                        <span class="font-medium">Balai Harta Peninggalan Surabaya</span>
-                        <span class="inline-flex items-center gap-1.5 text-emerald-400 font-medium">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                            Portal Resmi Terverifikasi
-                        </span>
-                    </div>
+                <!-- Institutional Pill Badge -->
+                <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-900/70 backdrop-blur-md border border-white/20 text-white shadow-md mb-4 sm:mb-5">
+                    <img src="{{ asset('images/pengayoman.svg') }}" alt="Kementerian Hukum RI" class="w-5 h-5 object-contain drop-shadow" />
+                    <span class="text-[11px] sm:text-xs font-bold tracking-wider text-amber-300 uppercase">Kementerian Hukum RI</span>
+                    <span class="text-white/40">•</span>
+                    <span class="text-[11px] sm:text-xs text-white/90 font-medium">Kanwil Jawa Timur</span>
                 </div>
 
-                <!-- Right Column: Clean Frosted Login Form -->
-                <div class="lg:col-span-5 relative p-6 sm:p-8 lg:p-10 flex flex-col justify-center bg-white/[0.04] backdrop-blur-xl" 
+                <!-- Hero PanduBHP Logo -->
+                <div class="mb-3 sm:mb-4">
+                    <h1 class="sr-only">PanduBHP - Balai Harta Peninggalan Surabaya</h1>
+                    <img src="{{ asset('images/logo-pandubhp-clean.png') }}" 
+                         alt="PanduBHP" 
+                         class="h-14 sm:h-16 lg:h-[82px] w-auto object-contain drop-shadow-[0_6px_24px_rgba(0,0,0,0.6)]" />
+                </div>
+
+                <!-- Official Tagline Badge (PASTI SETIA) -->
+                <div class="w-full max-w-[380px] sm:max-w-[460px] lg:max-w-[500px]">
+                    <img src="{{ asset('images/tagline-pasti-setia.png') }}" 
+                         alt="PASTI SETIA - Profesional Akuntabel Sinergi Transparan Inovatif | Santun Empati Tanggap Integritas Amanah" 
+                         class="w-full h-auto object-contain drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)]" />
+                </div>
+            </div>
+
+            <!-- Right Side: Frosted Glass Login Card (Solid Contrast) -->
+            <div class="w-full max-w-[430px] flex-shrink-0">
+                <div class="relative backdrop-blur-2xl bg-slate-900/75 border border-white/25 rounded-2xl sm:rounded-[28px] p-6 sm:p-8 shadow-[0_25px_60px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-white/35" 
                      x-data="{ showPassword: false }">
 
-                    <!-- Form Header -->
-                    <div class="mb-5 sm:mb-6 text-center lg:text-left">
+                    <!-- Top Avatar Circle & Header -->
+                    <div class="flex flex-col items-center text-center mb-5 sm:mb-6">
+                        <div class="w-12 h-12 sm:w-[60px] sm:h-[60px] rounded-full border-2 border-white/60 bg-white/10 flex items-center justify-center text-white mb-2 sm:mb-3 shadow-inner">
+                            <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white/95" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                            </svg>
+                        </div>
+
                         <h2 class="text-xl sm:text-2xl font-bold text-white tracking-tight drop-shadow-sm">
                             Masuk ke Akun
                         </h2>
-                        <p class="text-xs sm:text-sm text-white/75 mt-1 font-normal drop-shadow-sm">
-                            Silakan masukkan username dan password Anda
+                        <p class="text-xs sm:text-sm text-white/80 mt-1 font-normal drop-shadow-sm">
+                            Silakan masukkan kredensial akun PanduBHP
                         </p>
                     </div>
 
@@ -195,6 +182,13 @@
                                 </a>
                             </div>
                         @endif
+
+                        <!-- Footer Card Divider & Subtext -->
+                        <div class="pt-3 mt-3 sm:pt-4 sm:mt-4 border-t border-white/15 text-center">
+                            <p class="text-[11px] sm:text-xs text-white/70 font-normal tracking-wide drop-shadow-sm">
+                                Balai Harta Peninggalan Surabaya
+                            </p>
+                        </div>
                     </form>
                 </div>
             </div>
