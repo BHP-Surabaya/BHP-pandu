@@ -15,27 +15,19 @@
             <div class="w-full lg:max-w-xl text-white flex flex-col items-center text-center lg:items-start lg:text-left select-none">
                 
                 <!-- Logo & Brand Header -->
-                <div class="mb-3 sm:mb-5">
+                <div class="mb-2 sm:mb-3">
                     <h1 class="sr-only">PanduBHP - Balai Harta Peninggalan Surabaya</h1>
                     <img src="{{ asset('images/logo-pandubhp-clean.png') }}" 
                          alt="PanduBHP" 
                          class="h-12 sm:h-16 lg:h-[76px] w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.45)]" />
                 </div>
 
-                <!-- Subtitle / Application Description -->
-                <p class="text-sm sm:text-lg lg:text-[21px] font-medium text-white/95 leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
-                    Sistem Pendukung Administrasi Terpadu<br class="hidden sm:inline" />
-                    Balai Harta Peninggalan Surabaya
-                </p>
-
-                <!-- Yellow Accent Line (Desktop / Tablet) -->
-                <div class="hidden lg:block w-14 h-1 sm:h-[4px] bg-[#FBBF24] rounded-full my-5 sm:my-6 shadow-[0_2px_6px_rgba(0,0,0,0.2)]"></div>
-
-                <!-- Motto (Desktop / Tablet) -->
-                <p class="hidden lg:block text-sm sm:text-base text-white/90 font-normal leading-relaxed drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]">
-                    Melayani dengan Integritas,<br />
-                    Menuju Kepastian Hukum
-                </p>
+                <!-- Official Tagline (PASTI SETIA) -->
+                <div class="w-full max-w-[380px] sm:max-w-[460px] lg:max-w-[500px]">
+                    <img src="{{ asset('images/tagline-pasti-setia.png') }}" 
+                         alt="PASTI SETIA - Profesional Akuntabel Sinergi Transparan Inovatif | Santun Empati Tanggap Integritas Amanah" 
+                         class="w-full h-auto object-contain drop-shadow-[0_6px_20px_rgba(0,0,0,0.35)]" />
+                </div>
             </div>
 
             <!-- Right Side: Frosted Glass Reset Password Card -->

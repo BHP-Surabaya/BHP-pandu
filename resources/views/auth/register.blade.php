@@ -24,13 +24,12 @@
                          alt="PanduBHP" 
                          class="h-10 sm:h-12 w-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.45)]" />
 
-                    <!-- Subtitle -->
-                    <p class="text-xs sm:text-sm font-medium text-blue-100/90 mt-2 leading-relaxed">
-                        Balai Harta Peninggalan Surabaya
-                    </p>
-
-                    <!-- Yellow Accent Bar -->
-                    <div class="w-12 h-1 bg-[#FBBF24] rounded-full mt-3 shadow-sm"></div>
+                    <!-- Official Tagline (PASTI SETIA) -->
+                    <div class="mt-2.5 w-full max-w-[280px]">
+                        <img src="{{ asset('images/tagline-pasti-setia.png') }}" 
+                             alt="PASTI SETIA - Profesional Akuntabel Sinergi Transparan Inovatif | Santun Empati Tanggap Integritas Amanah" 
+                             class="w-full h-auto object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)]" />
+                    </div>
                 </div>
 
                 <!-- Center Highlights (Keeps sidebar vertically stable & attractive) -->
