@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedNik;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -45,7 +46,7 @@ class Pewasiat extends Model
     protected function casts(): array
     {
         return [
-            'nik' => 'encrypted',
+            'nik' => EncryptedNik::class,
             'tanggal_lahir' => 'date',
             'tanggal_kematian' => 'date',
             'tanggal_akta_kematian' => 'date',

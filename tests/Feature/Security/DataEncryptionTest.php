@@ -186,4 +186,70 @@ class DataEncryptionTest extends TestCase
         $this->assertNotSame($plainNik, $rawNik);
         $this->assertSame($plainNik, Crypt::decryptString($rawNik));
     }
+
+    public function test_user_nik_gracefully_handles_already_encrypted_string_without_double_encrypting(): void
+    {
+        $plainNik = '3578019908900006';
+        $encryptedNik = Crypt::encryptString($plainNik);
+
+        $user = User::factory()->create(['role' => 'pemohon']);
+        // Assign the encrypted string directly
+        $user->nik = $encryptedNik;
+        $user->save();
+
+        $freshUser = User::find($user->id);
+        // It must return the plain NIK, NOT the encrypted string!
+        $this->assertSame($plainNik, $freshUser->nik);
+
+        // In the database it must be encrypted once
+        $rawNik = DB::table('users')->where('id', $user->id)->value('nik');
+        $this->assertSame($plainNik, Crypt::decryptString($rawNik));
+    }
+
+    public function test_user_nik_gracefully_handles_plaintext_database_value_without_crashing(): void
+    {
+        $plainNik = '3578019908900007';
+        $user = User::factory()->create(['role' => 'pemohon']);
+
+        // Force a raw plaintext NIK into the database (simulating legacy data)
+        DB::table('users')->where('id', $user->id)->update(['nik' => $plainNik]);
+
+        $freshUser = User::find($user->id);
+        // Must NOT throw DecryptException, but return plaintext gracefully
+        $this->assertSame($plainNik, $freshUser->nik);
+    }
+
+    public function test_profile_update_form_displays_clean_plaintext_nik(): void
+    {
+        $plainNik = '3578019908900008';
+        $user = User::factory()->create([
+            'role' => 'pemohon',
+            'nik' => $plainNik,
+        ]);
+
+        $response = $this->actingAs($user)->get(route('profile.edit'));
+        $response->assertOk();
+        $response->assertSee('value="'.$plainNik.'"', false);
+        $response->assertDontSee('eyJpdi', false);
+    }
+
+    public function test_profile_update_form_with_old_encrypted_session_recovers_to_plaintext(): void
+    {
+        $plainNik = '3578019908900009';
+        $encryptedNik = Crypt::encryptString($plainNik);
+
+        $user = User::factory()->create([
+            'role' => 'pemohon',
+            'nik' => $plainNik,
+        ]);
+
+        // Simulate session having old input with an encrypted string from a previous failed submit
+        $response = $this->actingAs($user)
+            ->withSession(['_old_input' => ['nik' => $encryptedNik]])
+            ->get(route('profile.edit'));
+
+        $response->assertOk();
+        $response->assertSee('value="'.$plainNik.'"', false);
+        $response->assertDontSee('value="'.$encryptedNik.'"', false);
+    }
 }
