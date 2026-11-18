@@ -213,7 +213,7 @@
                  class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
                 
                 <div>
-                    <!-- Header Kartu: Ikon & Badge -->
+                    <!-- Header Kartu: Ikon -->
                     <div class="flex items-start justify-between mb-4">
                         <div class="w-14 h-14 rounded-2xl bg-blue-50 text-[#1d68d8] border border-blue-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                             <!-- Document + Seal -->
@@ -225,18 +225,11 @@
                                 <path d="M34 31h4l-4 6h4" stroke="white" stroke-width="1.8" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Tersedia Online
-                        </span>
                     </div>
 
                     <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Pembukaan Wasiat
                     </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Permohonan pembukaan akta wasiat tertutup (geheim) atau terbuka dan penyerahan Berita Acara pembukaan wasiat kepada ahli waris sah.
-                    </p>
                 </div>
 
                 <!-- CTA Button -->
