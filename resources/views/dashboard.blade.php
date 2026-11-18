@@ -204,20 +204,20 @@
         </div>
 
         <!-- ================= KATALOG LAYANAN ================= -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             
             {{-- 1. Pembukaan Wasiat (LAYANAN KHUSUS NOTARIS) --}}
             @if ($canNotaris)
             <div x-show="matches('Pembukaan Wasiat akta wasiat tertutup terbuka ahli waris notaris', 'wasiat')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-xl p-5 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
                 
                 <div>
-                    <!-- Header Kartu: Ikon & Badge -->
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-blue-50 text-[#1d68d8] border border-blue-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                    <!-- Header Kartu: Ikon -->
+                    <div class="mb-3">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-[#1d68d8] border border-blue-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                             <!-- Document + Seal -->
-                            <svg class="w-8 h-8" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="w-6 h-6" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M10 6h20l10 10v26H10V6z" fill="#f0f7ff" />
                                 <path d="M30 6v10h10" />
                                 <path d="M16 18h8M16 24h16M16 30h12" />
@@ -225,26 +225,21 @@
                                 <path d="M34 31h4l-4 6h4" stroke="white" stroke-width="1.8" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
-                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            Tersedia Online
-                        </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
-                        Pembukaan Wasiat
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Permohonan pembukaan akta wasiat tertutup (geheim) atau terbuka dan penyerahan Berita Acara pembukaan wasiat kepada ahli waris sah.
-                    </p>
+                    <div class="min-h-[2.6rem] flex items-center">
+                        <h3 class="text-sm sm:text-base font-bold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug line-clamp-2">
+                            Pembukaan Wasiat
+                        </h3>
+                    </div>
                 </div>
 
                 <!-- CTA Button -->
-                <div class="pt-5 mt-4 border-t border-slate-100">
+                <div class="pt-3.5 mt-3 border-t border-slate-100">
                     <a href="{{ route('permohonan.create') }}" 
-                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
+                       class="w-full py-2.5 px-4 rounded-lg bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
-                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
                     </a>
@@ -256,12 +251,12 @@
             @if ($canNotaris)
             <div x-show="matches('Pendaftaran Wasiat register akta notaris lapor', 'wasiat')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-xl p-5 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
                 <div>
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                    <div class="mb-3">
+                        <div class="w-12 h-12 rounded-xl bg-sky-50 text-sky-600 border border-sky-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                             <!-- Document + Pen / Medal -->
-                            <svg class="w-8 h-8" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="w-6 h-6" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M10 6h20l10 10v26H10V6z" fill="#f0f9ff" />
                                 <path d="M30 6v10h10" />
                                 <path d="M16 20h10M16 26h8" />
@@ -269,24 +264,20 @@
                                 <path d="M33 35l1.5 1.5 3-3" stroke="white" stroke-width="1.8" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200">
-                            Registrasi Notaris
-                        </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
-                        Pendaftaran Wasiat
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Pencatatan dan pelaporan daftar akta wasiat yang dibuat di hadapan Notaris ke Pusat Pendaftaran Wasiat Balai Harta Peninggalan.
-                    </p>
+                    <div class="min-h-[2.6rem] flex items-center">
+                        <h3 class="text-sm sm:text-base font-bold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug line-clamp-2">
+                            Pendaftaran Wasiat
+                        </h3>
+                    </div>
                 </div>
 
-                <div class="pt-5 mt-4 border-t border-slate-100">
+                <div class="pt-3.5 mt-3 border-t border-slate-100">
                     <a href="{{ route('layanan.pengembangan', 'pendaftaran-wasiat') }}" 
-                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
+                       class="w-full py-2.5 px-4 rounded-lg bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
-                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
                     </a>
@@ -297,36 +288,32 @@
             <!-- 3. Perwalian -->
             <div x-show="matches('Perwalian anak belum dewasa harta waris wali', 'perlindungan')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-xl p-5 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
                 <div>
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                    <div class="mb-3">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                             <!-- Guardian & Child Avatar -->
-                            <svg class="w-8 h-8" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="w-6 h-6" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="20" cy="16" r="5" fill="#059669" stroke="#059669" />
                                 <path d="M11 36c0-5.5 4-9 9-9s9 3.5 9 9" fill="#059669" stroke="#059669" />
                                 <circle cx="34" cy="24" r="3.5" fill="#065f46" stroke="#065f46" />
                                 <path d="M29 38c0-3.5 2.5-6 6-6s6 2.5 6 6" fill="#065f46" stroke="#065f46" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            Perlindungan Anak
-                        </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
-                        Perwalian
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Pengurusan, pemeliharaan, serta pengawasan atas harta kekayaan anak yang belum dewasa yang berada di bawah perwalian Balai Harta Peninggalan.
-                    </p>
+                    <div class="min-h-[2.6rem] flex items-center">
+                        <h3 class="text-sm sm:text-base font-bold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug line-clamp-2">
+                            Perwalian
+                        </h3>
+                    </div>
                 </div>
 
-                <div class="pt-5 mt-4 border-t border-slate-100">
+                <div class="pt-3.5 mt-3 border-t border-slate-100">
                     <a href="{{ route('layanan.pengembangan', 'perwalian') }}" 
-                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
+                       class="w-full py-2.5 px-4 rounded-lg bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
-                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
                     </a>
@@ -336,36 +323,32 @@
             <!-- 4. Pengampuan -->
             <div x-show="matches('Pengampuan curatele kurator perlindungan dewasa gangguan', 'perlindungan')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-xl p-5 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
                 <div>
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-teal-50 text-teal-600 border border-teal-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                    <div class="mb-3">
+                        <div class="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 border border-teal-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                             <!-- Person + Shield -->
-                            <svg class="w-8 h-8" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="w-6 h-6" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="20" cy="18" r="5" fill="#0d9488" stroke="#0d9488" />
                                 <path d="M11 38c0-5.5 4-9 9-9h4" stroke="#0d9488" />
                                 <path d="M34 24l7 3v6c0 5-7 9-7 9s-7-4-7-9v-6l7-3z" fill="#0d9488" stroke="#0d9488" />
                                 <circle cx="34" cy="31" r="1.5" fill="white" stroke="white" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-teal-50 text-teal-700 border border-teal-200">
-                            Curatele
-                        </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
-                        Pengampuan
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Pengurusan dan perlindungan harta kekayaan bagi orang dewasa yang berada di bawah pengampuan karena kondisi kesehatan mental atau fisik.
-                    </p>
+                    <div class="min-h-[2.6rem] flex items-center">
+                        <h3 class="text-sm sm:text-base font-bold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug line-clamp-2">
+                            Pengampuan
+                        </h3>
+                    </div>
                 </div>
 
-                <div class="pt-5 mt-4 border-t border-slate-100">
+                <div class="pt-3.5 mt-3 border-t border-slate-100">
                     <a href="{{ route('layanan.pengembangan', 'pengampuan') }}" 
-                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
+                       class="w-full py-2.5 px-4 rounded-lg bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
-                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
                     </a>
@@ -375,36 +358,32 @@
             <!-- 5. SKHW (Surat Keterangan Hak Waris) -->
             <div x-show="matches('SKHW Surat Keterangan Hak Waris warisan eropa timur asing', 'wasiat')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-xl p-5 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
                 <div>
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                    <div class="mb-3">
+                        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                             <!-- Certificate + House Emblem -->
-                            <svg class="w-8 h-8" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="w-6 h-6" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="10" y="8" width="28" height="32" rx="3" fill="#fffbeb" stroke="#d97706" />
                                 <path d="M18 24l6-5 6 5v6H18v-6z" fill="#d97706" stroke="#d97706" />
                                 <circle cx="32" cy="34" r="5" fill="#d97706" stroke="#d97706" />
                                 <path d="M30 38l2-1 2 1v-3h-4v3z" fill="#d97706" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                            Hak Waris
-                        </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
-                        SKHW
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Penerbitan Surat Keterangan Hak Waris resmi untuk WNI keturunan Timur Asing dan Eropa berdasarkan ketentuan hukum perdata barat.
-                    </p>
+                    <div class="min-h-[2.6rem] flex items-center">
+                        <h3 class="text-sm sm:text-base font-bold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug line-clamp-2">
+                            SKHW
+                        </h3>
+                    </div>
                 </div>
 
-                <div class="pt-5 mt-4 border-t border-slate-100">
+                <div class="pt-3.5 mt-3 border-t border-slate-100">
                     <a href="{{ route('layanan.pengembangan', 'skhw') }}" 
-                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
+                       class="w-full py-2.5 px-4 rounded-lg bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
-                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
                     </a>
@@ -414,35 +393,31 @@
             <!-- 6. Layanan Harta Kekayaan Yang Pemiliknya Tidak Hadir -->
             <div x-show="matches('Layanan Harta Kekayaan Yang Pemiliknya Tidak Hadir afwezigheid ghaib hilang aset', 'harta')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-xl p-5 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
                 <div>
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                    <div class="mb-3">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 border border-indigo-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                             <!-- House + Search / Unknown -->
-                            <svg class="w-8 h-8" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="w-6 h-6" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 22l12-10 12 10v14H12V22z" fill="#eef2ff" stroke="#4f46e5" />
                                 <circle cx="32" cy="30" r="6" fill="white" stroke="#312e81" stroke-width="2.5" />
                                 <path d="M36 34l6 6" stroke="#312e81" stroke-width="2.5" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
-                            Afwezigheid
-                        </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
-                        Layanan Harta Kekayaan Yang Pemiliknya Tidak Hadir
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Penatausahaan dan pengelolaan harta kekayaan milik orang yang tidak hadir atau meninggalkan tempat tinggalnya tanpa menunjuk kuasa.
-                    </p>
+                    <div class="min-h-[2.6rem] flex items-center">
+                        <h3 class="text-sm sm:text-base font-bold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug line-clamp-2">
+                            Layanan Harta Kekayaan Yang Pemiliknya Tidak Hadir
+                        </h3>
+                    </div>
                 </div>
 
-                <div class="pt-5 mt-4 border-t border-slate-100">
+                <div class="pt-3.5 mt-3 border-t border-slate-100">
                     <a href="{{ route('layanan.pengembangan', 'harta-pemilik-tidak-hadir') }}" 
-                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
+                       class="w-full py-2.5 px-4 rounded-lg bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
-                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
                     </a>
@@ -452,34 +427,30 @@
             <!-- 7. Layanan Harta Peninggalan Yang Tidak Terurus -->
             <div x-show="matches('Layanan Harta Peninggalan Yang Tidak Terurus onbeheerde boedel warisan terlantar', 'harta')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-xl p-5 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
                 <div>
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                    <div class="mb-3">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                             <!-- House on Caring Hands -->
-                            <svg class="w-8 h-8" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="w-6 h-6" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M16 18l8-7 8 7v10H16V18z" fill="#eff6ff" stroke="#1d4ed8" />
                                 <path d="M10 32c4 4 10 5 14 5s10-1 14-5M12 36l12 3 12-3" stroke="#1e3a8a" stroke-width="2.2" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200">
-                            Onbeheerde Boedel
-                        </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
-                        Layanan Harta Peninggalan Yang Tidak Terurus
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Pengurusan, pendaftaran, dan pemberesan boedel harta peninggalan yang tidak ada ahli warisnya atau seluruh ahli waris menolak warisan.
-                    </p>
+                    <div class="min-h-[2.6rem] flex items-center">
+                        <h3 class="text-sm sm:text-base font-bold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug line-clamp-2">
+                            Layanan Harta Peninggalan Yang Tidak Terurus
+                        </h3>
+                    </div>
                 </div>
 
-                <div class="pt-5 mt-4 border-t border-slate-100">
+                <div class="pt-3.5 mt-3 border-t border-slate-100">
                     <a href="{{ route('layanan.pengembangan', 'harta-tidak-terurus') }}" 
-                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
+                       class="w-full py-2.5 px-4 rounded-lg bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
-                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
                     </a>
@@ -489,12 +460,12 @@
             <!-- 8. Layanan Uang Pihak Ketiga -->
             <div x-show="matches('Layanan Uang Pihak Ketiga konsinyasi penitipan ganti rugi kas', 'harta')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-xl p-5 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
                 <div>
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-cyan-50 text-cyan-700 border border-cyan-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                    <div class="mb-3">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-50 text-cyan-700 border border-cyan-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                             <!-- Coin Stack + Currency -->
-                            <svg class="w-8 h-8" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="w-6 h-6" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <ellipse cx="20" cy="14" rx="10" ry="4" fill="#ecfeff" stroke="#0891b2" />
                                 <path d="M10 14v6c0 2.2 4.5 4 10 4s10-1.8 10-4v-6" stroke="#0891b2" />
                                 <path d="M10 20v6c0 2.2 4.5 4 10 4s10-1.8 10-4v-6" stroke="#0891b2" />
@@ -503,24 +474,20 @@
                                 <text x="30" y="35" fill="white" font-size="7" font-weight="bold" font-family="sans-serif">Rp</text>
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-cyan-50 text-cyan-800 border border-cyan-200">
-                            Konsinyasi
-                        </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
-                        Layanan Uang Pihak Ketiga
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Penerimaan, penyimpanan, dan penyaluran uang titipan milik pihak ketiga (konsinyasi pembebasan lahan, eksekusi, dll) pada kas BHP.
-                    </p>
+                    <div class="min-h-[2.6rem] flex items-center">
+                        <h3 class="text-sm sm:text-base font-bold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug line-clamp-2">
+                            Layanan Uang Pihak Ketiga
+                        </h3>
+                    </div>
                 </div>
 
-                <div class="pt-5 mt-4 border-t border-slate-100">
+                <div class="pt-3.5 mt-3 border-t border-slate-100">
                     <a href="{{ route('layanan.pengembangan', 'uang-pihak-ketiga') }}" 
-                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
+                       class="w-full py-2.5 px-4 rounded-lg bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
-                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
                     </a>
@@ -531,12 +498,12 @@
             @if ($canPengacara)
             <div x-show="matches('Layanan Kepailitan kurator negara pengadilan niaga pailit insolvensi', 'harta')" 
                  x-transition
-                 class="group bg-white rounded-2xl p-6 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
+                 class="group bg-white rounded-xl p-5 border border-slate-200/90 hover:border-[#1d68d8] shadow-xs hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between">
                 <div>
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-700 border border-purple-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                    <div class="mb-3">
+                        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-700 border border-purple-100 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                             <!-- Court Pillars + Gavel -->
-                            <svg class="w-8 h-8" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="w-6 h-6" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M8 18l14-8 14 8v3H8v-3z" fill="#faf5ff" stroke="#7e22ce" />
                                 <path d="M12 21v11M18 21v11M26 21v11M32 21v11" stroke="#7e22ce" />
                                 <rect x="8" y="32" width="28" height="4" rx="1" fill="#7e22ce" stroke="#7e22ce" />
@@ -544,24 +511,20 @@
                                 <path d="M33 30l6 10" stroke="#d97706" stroke-width="2.2" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200">
-                            Kurator Negara
-                        </span>
                     </div>
 
-                    <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
-                        Layanan Kepailitan
-                    </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Pelaksanaan tugas BHP sebagai Kurator Negara dalam kepengurusan dan pemberesan boedel harta debitur pailit berdasarkan putusan Pengadilan Niaga.
-                    </p>
+                    <div class="min-h-[2.6rem] flex items-center">
+                        <h3 class="text-sm sm:text-base font-bold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug line-clamp-2">
+                            Layanan Kepailitan
+                        </h3>
+                    </div>
                 </div>
 
-                <div class="pt-5 mt-4 border-t border-slate-100">
+                <div class="pt-3.5 mt-3 border-t border-slate-100">
                     <a href="{{ route('layanan.pengembangan', 'kepailitan') }}" 
-                       class="w-full py-2.5 px-4 rounded-xl bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-md shadow-blue-900/10 transition-all hover:scale-[1.01] active:scale-[0.99]">
+                       class="w-full py-2.5 px-4 rounded-lg bg-[#0b2e66] hover:bg-[#1d68d8] text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-xs transition-all hover:scale-[1.01] active:scale-[0.99]">
                         <span>Ajukan Sekarang</span>
-                        <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
                     </a>
