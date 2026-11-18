@@ -9,7 +9,7 @@
         <div class="absolute inset-0 bg-gradient-to-b lg:bg-gradient-to-r from-slate-950/90 via-slate-950/50 to-slate-950/85 backdrop-blur-[1px]"></div>
 
         <!-- Top Spacer for Balanced Vertical Centering -->
-        <div class="hidden lg:block h-2"></div>
+        <div class="hidden lg:block h-12 sm:h-16"></div>
 
         <!-- Main Content Area: Floating Two-Column Layout (Opsi 2) -->
         <div class="relative z-10 w-full max-w-6xl mx-auto my-auto flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-8 sm:gap-12 lg:gap-16">
@@ -17,24 +17,16 @@
             <!-- Left Side: Hero Brand & Official Tagline (Floating Refined) -->
             <div class="w-full lg:max-w-xl text-white flex flex-col items-center text-center lg:items-start lg:text-left select-none">
                 
-                <!-- Institutional Pill Badge -->
-                <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-slate-900/70 backdrop-blur-md border border-white/20 text-white shadow-md mb-4 sm:mb-5">
-                    <img src="{{ asset('images/pengayoman.svg') }}" alt="Kementerian Hukum RI" class="w-5 h-5 object-contain drop-shadow" />
-                    <span class="text-[11px] sm:text-xs font-bold tracking-wider text-amber-300 uppercase">Kementerian Hukum RI</span>
-                    <span class="text-white/40">•</span>
-                    <span class="text-[11px] sm:text-xs text-white/90 font-medium">Kanwil Jawa Timur</span>
-                </div>
-
                 <!-- Hero PanduBHP Logo -->
                 <div class="mb-3 sm:mb-4">
                     <h1 class="sr-only">PanduBHP - Balai Harta Peninggalan Surabaya</h1>
                     <img src="{{ asset('images/logo-pandubhp-clean.png') }}" 
                          alt="PanduBHP" 
-                         class="h-14 sm:h-16 lg:h-[82px] w-auto object-contain drop-shadow-[0_6px_24px_rgba(0,0,0,0.6)]" />
+                         class="h-16 sm:h-20 lg:h-[90px] w-auto object-contain drop-shadow-[0_6px_24px_rgba(0,0,0,0.6)]" />
                 </div>
 
                 <!-- Official Tagline Badge (PASTI SETIA) -->
-                <div class="w-full max-w-[380px] sm:max-w-[460px] lg:max-w-[500px]">
+                <div class="w-full max-w-[390px] sm:max-w-[480px] lg:max-w-[520px]">
                     <img src="{{ asset('images/tagline-pasti-setia.png') }}" 
                          alt="PASTI SETIA - Profesional Akuntabel Sinergi Transparan Inovatif | Santun Empati Tanggap Integritas Amanah" 
                          class="w-full h-auto object-contain drop-shadow-[0_8px_24px_rgba(0,0,0,0.5)]" />
@@ -198,11 +190,11 @@
         </div>
 
         <!-- Bottom Web Area: Official Accreditation & Endorsement Logos (RAW ASSET PANDU BHP-2) -->
-        <div class="relative z-10 w-full max-w-4xl mx-auto mt-6 sm:mt-8 pt-2 pb-1 flex flex-col items-center select-none">
-            <div class="inline-flex items-center justify-center px-4 sm:px-8 py-2 sm:py-2.5 rounded-2xl sm:rounded-full bg-slate-900/75 backdrop-blur-md border border-white/20 shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
+        <div class="relative z-10 w-full max-w-4xl mx-auto mt-4 sm:mt-6 pt-1 pb-1 flex flex-col items-center select-none">
+            <div class="inline-flex items-center justify-center px-5 sm:px-8 py-2.5 sm:py-3 rounded-2xl sm:rounded-full bg-slate-900/75 backdrop-blur-md border border-white/20 shadow-[0_8px_24px_rgba(0,0,0,0.5)]">
                 <img src="{{ asset('images/footer-logos-bhp.png') }}" 
                      alt="Kementerian Hukum RI, BerAKHLAK, Bangga Melayani Bangsa, Wilayah Bebas dari Korupsi (WBK), ISO" 
-                     class="h-6 sm:h-7 lg:h-8 w-auto max-w-full object-contain drop-shadow" />
+                     class="h-8 sm:h-10 lg:h-12 w-auto max-w-full object-contain drop-shadow" />
             </div>
             <p class="text-[10px] sm:text-[11px] text-white/60 font-normal tracking-wide mt-2 drop-shadow-sm text-center">
                 &copy; {{ date('Y') }} Balai Harta Peninggalan Surabaya &bull; Kementerian Hukum Republik Indonesia

@@ -30,24 +30,19 @@
 
         <!-- Sidebar Navigation -->
         <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
-               class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0b2e66] text-white flex flex-col justify-between transition-transform duration-200 ease-in-out lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:self-start overflow-y-auto shadow-xl">
-            <div class="flex-1 flex flex-col justify-between">
+               class="fixed inset-y-0 left-0 z-50 w-64 bg-[#0b2e66] text-white flex flex-col justify-between transition-transform duration-200 ease-in-out lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen lg:shrink-0 lg:self-start overflow-y-auto shadow-xl relative overflow-hidden">
+            <div class="relative z-10 flex-1 flex flex-col justify-between">
                 <div>
                     <!-- Brand Header -->
-                    <div class="px-5 py-5 border-b border-white/10 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <img src="{{ asset('images/pengayoman.svg') }}" alt="Logo Pengayoman" class="w-10 h-11 object-contain drop-shadow-md shrink-0 rounded-lg" />
-                            <div>
-                                <h2 class="text-lg font-black text-white leading-tight tracking-tight">
-                                    BHP
-                                </h2>
-                                <p class="text-[11px] text-blue-200/80 font-medium leading-snug">
-                                    Balai Harta Peninggalan<br>Surabaya
-                                </p>
-                            </div>
-                        </div>
+                    <div class="px-5 py-4.5 sm:py-5 border-b border-white/10 flex items-center justify-between">
+                        <a href="{{ route('dashboard') }}" class="flex items-center focus:outline-none group" title="PanduBHP - Balai Harta Peninggalan Surabaya">
+                            <h1 class="sr-only">PanduBHP - Balai Harta Peninggalan Surabaya</h1>
+                            <img src="{{ asset('images/logo-pandubhp-sidebar.png') }}" 
+                                 alt="PanduBHP - Balai Harta Peninggalan Surabaya" 
+                                 class="h-10 sm:h-11 w-auto max-w-[190px] object-contain drop-shadow-md group-hover:opacity-90 transition duration-150" />
+                        </a>
                         <!-- Close button on mobile -->
-                        <button @click="sidebarOpen = false" class="lg:hidden text-white/70 hover:text-white focus:outline-none">
+                        <button @click="sidebarOpen = false" class="lg:hidden text-white/70 hover:text-white focus:outline-none p-1 rounded-lg hover:bg-white/10 transition">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
@@ -362,14 +357,17 @@
                     </nav>
                 </div>
 
-                <!-- Siluet Arsitektur Gedung BHP di Pojokan Bawah Sidebar -->
-                <div class="pointer-events-none px-4 pb-2 opacity-30 mt-auto">
-                    <img src="{{ asset('images/siluet-gedung-bhp-white.png') }}" alt="Siluet Gedung BHP" class="w-full object-contain drop-shadow-xs" />
-                </div>
+            </div>
+
+            <!-- Tribal / Batik Ornament Watermark di Sudut Bawah Sidebar (RAW ASSET PANDU BHP-6) -->
+            <div class="absolute left-0 bottom-0 pointer-events-none select-none z-0 overflow-hidden">
+                <img src="{{ asset('images/sidebar-tribal-ornament.png') }}" 
+                     alt="" 
+                     class="w-52 sm:w-60 h-auto object-contain object-left-bottom" />
             </div>
 
             <!-- Sidebar Bottom: User Profile & Keluar Action (Matching Image 1) -->
-            <div class="p-4 border-t border-white/10 space-y-3">
+            <div class="relative z-10 p-4 space-y-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3 min-w-0">
                         @if (Auth::user()?->foto_profil_url)

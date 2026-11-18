@@ -43,49 +43,64 @@
             </div>
         @endif
 
-        <!-- ================= HERO BANNER EKSEKUTIF ================= -->
-        <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-[#0b2868] p-6 sm:p-9 text-white shadow-xl border border-blue-900/40">
-            <!-- Background Image Illustration of BHP Surabaya Building on Right Side -->
-            <div class="absolute inset-0 bg-no-repeat bg-right bg-cover opacity-90 sm:opacity-100 pointer-events-none"
-                 style="background-image: url('{{ asset('images/banner-selamat-datang.png') }}'); background-position: right center;">
+        <!-- ================= HERO BANNER EKSEKUTIF (DESAIN RESMI SURABAYA SKYLINE & BATIK) ================= -->
+        <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-[#082455] px-6 py-5 sm:px-8 sm:py-6 lg:py-7 text-white shadow-xl border border-blue-800/40">
+            <!-- Background Image Artwork Surabaya Skyline & Batik Motif (RAW ASSET PANDU BHP-5) -->
+            <div class="absolute inset-0 bg-cover bg-right-bottom sm:bg-right bg-no-repeat pointer-events-none" 
+                 style="background-image: url('{{ asset('images/bg-dashboard-hero.png') }}');">
             </div>
 
-            <!-- Soft Gradient Overlay on Left to guarantee 100% text readability -->
-            <div class="absolute inset-0 bg-gradient-to-r from-[#0b2868] via-[#0b2868]/95 to-transparent sm:via-[#0b2868]/75 sm:to-transparent pointer-events-none"></div>
+            <!-- Soft Mobile Vignette for Maximum Text Contrast on Small Screens -->
+            <div class="absolute inset-0 bg-gradient-to-r from-[#082455]/95 via-[#082455]/85 to-transparent sm:hidden pointer-events-none"></div>
 
-            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                <div class="space-y-3.5 max-w-xl">
-                    <!-- Brand Pill -->
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-amber-300 border border-white/15 text-xs font-semibold backdrop-blur-md shadow-xs">
-                        <img src="{{ asset('images/pengayoman.svg') }}" alt="Pengayoman" class="w-4 h-4 object-contain rounded-xs" />
-                        <span>Balai Harta Peninggalan (BHP) Kemenkumham RI</span>
+            <div class="relative z-10 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6">
+                <div class="space-y-3 sm:space-y-4 max-w-xl">
+                    <div class="space-y-0.5">
+                        <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight leading-tight drop-shadow-sm">
+                            Selamat Datang, {{ Auth::user()->name ?? 'Pemohon' }}
+                        </h1>
+                        <p class="text-xs sm:text-sm font-medium text-blue-200/90 tracking-wide">
+                            {{ Auth::user()->pekerjaan && strcasecmp(Auth::user()->pekerjaan, 'perorangan') !== 0 ? Auth::user()->pekerjaan : (Auth::user()->status_akun === 'notaris' ? 'Notaris' : (Auth::user()->status_akun === 'pengacara' ? 'Pengacara / Advokat' : (Auth::user()->status_akun_label ?? 'Pemohon'))) }}
+                        </p>
                     </div>
 
-                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">
-                        Selamat Datang, {{ Auth::user()->name ?? 'Pemohon' }}
-                    </h1>
-                    
-                    <p class="text-xs sm:text-sm text-blue-100/90 leading-relaxed font-normal">
-                        Portal pelayanan hukum terpadu Balai Harta Peninggalan Surabaya. Silakan pilih layanan yang ingin Anda ajukan di bawah ini atau pantau seluruh status permohonan melalui menu Histori Permohonan.
-                    </p>
-
-                    <!-- Shortcut Actions -->
-                    <div class="pt-1 flex flex-wrap items-center gap-3">
+                    <!-- Shortcut Action: Minimalist Link Histori Permohonan -->
+                    <div class="pt-1">
                         <a href="{{ route('permohonan.index') }}" 
-                           class="inline-flex items-center justify-center gap-2.5 px-5 py-2.5 bg-[#1d68d8] hover:bg-[#2575ea] text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg shadow-blue-900/30 transition-all hover:scale-[1.02] active:scale-[0.98]">
-                            <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>Histori Permohonan</span>
+                           class="group inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-blue-200 hover:text-white transition-colors">
+                            <span>Lihat Histori Permohonan</span>
                             @php
                                 $userCount = Auth::user()?->permohonans()->count() ?? 0;
                             @endphp
                             @if ($userCount > 0)
-                                <span class="px-2 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-extrabold">
+                                <span class="px-2 py-0.5 rounded-full bg-blue-500/25 border border-blue-400/30 text-white text-[11px] font-bold group-hover:bg-blue-500/40 transition-colors">
                                     {{ $userCount }}
                                 </span>
                             @endif
+                            <svg class="w-4 h-4 text-blue-300 group-hover:text-white group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
                         </a>
+                    </div>
+                </div>
+
+                <!-- Penanda Tanggal & Waktu Resmi di Langit Kanan Atas Banner -->
+                <div class="sm:text-right shrink-0 pt-1 pointer-events-none"
+                     x-data="{ 
+                         date: '', 
+                         time: '',
+                         update() {
+                             const now = new Date();
+                             this.date = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                             this.time = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
+                         }
+                     }"
+                     x-init="update(); setInterval(() => update(), 1000)">
+                    <div class="text-[11px] sm:text-xs font-semibold text-blue-200/90 tracking-wide" x-text="date">
+                        {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, d F Y') }}
+                    </div>
+                    <div class="text-base sm:text-lg font-bold text-white font-mono tabular-nums tracking-tight mt-0.5" x-text="time">
+                        {{ \Carbon\Carbon::now()->format('H:i:s') }} WIB
                     </div>
                 </div>
             </div>
