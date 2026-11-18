@@ -49,6 +49,18 @@ class UserTest extends TestCase
         $this->assertFalse($bendahara_penerimaan = (new User(['role' => 'bendahara_penerimaan']))->isPemohon());
         $this->assertTrue((new User(['role' => 'bendahara_penerimaan']))->isBendahara());
 
+        $kepalaBhp = new User(['role' => 'kepala_bhp', 'pekerjaan' => 'Kepala Balai Harta Peninggalan Surabaya']);
+        $this->assertTrue($kepalaBhp->isKepalaBhp());
+        $this->assertTrue($kepalaBhp->isBhpStaff());
+        $this->assertFalse($kepalaBhp->isMasterAdmin());
+        $this->assertFalse($kepalaBhp->isKasi());
+        $this->assertFalse($kepalaBhp->isPetugas());
+        $this->assertFalse($kepalaBhp->isPemohon());
+        $this->assertSame('Kepala BHP Surabaya', $kepalaBhp->status_akun_label);
+
+        $kepalaBalai = new User(['role' => 'kepala_balai']);
+        $this->assertTrue($kepalaBalai->isKepalaBhp());
+
         $kuratorMadya = new User(['role' => 'kurator_madya', 'pekerjaan' => 'Kurator Keperdataan Madya']);
         $this->assertTrue($kuratorMadya->isKuratorMadya());
         $this->assertFalse($kuratorMadya->isKuratorPertama());
@@ -76,10 +88,12 @@ class UserTest extends TestCase
         $singleWord = new User(['name' => 'Petugas']);
         $twoWords = new User(['name' => 'BHP Surabaya']);
         $multipleWords = new User(['name' => 'Balai Harta Peninggalan']);
+        $titledUser = new User(['name' => 'Dr. H. Prasetyo Wibowo']);
 
         $this->assertSame('PE', $singleWord->initials);
         $this->assertSame('BS', $twoWords->initials);
         $this->assertSame('BP', $multipleWords->initials);
+        $this->assertSame('PW', $titledUser->initials);
     }
 
     /**

@@ -27,6 +27,21 @@ class Pasangan extends Model
     ];
 
     /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'nik' => 'encrypted',
+            'tanggal_lahir' => 'date',
+            'tanggal_kawin' => 'date',
+            'tanggal_bukti_perkawinan' => 'date',
+        ];
+    }
+
+    /**
      * Get the pewasiat that owns the pasangan.
      */
     public function pewasiat(): BelongsTo

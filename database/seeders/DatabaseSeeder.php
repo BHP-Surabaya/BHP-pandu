@@ -32,15 +32,15 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Akun Petugas BHP
-        User::firstOrCreate(
-            ['email' => 'petugas@bhp.test'],
+        // Akun Kepala Balai Harta Peninggalan (BHP) Surabaya
+        User::updateOrCreate(
+            ['email' => 'kepala@pandubhp.go.id'],
             [
-                'name' => 'Petugas BHP',
+                'name' => 'Dr. H. Prasetyo Wibowo',
                 'password' => bcrypt('password'),
-                'role' => 'petugas',
-                'pekerjaan' => 'Petugas BHP',
-                'status_akun' => 'petugas',
+                'role' => 'kepala_bhp',
+                'pekerjaan' => 'Kepala Balai Harta Peninggalan Surabaya',
+                'status_akun' => 'kepala_bhp',
                 'status_verifikasi' => 'terverifikasi',
                 'email_verified_at' => now(),
             ]
@@ -116,16 +116,16 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Contoh akun Pemohon
+        // Akun Pemohon / Notaris
         User::firstOrCreate(
-            ['email' => 'pemohon@bhp.test'],
+            ['email' => 'f.tsaqif2004@gmail.com'],
             [
-                'name' => 'Contoh Pemohon',
+                'name' => 'Fernanda Tsaqif',
                 'password' => bcrypt('password'),
                 'role' => 'pemohon',
-                'pekerjaan' => 'Wiraswasta',
-                'jenis_akun' => 'perorangan',
-                'status_akun' => 'perorangan',
+                'pekerjaan' => 'Notaris',
+                'jenis_akun' => 'notaris',
+                'status_akun' => 'notaris',
                 'status_verifikasi' => 'terverifikasi',
                 'email_verified_at' => now(),
             ]

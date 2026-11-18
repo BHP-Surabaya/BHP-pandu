@@ -38,11 +38,15 @@ class PasswordResetLinkController extends Controller
         $lowerInput = Str::lower($input);
 
         // Cari user berdasarkan email, NIK, atau username
-        $user = User::where(function ($query) use ($input, $lowerInput) {
+        $user = User::where(function ($query) use ($lowerInput) {
             $query->whereRaw('LOWER(email) = ?', [$lowerInput])
-                ->orWhere('nik', $input)
                 ->orWhereRaw('LOWER(name) = ?', [$lowerInput]);
         })->first();
+
+        // Jika tidak ditemukan by email/name dan input berupa NIK 16 digit terenkripsi
+        if (! $user && preg_match('/^[0-9]{16}$/', $input)) {
+            $user = User::all()->first(fn (User $u) => (string) $u->nik === $input);
+        }
 
         if (! $user) {
             $isNik = preg_match('/^[0-9]{16}$/', $input);

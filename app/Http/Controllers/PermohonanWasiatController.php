@@ -228,7 +228,7 @@ class PermohonanWasiatController extends Controller
         foreach ($documentKeys as $key) {
             if ($request->hasFile($key)) {
                 $file = $request->file($key);
-                $path = $file->store("dokumens/{$permohonan->id}", 'public');
+                $path = $file->store("dokumens/{$permohonan->id}", 'local');
 
                 $permohonan->dokumens()->updateOrCreate(
                     ['jenis_dokumen' => $key],

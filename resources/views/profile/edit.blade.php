@@ -493,7 +493,7 @@
                                                 <p class="text-[10px] text-gray-500">Berkas tersimpan aman</p>
                                             </div>
                                         </div>
-                                        <a href="{{ asset('storage/' . $user->sk_notaris) }}" 
+                                        <a href="{{ route('secure.user-dokumen.show', [$user->id, 'sk_notaris']) }}" 
                                            target="_blank" 
                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0066d6] hover:bg-[#0055b8] text-white font-semibold text-xs transition shrink-0">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -547,7 +547,7 @@
                                                 <p class="text-[10px] text-gray-500">Berkas tersimpan aman</p>
                                             </div>
                                         </div>
-                                        <a href="{{ asset('storage/' . $user->sk_ppat) }}" 
+                                        <a href="{{ route('secure.user-dokumen.show', [$user->id, 'sk_ppat']) }}" 
                                            target="_blank" 
                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0066d6] hover:bg-[#0055b8] text-white font-semibold text-xs transition shrink-0">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -634,7 +634,7 @@
                                                 <p class="text-[10px] text-gray-500">Berkas tersimpan aman</p>
                                             </div>
                                         </div>
-                                        <a href="{{ asset('storage/' . $user->berita_acara_sumpah) }}" 
+                                        <a href="{{ route('secure.user-dokumen.show', [$user->id, 'berita_acara_sumpah']) }}" 
                                            target="_blank" 
                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shrink-0">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -688,7 +688,7 @@
                                                 <p class="text-[10px] text-gray-500">Berkas tersimpan aman</p>
                                             </div>
                                         </div>
-                                        <a href="{{ asset('storage/' . $user->id_card_pengacara) }}" 
+                                        <a href="{{ route('secure.user-dokumen.show', [$user->id, 'id_card_pengacara']) }}" 
                                            target="_blank" 
                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shrink-0">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

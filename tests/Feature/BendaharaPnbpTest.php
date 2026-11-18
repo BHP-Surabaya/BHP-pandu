@@ -184,11 +184,21 @@ class BendaharaPnbpTest extends TestCase
 
     public function test_get_pending_count_returns_belum_bayar_count(): void
     {
-        session()->forget('bendahara_pnbp_list');
+        $pemohon = $this->createPemohonUser();
+        $permohonan = Permohonan::create([
+            'user_id' => $pemohon->id,
+            'nomor_permohonan' => 'W15.AHU.AHU.1.AH.06.01-00099',
+            'status' => 'menunggu_verifikasi',
+        ]);
+        Voucher::create([
+            'permohonan_id' => $permohonan->id,
+            'nomor_voucher' => 'VCH-TEST-00099',
+            'status_pembayaran' => 'belum_bayar',
+            'nominal' => 200000,
+        ]);
 
         $count = BendaharaPnbpController::getPendingCount();
 
-        // In default list, there are 3 items with status_pnbp = 'belum_bayar'
-        $this->assertGreaterThanOrEqual(3, $count);
+        $this->assertSame(1, $count);
     }
 }

@@ -61,7 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isKuratorMadya(): bool
     {
-        return in_array($this->role, ['kurator_madya', 'madya'], true)
+        return in_array($this->role, ['kurator_madya', 'madya', 'jfkk_madya'], true)
             || ($this->role === 'petugas' && str_contains(strtolower($this->pekerjaan ?? ''), 'madya'));
     }
 
@@ -70,7 +70,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isKuratorMuda(): bool
     {
-        return in_array($this->role, ['kurator_muda', 'muda'], true)
+        return in_array($this->role, ['kurator_muda', 'muda', 'jfkk_muda'], true)
             || ($this->role === 'petugas' && str_contains(strtolower($this->pekerjaan ?? ''), 'muda'));
     }
 
@@ -79,7 +79,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isKuratorPertama(): bool
     {
-        return in_array($this->role, ['kurator_pertama', 'pertama'], true)
+        return in_array($this->role, ['kurator_pertama', 'pertama', 'jfkk_pertama'], true)
             || ($this->role === 'petugas' && ! $this->isKuratorMuda() && ! $this->isKuratorMadya());
     }
 
@@ -92,11 +92,34 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Check if the user is a Kepala BHP.
+     */
+    public function isKepalaBhp(): bool
+    {
+        return in_array($this->role, ['kepala_bhp', 'kepala_balai'], true);
+    }
+
+    /**
      * Check if the user is a Bendahara Penerimaan.
      */
     public function isBendahara(): bool
     {
         return in_array($this->role, ['bendahara', 'bendahara_penerimaan'], true);
+    }
+
+    /**
+     * Check if the user is an authorized internal BHP staff or admin.
+     */
+    public function isBhpStaff(): bool
+    {
+        return $this->isPetugas()
+            || $this->isKuratorPertama()
+            || $this->isKuratorMuda()
+            || $this->isKuratorMadya()
+            || $this->isKasi()
+            || $this->isKepalaBhp()
+            || $this->isBendahara()
+            || $this->isMasterAdmin();
     }
 
     /**
@@ -172,6 +195,10 @@ class User extends Authenticatable implements MustVerifyEmail
             return 'Master Admin';
         }
 
+        if ($this->isKepalaBhp()) {
+            return 'Kepala BHP Surabaya';
+        }
+
         if ($this->isKasi()) {
             return 'Kepala Seksi';
         }
@@ -228,7 +255,8 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getInitialsAttribute(): string
     {
-        $words = preg_split('/\s+/', trim($this->name));
+        $cleanedName = preg_replace('/^((dr\.|h\.|hj\.|prof\.|drs\.|dra\.|ir\.)\s*)+/i', '', trim($this->name));
+        $words = preg_split('/\s+/', trim((string) $cleanedName));
         if (count($words) >= 2) {
             return strtoupper(mb_substr($words[0], 0, 1).mb_substr(end($words), 0, 1));
         }
@@ -247,6 +275,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'verified_at' => 'datetime',
             'password' => 'hashed',
+            'nik' => 'encrypted',
         ];
     }
 }

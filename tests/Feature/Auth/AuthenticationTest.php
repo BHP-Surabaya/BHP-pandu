@@ -83,4 +83,20 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
         $response->assertRedirect('/');
     }
+
+    public function test_kepala_bhp_can_authenticate_using_credentials(): void
+    {
+        $kepala = User::factory()->kepalaBhp()->create([
+            'password' => bcrypt('password'),
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => 'kepala@pandubhp.go.id',
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticatedAs($kepala);
+        $this->assertTrue($kepala->isKepalaBhp());
+        $response->assertRedirect(route('dashboard', absolute: false));
+    }
 }
