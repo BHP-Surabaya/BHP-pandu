@@ -413,12 +413,24 @@
                             <label for="nik" class="block text-xs font-semibold text-gray-700 mb-1">
                                 Nomor Induk Kependudukan (NIK)
                             </label>
+                            @php
+                                $displayNik = old('nik', $user->nik);
+                                if (is_string($displayNik) && str_starts_with($displayNik, 'eyJ')) {
+                                    try {
+                                        while (str_starts_with($displayNik, 'eyJ')) {
+                                            $displayNik = \Illuminate\Support\Facades\Crypt::decryptString($displayNik);
+                                        }
+                                    } catch (\Throwable) {
+                                        $displayNik = '';
+                                    }
+                                }
+                            @endphp
                             <input id="nik" 
                                    name="nik" 
                                    type="text" 
                                    maxlength="16"
                                    placeholder="16 digit angka NIK"
-                                   value="{{ old('nik', $user->nik) }}" 
+                                   value="{{ $displayNik }}" 
                                    class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0066d6] focus:border-[#0066d6] transition @error('nik') border-red-500 @enderror" />
                             @error('nik')
                                 <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>

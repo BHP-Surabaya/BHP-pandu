@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedNik;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -275,7 +276,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'verified_at' => 'datetime',
             'password' => 'hashed',
-            'nik' => 'encrypted',
+            'nik' => EncryptedNik::class,
         ];
     }
 }

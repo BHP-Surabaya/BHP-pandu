@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedNik;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,7 +35,7 @@ class Pasangan extends Model
     protected function casts(): array
     {
         return [
-            'nik' => 'encrypted',
+            'nik' => EncryptedNik::class,
             'tanggal_lahir' => 'date',
             'tanggal_kawin' => 'date',
             'tanggal_bukti_perkawinan' => 'date',
