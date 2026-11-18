@@ -262,17 +262,11 @@
                                 <path d="M33 35l1.5 1.5 3-3" stroke="white" stroke-width="1.8" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-sky-50 text-sky-700 border border-sky-200">
-                            Registrasi Notaris
-                        </span>
                     </div>
 
                     <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Pendaftaran Wasiat
                     </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Pencatatan dan pelaporan daftar akta wasiat yang dibuat di hadapan Notaris ke Pusat Pendaftaran Wasiat Balai Harta Peninggalan.
-                    </p>
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
@@ -302,17 +296,11 @@
                                 <path d="M29 38c0-3.5 2.5-6 6-6s6 2.5 6 6" fill="#065f46" stroke="#065f46" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                            Perlindungan Anak
-                        </span>
                     </div>
 
                     <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Perwalian
                     </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Pengurusan, pemeliharaan, serta pengawasan atas harta kekayaan anak yang belum dewasa yang berada di bawah perwalian Balai Harta Peninggalan.
-                    </p>
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
@@ -341,17 +329,11 @@
                                 <circle cx="34" cy="31" r="1.5" fill="white" stroke="white" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-teal-50 text-teal-700 border border-teal-200">
-                            Curatele
-                        </span>
                     </div>
 
                     <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Pengampuan
                     </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Pengurusan dan perlindungan harta kekayaan bagi orang dewasa yang berada di bawah pengampuan karena kondisi kesehatan mental atau fisik.
-                    </p>
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
@@ -380,17 +362,11 @@
                                 <path d="M30 38l2-1 2 1v-3h-4v3z" fill="#d97706" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                            Hak Waris
-                        </span>
                     </div>
 
                     <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         SKHW
                     </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Penerbitan Surat Keterangan Hak Waris resmi untuk WNI keturunan Timur Asing dan Eropa berdasarkan ketentuan hukum perdata barat.
-                    </p>
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
@@ -418,17 +394,11 @@
                                 <path d="M36 34l6 6" stroke="#312e81" stroke-width="2.5" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
-                            Afwezigheid
-                        </span>
                     </div>
 
                     <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Layanan Harta Kekayaan Yang Pemiliknya Tidak Hadir
                     </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Penatausahaan dan pengelolaan harta kekayaan milik orang yang tidak hadir atau meninggalkan tempat tinggalnya tanpa menunjuk kuasa.
-                    </p>
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
@@ -455,17 +425,11 @@
                                 <path d="M10 32c4 4 10 5 14 5s10-1 14-5M12 36l12 3 12-3" stroke="#1e3a8a" stroke-width="2.2" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-800 border border-blue-200">
-                            Onbeheerde Boedel
-                        </span>
                     </div>
 
                     <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Layanan Harta Peninggalan Yang Tidak Terurus
                     </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Pengurusan, pendaftaran, dan pemberesan boedel harta peninggalan yang tidak ada ahli warisnya atau seluruh ahli waris menolak warisan.
-                    </p>
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
@@ -496,17 +460,11 @@
                                 <text x="30" y="35" fill="white" font-size="7" font-weight="bold" font-family="sans-serif">Rp</text>
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-cyan-50 text-cyan-800 border border-cyan-200">
-                            Konsinyasi
-                        </span>
                     </div>
 
                     <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Layanan Uang Pihak Ketiga
                     </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Penerimaan, penyimpanan, dan penyaluran uang titipan milik pihak ketiga (konsinyasi pembebasan lahan, eksekusi, dll) pada kas BHP.
-                    </p>
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
@@ -537,17 +495,11 @@
                                 <path d="M33 30l6 10" stroke="#d97706" stroke-width="2.2" />
                             </svg>
                         </div>
-                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-purple-50 text-purple-700 border border-purple-200">
-                            Kurator Negara
-                        </span>
                     </div>
 
                     <h3 class="text-base font-extrabold text-[#071d40] group-hover:text-[#1d68d8] transition-colors leading-snug">
                         Layanan Kepailitan
                     </h3>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-                        Pelaksanaan tugas BHP sebagai Kurator Negara dalam kepengurusan dan pemberesan boedel harta debitur pailit berdasarkan putusan Pengadilan Niaga.
-                    </p>
                 </div>
 
                 <div class="pt-5 mt-4 border-t border-slate-100">
