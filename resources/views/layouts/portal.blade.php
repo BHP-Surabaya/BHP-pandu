@@ -34,15 +34,15 @@
             <div class="relative z-10 flex-1 flex flex-col justify-between">
                 <div>
                     <!-- Brand Header -->
-                    <div class="px-5 py-4.5 sm:py-5 border-b border-white/10 flex items-center justify-between">
-                        <a href="{{ route('dashboard') }}" class="flex items-center focus:outline-none group" title="PanduBHP - Balai Harta Peninggalan Surabaya">
+                    <div class="relative px-5 py-4.5 sm:py-5 border-b border-white/10 flex items-center justify-center">
+                        <a href="{{ route('dashboard') }}" class="flex items-center justify-center focus:outline-none group text-center" title="PanduBHP - Balai Harta Peninggalan Surabaya">
                             <h1 class="sr-only">PanduBHP - Balai Harta Peninggalan Surabaya</h1>
                             <img src="{{ asset('images/logo-pandubhp-sidebar.png') }}" 
                                  alt="PanduBHP - Balai Harta Peninggalan Surabaya" 
-                                 class="h-10 sm:h-11 w-auto max-w-[190px] object-contain drop-shadow-md group-hover:opacity-90 transition duration-150" />
+                                 class="h-10 sm:h-11 w-auto max-w-[195px] object-contain drop-shadow-md group-hover:opacity-90 transition duration-150 mx-auto" />
                         </a>
                         <!-- Close button on mobile -->
-                        <button @click="sidebarOpen = false" class="lg:hidden text-white/70 hover:text-white focus:outline-none p-1 rounded-lg hover:bg-white/10 transition">
+                        <button @click="sidebarOpen = false" class="absolute right-4 top-1/2 -translate-y-1/2 lg:hidden text-white/70 hover:text-white focus:outline-none p-1 rounded-lg hover:bg-white/10 transition">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
