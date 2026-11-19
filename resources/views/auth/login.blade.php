@@ -34,7 +34,7 @@
             </div>
 
             <!-- Right Side: Frosted Glass Login Card (Solid Contrast) -->
-            <div class="w-full max-w-[420px] lg:max-w-[390px] xl:max-w-[420px] flex-shrink-0">
+            <div class="w-full max-w-[420px] lg:max-w-[390px] xl:max-w-[420px] flex-shrink-0 lg:translate-y-7 tall:lg:translate-y-8 transition-transform">
                 <div class="relative backdrop-blur-2xl bg-slate-900/75 border border-white/25 rounded-2xl sm:rounded-[24px] tall:rounded-[28px] p-5 sm:p-6 tall:p-8 shadow-[0_25px_60px_rgba(0,0,0,0.6)] transition-all duration-300 hover:border-white/35" 
                      x-data="{ showPassword: false }">
 
