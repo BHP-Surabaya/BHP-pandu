@@ -14,6 +14,9 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            screens: {
+                'tall': { 'raw': '(min-height: 780px)' },
+            },
         },
     },
 
