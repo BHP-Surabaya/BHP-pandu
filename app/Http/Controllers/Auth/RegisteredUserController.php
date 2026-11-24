@@ -90,22 +90,22 @@ class RegisteredUserController extends Controller
 
         $skNotarisPath = null;
         if ($request->hasFile('sk_notaris')) {
-            $skNotarisPath = $request->file('sk_notaris')->store('sk_notaris', 'public');
+            $skNotarisPath = $request->file('sk_notaris')->store('sk_notaris', 'local');
         }
 
         $skPpatPath = null;
         if ($request->hasFile('sk_ppat')) {
-            $skPpatPath = $request->file('sk_ppat')->store('sk_ppat', 'public');
+            $skPpatPath = $request->file('sk_ppat')->store('sk_ppat', 'local');
         }
 
         $baSumpahPath = null;
         if ($request->hasFile('berita_acara_sumpah')) {
-            $baSumpahPath = $request->file('berita_acara_sumpah')->store('berita_acara_sumpah', 'public');
+            $baSumpahPath = $request->file('berita_acara_sumpah')->store('berita_acara_sumpah', 'local');
         }
 
         $idCardPengacaraPath = null;
         if ($request->hasFile('id_card_pengacara')) {
-            $idCardPengacaraPath = $request->file('id_card_pengacara')->store('id_card_pengacara', 'public');
+            $idCardPengacaraPath = $request->file('id_card_pengacara')->store('id_card_pengacara', 'local');
         }
 
         $alamatKantor = ($isNotaris || $isPengacara) ? $request->alamat_kantor : null;

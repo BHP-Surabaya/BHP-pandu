@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedNik;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,6 +26,21 @@ class Pasangan extends Model
         'tanggal_bukti_perkawinan',
         'pejabat_pembuat_bukti',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'nik' => EncryptedNik::class,
+            'tanggal_lahir' => 'date',
+            'tanggal_kawin' => 'date',
+            'tanggal_bukti_perkawinan' => 'date',
+        ];
+    }
 
     /**
      * Get the pewasiat that owns the pasangan.

@@ -48,12 +48,15 @@ class LoginRequest extends FormRequest
         $lowerLogin = Str::lower($login);
 
         $user = User::query()
-            ->where(function ($query) use ($login, $lowerLogin) {
+            ->where(function ($query) use ($lowerLogin) {
                 $query->whereRaw('LOWER(email) = ?', [$lowerLogin])
-                    ->orWhereRaw('LOWER(name) = ?', [$lowerLogin])
-                    ->orWhere('nik', $login);
+                    ->orWhereRaw('LOWER(name) = ?', [$lowerLogin]);
             })
             ->first();
+
+        if (! $user && preg_match('/^[0-9]{16}$/', $login)) {
+            $user = User::all()->first(fn (User $u) => (string) $u->nik === $login);
+        }
 
         if (! $user || ! Hash::check($this->input('password'), $user->password)) {
             RateLimiter::hit($this->throttleKey());

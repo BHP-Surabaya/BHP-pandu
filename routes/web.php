@@ -3,12 +3,15 @@
 use App\Http\Controllers\Admin\UserVerificationController;
 use App\Http\Controllers\Bendahara\BendaharaPnbpController;
 use App\Http\Controllers\Kasi\KasiDashboardController;
+use App\Http\Controllers\Kepala\KepalaDashboardController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\Madya\MadyaDashboardController;
 use App\Http\Controllers\Muda\MudaDashboardController;
 use App\Http\Controllers\PermohonanWasiatController;
 use App\Http\Controllers\Petugas\PetugasDashboardController;
+use App\Http\Controllers\Petugas\PetugasGatewayController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SecureDocumentController;
 use App\Models\Permohonan;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +22,10 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     if (auth()->user()->isMasterAdmin()) {
         return redirect()->route('admin.verifikasi.index');
+    }
+
+    if (auth()->user()->isKepalaBhp()) {
+        return redirect()->route('kepala.dashboard');
     }
 
     if (auth()->user()->isKasi()) {
@@ -49,7 +56,7 @@ Route::get('/dashboard', function () {
 
     $stats = [
         'total' => $userPermohonans->count(),
-        'verifikasi' => $userPermohonans->where('status', 'menunggu_verifikasi')->count(),
+        'verifikasi' => $userPermohonans->whereIn('status', ['menunggu_verifikasi', 'disetujui_pertama', 'proses_muda', 'proses_madya'])->count(),
         'voucher' => $userPermohonans->where('status', 'menunggu_voucher')->count(),
         'siap' => $userPermohonans->where('status', 'selesai')->count(),
     ];
@@ -69,11 +76,18 @@ Route::middleware(['auth', 'role:master_admin'])->prefix('admin')->name('admin.'
     Route::delete('/verifikasi/{user}', [UserVerificationController::class, 'destroy'])->name('verifikasi.destroy');
 });
 
-Route::middleware(['auth', 'role:petugas'])->prefix('petugas')->name('petugas.')->group(function () {
+Route::middleware(['auth', 'role:petugas,kurator_pertama'])->prefix('petugas')->name('petugas.')->group(function () {
     Route::get('/dashboard', [PetugasDashboardController::class, 'index'])->name('dashboard');
     Route::get('/history', [PetugasDashboardController::class, 'history'])->name('history');
     Route::get('/verifikasi/{id}', [PetugasDashboardController::class, 'show'])->name('verifikasi.show');
     Route::post('/verifikasi/{id}/tindak-lanjut', [PetugasDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
+
+    // Gateway Layanan (Proses Barcode & e-TTD, Riwayat Pengiriman)
+    Route::get('/gateway', [PetugasGatewayController::class, 'index'])->name('gateway.index');
+    Route::get('/gateway/riwayat', [PetugasGatewayController::class, 'riwayat'])->name('gateway.riwayat');
+    Route::get('/gateway/{id}/download', [PetugasGatewayController::class, 'download'])->name('gateway.download');
+    Route::post('/gateway/{id}/upload-kirim', [PetugasGatewayController::class, 'uploadKirim'])->name('gateway.upload-kirim');
+    Route::post('/gateway/reset', [PetugasGatewayController::class, 'resetData'])->name('gateway.reset');
 });
 
 Route::middleware(['auth', 'role:kurator_muda,muda'])->prefix('muda')->name('muda.')->group(function () {
@@ -102,6 +116,14 @@ Route::middleware(['auth', 'role:kasi,kepala_seksi'])->prefix('kasi')->name('kas
     Route::post('/tindak-lanjut/{id}', [KasiDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
 });
 
+Route::middleware(['auth', 'role:kepala_bhp,kepala_balai'])->prefix('kepala')->name('kepala.')->group(function () {
+    Route::get('/dashboard', [KepalaDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/tindak-lanjut', [KepalaDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
+    Route::post('/tindak-lanjut/{id}', [KepalaDashboardController::class, 'simpanTindakLanjut'])->name('tindak-lanjut.store');
+    Route::post('/tindak-lanjut/{id}/setujui', [KepalaDashboardController::class, 'setujuiDokumen'])->name('tindak-lanjut.setujui');
+    Route::get('/history', [KepalaDashboardController::class, 'history'])->name('history');
+});
+
 Route::middleware(['auth', 'role:bendahara,bendahara_penerimaan'])->prefix('bendahara')->name('bendahara.')->group(function () {
     Route::get('/verifikasi-pnbp', [BendaharaPnbpController::class, 'index'])->name('verifikasi.index');
     Route::post('/verifikasi-pnbp/{id}/tindak-lanjut', [BendaharaPnbpController::class, 'tindakLanjut'])->name('verifikasi.tindak-lanjut');
@@ -125,6 +147,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/layanan/{slug}', [LayananController::class, 'show'])->name('layanan.pengembangan');
+
+    // Secure Document Delivery Routes (Private Storage Streaming & Protected Downloads)
+    Route::prefix('secure')->name('secure.')->group(function () {
+        Route::get('/dokumen/{id}', [SecureDocumentController::class, 'showDokumen'])->name('dokumen.show');
+        Route::get('/dokumen/{id}/download', [SecureDocumentController::class, 'downloadDokumen'])->name('dokumen.download');
+        Route::get('/voucher/{id}', [SecureDocumentController::class, 'showVoucher'])->name('voucher.show');
+        Route::get('/user-dokumen/{userId}/{type}', [SecureDocumentController::class, 'showUserDokumen'])->name('user-dokumen.show');
+    });
 });
 
 require __DIR__.'/auth.php';

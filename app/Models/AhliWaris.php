@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedNik;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +22,19 @@ class AhliWaris extends Model
         'tanggal_lahir',
         'alamat',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'nik' => EncryptedNik::class,
+            'tanggal_lahir' => 'date',
+        ];
+    }
 
     /**
      * Get the pewasiat that owns the ahli waris.

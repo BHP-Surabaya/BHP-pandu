@@ -413,12 +413,24 @@
                             <label for="nik" class="block text-xs font-semibold text-gray-700 mb-1">
                                 Nomor Induk Kependudukan (NIK)
                             </label>
+                            @php
+                                $displayNik = old('nik', $user->nik);
+                                if (is_string($displayNik) && str_starts_with($displayNik, 'eyJ')) {
+                                    try {
+                                        while (str_starts_with($displayNik, 'eyJ')) {
+                                            $displayNik = \Illuminate\Support\Facades\Crypt::decryptString($displayNik);
+                                        }
+                                    } catch (\Throwable) {
+                                        $displayNik = '';
+                                    }
+                                }
+                            @endphp
                             <input id="nik" 
                                    name="nik" 
                                    type="text" 
                                    maxlength="16"
                                    placeholder="16 digit angka NIK"
-                                   value="{{ old('nik', $user->nik) }}" 
+                                   value="{{ $displayNik }}" 
                                    class="w-full px-3.5 py-2.5 bg-white border border-gray-300 rounded-xl text-xs sm:text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0066d6] focus:border-[#0066d6] transition @error('nik') border-red-500 @enderror" />
                             @error('nik')
                                 <p class="mt-1 text-xs text-red-600 font-medium">{{ $message }}</p>
@@ -493,7 +505,7 @@
                                                 <p class="text-[10px] text-gray-500">Berkas tersimpan aman</p>
                                             </div>
                                         </div>
-                                        <a href="{{ asset('storage/' . $user->sk_notaris) }}" 
+                                        <a href="{{ route('secure.user-dokumen.show', [$user->id, 'sk_notaris']) }}" 
                                            target="_blank" 
                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0066d6] hover:bg-[#0055b8] text-white font-semibold text-xs transition shrink-0">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -547,7 +559,7 @@
                                                 <p class="text-[10px] text-gray-500">Berkas tersimpan aman</p>
                                             </div>
                                         </div>
-                                        <a href="{{ asset('storage/' . $user->sk_ppat) }}" 
+                                        <a href="{{ route('secure.user-dokumen.show', [$user->id, 'sk_ppat']) }}" 
                                            target="_blank" 
                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0066d6] hover:bg-[#0055b8] text-white font-semibold text-xs transition shrink-0">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -634,7 +646,7 @@
                                                 <p class="text-[10px] text-gray-500">Berkas tersimpan aman</p>
                                             </div>
                                         </div>
-                                        <a href="{{ asset('storage/' . $user->berita_acara_sumpah) }}" 
+                                        <a href="{{ route('secure.user-dokumen.show', [$user->id, 'berita_acara_sumpah']) }}" 
                                            target="_blank" 
                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shrink-0">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -688,7 +700,7 @@
                                                 <p class="text-[10px] text-gray-500">Berkas tersimpan aman</p>
                                             </div>
                                         </div>
-                                        <a href="{{ asset('storage/' . $user->id_card_pengacara) }}" 
+                                        <a href="{{ route('secure.user-dokumen.show', [$user->id, 'id_card_pengacara']) }}" 
                                            target="_blank" 
                                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition shrink-0">
                                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

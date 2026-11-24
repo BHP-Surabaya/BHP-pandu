@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedNik;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,6 +37,23 @@ class Pewasiat extends Model
         'kedudukan_notaris',
         'status_kawin',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'nik' => EncryptedNik::class,
+            'tanggal_lahir' => 'date',
+            'tanggal_kematian' => 'date',
+            'tanggal_akta_kematian' => 'date',
+            'tanggal_surat_dpw' => 'date',
+            'tanggal_akta_penyimpanan' => 'date',
+        ];
+    }
 
     /**
      * Get the permohonan that owns the pewasiat.

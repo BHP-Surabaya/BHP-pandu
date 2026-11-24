@@ -41,12 +41,23 @@ class UserVerificationController extends Controller
 
         // Apply search filter
         if (! empty($search)) {
-            $query->where(function ($q) use ($search) {
+            $nikUserIds = [];
+            if (preg_match('/^[0-9]+$/', $search)) {
+                $nikUserIds = User::all()
+                    ->filter(fn (User $u) => str_contains((string) $u->nik, $search))
+                    ->pluck('id')
+                    ->all();
+            }
+
+            $query->where(function ($q) use ($search, $nikUserIds) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('nik', 'like', "%{$search}%")
                     ->orWhere('phone', 'like', "%{$search}%")
                     ->orWhere('pekerjaan', 'like', "%{$search}%");
+
+                if (! empty($nikUserIds)) {
+                    $q->orWhereIn('id', $nikUserIds);
+                }
             });
         }
 
@@ -184,6 +195,7 @@ class UserVerificationController extends Controller
         ]);
 
         foreach ($filesToDelete as $filePath) {
+            Storage::disk('local')->delete($filePath);
             Storage::disk('public')->delete($filePath);
         }
 
