@@ -30,6 +30,9 @@ class Permohonan extends Model
         'nomor_berita_acara',
         'tanggal_berita_acara',
         'file_berita_acara',
+        'data_berita_acara',
+        'dokumen_terkunci',
+        'dokumen_dikunci_at',
     ];
 
     /**
@@ -44,6 +47,9 @@ class Permohonan extends Model
             'tanggal_disposisi' => 'datetime',
             'jadwal_pembukaan' => 'datetime',
             'tanggal_berita_acara' => 'date',
+            'data_berita_acara' => 'array',
+            'dokumen_terkunci' => 'boolean',
+            'dokumen_dikunci_at' => 'datetime',
         ];
     }
 

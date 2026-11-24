@@ -104,9 +104,26 @@ Route::middleware(['auth', 'role:kurator_madya,madya'])->prefix('madya')->name('
     Route::get('/history', [MadyaDashboardController::class, 'history'])->name('history');
     Route::get('/verifikasi/{id}', [MadyaDashboardController::class, 'show'])->name('verifikasi.show');
     Route::post('/verifikasi/{id}/tindak-lanjut', [MadyaDashboardController::class, 'tindakLanjut'])->name('tindak-lanjut');
+
+    // Buat & Reviu Berita Acara dengan OTP
+    Route::get('/layanan/{id}/buat-ba', [MadyaDashboardController::class, 'buatBaPage'])->name('layanan.buat-ba.page');
+    Route::post('/layanan/{id}/kode-persetujuan', [MadyaDashboardController::class, 'requestKodePersetujuan'])->name('layanan.kode-persetujuan');
+    Route::post('/layanan/{id}/verifikasi-kode', [MadyaDashboardController::class, 'verifikasiKodePersetujuan'])->name('layanan.verifikasi-kode');
     Route::post('/layanan/{id}/buat-ba', [MadyaDashboardController::class, 'buatBa'])->name('layanan.buat-ba');
+
+    // Cetak Dokumen 2 Salinan
+    Route::get('/layanan/{id}/cetak', [MadyaDashboardController::class, 'cetakPage'])->name('layanan.cetak.page');
     Route::post('/layanan/{id}/cetak-dokumen', [MadyaDashboardController::class, 'cetakDokumen'])->name('layanan.cetak-dokumen');
+
+    // Pengelolaan & Unggah 6 Berkas Dokumen Sidang
+    Route::get('/layanan/{id}/upload', [MadyaDashboardController::class, 'uploadPage'])->name('layanan.upload.page');
+    Route::post('/layanan/{id}/upload-dokumen', [MadyaDashboardController::class, 'uploadDokumen'])->name('layanan.upload-dokumen');
+    Route::delete('/dokumen/{id}', [MadyaDashboardController::class, 'deleteDokumen'])->name('dokumen.delete');
+    Route::post('/layanan/{id}/toggle-kunci-dokumen', [MadyaDashboardController::class, 'toggleKunciDokumen'])->name('layanan.toggle-kunci');
+
+    // Selesaikan & Arsipkan / Aktifkan Kembali
     Route::post('/layanan/{id}/arsipkan', [MadyaDashboardController::class, 'arsipkan'])->name('layanan.arsipkan');
+    Route::post('/layanan/{id}/aktifkan', [MadyaDashboardController::class, 'aktifkan'])->name('layanan.aktifkan');
 });
 
 Route::middleware(['auth', 'role:kasi,kepala_seksi'])->prefix('kasi')->name('kasi.')->group(function () {

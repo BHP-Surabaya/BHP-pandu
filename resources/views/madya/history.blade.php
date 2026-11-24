@@ -128,12 +128,41 @@
                                 </td>
 
                                 <td class="py-4 px-4 text-right whitespace-nowrap">
-                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        {{ $item['status_label'] }}
-                                    </span>
+                                    <div class="flex items-center justify-end gap-2">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            {{ $item['status_label'] }}
+                                        </span>
+
+                                        <a href="{{ route('madya.layanan.cetak.page', $item['id']) }}"
+                                           title="Cetak Ulang 2 Salinan Berita Acara"
+                                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs transition">
+                                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24-1.076-.672-2.13-1.27-3.086m0 0A10.02 10.02 0 0112 4.5c4.76 0 8.746 3.324 9.77 7.784M12 4.5v15m0 0l-3-3m3 3l3-3" />
+                                            </svg>
+                                            <span>Salinan BA</span>
+                                        </a>
+
+                                        <a href="{{ route('madya.layanan.upload.page', $item['id']) }}"
+                                           title="Lihat Berkas Arsip Sidang"
+                                           class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs transition">
+                                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                                            </svg>
+                                            <span>Berkas</span>
+                                        </a>
+
+                                        <form action="{{ route('madya.layanan.aktifkan', $item['id']) }}" method="POST" onsubmit="return confirm('Aktifkan kembali layanan ini ke daftar aktif?')">
+                                            @csrf
+                                            <button type="submit" 
+                                                    title="Aktifkan Kembali ke Daftar Layanan"
+                                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+                                                <span>Buka Kembali</span>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
