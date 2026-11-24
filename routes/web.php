@@ -132,6 +132,8 @@ Route::middleware(['auth', 'role:bendahara,bendahara_penerimaan'])->prefix('bend
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::view('/manual-guide', 'manual-guide')->name('manual-guide');
+
     Route::get('/permohonan', [PermohonanWasiatController::class, 'index'])->name('permohonan.index');
     Route::get('/permohonan/buat', [PermohonanWasiatController::class, 'create'])->name('permohonan.create');
     Route::post('/permohonan/buat', [PermohonanWasiatController::class, 'store'])->name('permohonan.store');
