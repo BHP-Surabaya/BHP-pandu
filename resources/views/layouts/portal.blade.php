@@ -343,6 +343,15 @@
                                     </span>
                                 @endif
                             </a>
+
+                            <!-- Manual Guide -->
+                            <a href="{{ route('manual-guide') }}"
+                               class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium transition {{ request()->routeIs('manual-guide') ? 'bg-[#1d68d8] text-white font-semibold shadow-md' : 'text-white/80 hover:text-white hover:bg-white/10' }}">
+                                <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 7v14m0-14C10.8 6.1 9.2 5.5 7.5 5.5 5.6 5.5 4 6.1 3 7v14c1-.9 2.6-1.5 4.5-1.5 1.7 0 3.3.6 4.5 1.5m0-14c1.2-.9 2.8-1.5 4.5-1.5 1.9 0 3.5.6 4.5 1.5v14c-1-.9-2.6-1.5-4.5-1.5-1.7 0-3.3.6-4.5 1.5" />
+                                </svg>
+                                <span>Manual Guide</span>
+                            </a>
                         @endif
 
                         <!-- Profil Akun -->
