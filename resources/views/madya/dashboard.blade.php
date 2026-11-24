@@ -157,24 +157,46 @@
 
                                 <!-- AKSI -->
                                 <td class="py-4 px-4 text-right whitespace-nowrap">
-                                    <div class="flex items-center justify-end gap-2">
-                                        <!-- Tombol Detail / Verifikasi SOP -->
-                                        <a href="{{ route('madya.verifikasi.show', $item['id']) }}" 
-                                           title="Lihat Detail & Checklist SOP"
-                                           class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 transition shadow-2xs">
-                                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <div class="flex items-center justify-end gap-1.5">
+                                        <!-- Tombol Buat / Reviu BA -->
+                                        <a href="{{ route('madya.layanan.buat-ba.page', $item['id']) }}" 
+                                           title="{{ $item['has_ba'] ? 'Reviu Berita Acara & Otorisasi OTP' : 'Buat Berita Acara Baru' }}"
+                                           class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-semibold shadow-2xs transition {{ $item['has_ba'] ? 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50' }}">
+                                            <svg class="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                                             </svg>
-                                            <span>Lihat</span>
+                                            <span>{{ $item['has_ba'] ? 'Reviu BA' : 'Buat BA' }}</span>
                                         </a>
+
+                                        <!-- Tombol Upload Dokumen Sidang -->
+                                        <a href="{{ route('madya.layanan.upload.page', $item['id']) }}"
+                                           title="Kelola 6 Berkas Dokumen Sidang"
+                                           class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 shadow-2xs transition">
+                                            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                                            </svg>
+                                            <span>Upload ({{ $item['dokumen_count'] }})</span>
+                                        </a>
+
+                                        @if ($item['has_ba'])
+                                            <!-- Tombol Cetak 2 Salinan -->
+                                            <a href="{{ route('madya.layanan.cetak.page', $item['id']) }}"
+                                               title="Cetak Dokumen 2 Salinan Resmi"
+                                               class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24-1.076-.672-2.13-1.27-3.086m0 0A10.02 10.02 0 0112 4.5c4.76 0 8.746 3.324 9.77 7.784M12 4.5v15m0 0l-3-3m3 3l3-3" />
+                                                </svg>
+                                                <span>Cetak</span>
+                                            </a>
+                                        @endif
 
                                         <!-- Tombol Tindak Lanjut Modal -->
                                         <button type="button" 
                                                 @click="bukaModal({{ json_encode($item) }})"
-                                                class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#1d68d8] hover:bg-[#1557b8] text-white text-xs font-semibold shadow-xs transition cursor-pointer">
-                                            <span>Tindak lanjut</span>
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                title="Modal Alur Kerja Layanan"
+                                                class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition cursor-pointer">
+                                            <span>Opsi</span>
+                                            <svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                                             </svg>
                                         </button>

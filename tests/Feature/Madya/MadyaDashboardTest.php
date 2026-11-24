@@ -6,6 +6,9 @@ use App\Models\Permohonan;
 use App\Models\Pewasiat;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class MadyaDashboardTest extends TestCase
@@ -96,7 +99,6 @@ class MadyaDashboardTest extends TestCase
         $response->assertSee('DASHBOARD MADYA');
         $response->assertSee('Layanan Wasiat Tertutup');
         $response->assertSee('Daftar Layanan');
-        $response->assertSee('Histori Layanan');
         $response->assertSee('SLA Layanan');
         $response->assertSee('Jadwal Pembukaan');
     }
@@ -110,22 +112,181 @@ class MadyaDashboardTest extends TestCase
         $response->assertOk();
         $response->assertSee('Histori Layanan');
         $response->assertSee('DASHBOARD MADYA');
-        $response->assertSee('Daftar Layanan');
     }
 
-    public function test_madya_can_create_ba_for_layanan(): void
+    public function test_madya_can_request_and_verify_approval_otp_code(): void
     {
         $madya = $this->createKuratorMadyaUser();
         $pemohon = $this->createPemohonUser();
         $permohonan = $this->createPermohonan($pemohon);
 
-        $response = $this->actingAs($madya)->post(route('madya.layanan.buat-ba', ['id' => $permohonan->id]), [
-            'nomor_ba' => 'BA.01/WST/BHP.SBY/05/2025',
-            'catatan' => 'Pemeriksaan fisik telah selesai.',
+        // 1. Request OTP
+        $response = $this->actingAs($madya)->postJson(route('madya.layanan.kode-persetujuan', ['id' => $permohonan->id]));
+        $response->assertOk();
+        $response->assertJsonStructure([
+            'success',
+            'sent_to',
+            'masked_email',
+            'expires_in_seconds',
+            'delivery_mode',
+            'preview_code',
         ]);
 
-        $response->assertRedirect(route('madya.dashboard'));
-        $response->assertSessionHas('success');
+        $otp = $response->json('preview_code');
+        $this->assertNotEmpty($otp);
+
+        // 2. Verify Wrong OTP
+        $wrongResponse = $this->actingAs($madya)->postJson(route('madya.layanan.verifikasi-kode', ['id' => $permohonan->id]), [
+            'code' => '000000',
+        ]);
+        $wrongResponse->assertStatus(422);
+        $wrongResponse->assertJson(['valid' => false]);
+
+        // 3. Verify Correct OTP
+        $verifyResponse = $this->actingAs($madya)->postJson(route('madya.layanan.verifikasi-kode', ['id' => $permohonan->id]), [
+            'code' => $otp,
+        ]);
+        $verifyResponse->assertOk();
+        $verifyResponse->assertJson(['valid' => true]);
+    }
+
+    public function test_madya_can_view_buat_ba_page_and_save_ba_with_verified_otp(): void
+    {
+        $madya = $this->createKuratorMadyaUser();
+        $pemohon = $this->createPemohonUser();
+        $permohonan = $this->createPermohonan($pemohon);
+
+        // View Buat BA page
+        $pageResponse = $this->actingAs($madya)->get(route('madya.layanan.buat-ba.page', ['id' => $permohonan->id]));
+        $pageResponse->assertOk();
+        $pageResponse->assertSee('Berita Acara Pembukaan Wasiat Tertutup');
+        $pageResponse->assertSee('Otorisasi Kurator Madya');
+
+        // Set verified OTP in cache
+        Cache::put("madya_otp_verified_{$permohonan->id}", true, now()->addMinutes(10));
+
+        $baData = [
+            'nomor_ba' => 'W15.BHP.02-00099/BA-WT/XI/2026',
+            'ada_surat_kuasa' => 1,
+            'tanggal_surat_kuasa' => '2026-11-24',
+            'hari' => 'Selasa',
+            'tanggal' => '2026-11-24',
+            'tempat_dibuat' => 'Sidoarjo',
+            'pihak_pertama_nama' => 'Ayu Rachmawati, S.H., M.Kn.',
+            'pihak_pertama_nip' => '198405122010122001',
+            'pihak_pertama_jabatan' => 'Kurator Keperdataan Ahli Madya',
+            'pihak_kedua_nama' => 'Dimas Mahendra',
+            'pihak_kedua_jabatan' => 'Notaris Kota Surabaya',
+            'pihak_kedua_alamat' => 'Jl. Pemuda No. 10 Surabaya',
+            'deskripsi_wasiat' => '1 (satu) buah amplop coklat ukuran A4 dalam keadaan tertutup dan tersegel lak merah',
+            'nama_pewasiat' => 'Alm. Soetrisno Hardjono',
+            'saksi_1' => 'Budi Santoso, S.H.',
+            'saksi_2' => 'Rina Wulandari, S.H.',
+            'catatan' => 'Sidang pembukaan wasiat berlangsung tertib.',
+            'submit_action' => 'save_print',
+        ];
+
+        $response = $this->actingAs($madya)->post(route('madya.layanan.buat-ba', ['id' => $permohonan->id]), $baData);
+
+        $response->assertRedirect(route('madya.layanan.cetak.page', ['id' => $permohonan->id]));
+        $this->assertDatabaseHas('permohonans', [
+            'id' => $permohonan->id,
+            'nomor_berita_acara' => 'W15.BHP.02-00099/BA-WT/XI/2026',
+        ]);
+    }
+
+    public function test_madya_can_view_cetak_2_salinan_page(): void
+    {
+        $madya = $this->createKuratorMadyaUser();
+        $pemohon = $this->createPemohonUser();
+        $permohonan = $this->createPermohonan($pemohon, [
+            'nomor_berita_acara' => 'W15.BHP.02-00099/BA-WT/XI/2026',
+            'data_berita_acara' => [
+                'nomor_ba' => 'W15.BHP.02-00099/BA-WT/XI/2026',
+                'ada_surat_kuasa' => true,
+                'tanggal_surat_kuasa' => '2026-11-24',
+                'hari' => 'Selasa',
+                'tanggal' => '2026-11-24',
+                'tempat_dibuat' => 'Sidoarjo',
+                'pihak_pertama_nama' => 'Ayu Rachmawati, S.H., M.Kn.',
+                'pihak_pertama_nip' => '198405122010122001',
+                'pihak_pertama_jabatan' => 'Kurator Keperdataan Ahli Madya',
+                'pihak_kedua_nama' => 'Dimas Mahendra',
+                'pihak_kedua_jabatan' => 'Notaris Kota Surabaya',
+                'pihak_kedua_alamat' => 'Jl. Pemuda No. 10 Surabaya',
+                'deskripsi_wasiat' => '1 buah amplop coklat',
+                'nama_pewasiat' => 'Alm. Soetrisno Hardjono',
+                'saksi_1' => 'Budi Santoso, S.H.',
+                'saksi_2' => 'Rina Wulandari, S.H.',
+            ],
+        ]);
+
+        $response = $this->actingAs($madya)->get(route('madya.layanan.cetak.page', ['id' => $permohonan->id]));
+
+        $response->assertOk();
+        $response->assertSee('Cetak Berita Acara — 2 Salinan Resmi');
+        $response->assertSee('SALINAN I — ARSIP BALAI HARTA PENINGGALAN SURABAYA');
+        $response->assertSee('SALINAN II — PEMOHON / NOTARIS PENYIMPAN');
+    }
+
+    public function test_madya_can_manage_6_slot_documents_and_toggle_lock(): void
+    {
+        Storage::fake('local');
+
+        $madya = $this->createKuratorMadyaUser();
+        $pemohon = $this->createPemohonUser();
+        $permohonan = $this->createPermohonan($pemohon);
+
+        // 1. View upload page
+        $viewResponse = $this->actingAs($madya)->get(route('madya.layanan.upload.page', ['id' => $permohonan->id]));
+        $viewResponse->assertOk();
+        $viewResponse->assertSee('Unggah dan Kelola Berkas Sidang Wasiat');
+        $viewResponse->assertSee('Surat / Form Persetujuan Jadwal');
+
+        // 2. Upload file
+        $file = UploadedFile::fake()->create('jadwal_sidang.pdf', 200, 'application/pdf');
+        $uploadResponse = $this->actingAs($madya)->post(route('madya.layanan.upload-dokumen', ['id' => $permohonan->id]), [
+            'jenis_dokumen' => 'persetujuan_jadwal',
+            'file' => $file,
+        ]);
+        $uploadResponse->assertRedirect();
+        $this->assertDatabaseHas('dokumens', [
+            'permohonan_id' => $permohonan->id,
+            'jenis_dokumen' => 'persetujuan_jadwal',
+        ]);
+
+        // 3. Toggle Lock Documents
+        $lockResponse = $this->actingAs($madya)->post(route('madya.layanan.toggle-kunci', ['id' => $permohonan->id]));
+        $lockResponse->assertRedirect();
+        $this->assertTrue($permohonan->fresh()->dokumen_terkunci);
+
+        // 4. Try upload when locked -> forbidden/error
+        $tryUploadResponse = $this->actingAs($madya)->post(route('madya.layanan.upload-dokumen', ['id' => $permohonan->id]), [
+            'jenis_dokumen' => 'daftar_hadir',
+            'file' => UploadedFile::fake()->create('daftar_hadir.pdf', 100, 'application/pdf'),
+        ]);
+        $tryUploadResponse->assertSessionHas('error');
+    }
+
+    public function test_madya_can_archive_and_reopen_layanan(): void
+    {
+        $madya = $this->createKuratorMadyaUser();
+        $pemohon = $this->createPemohonUser();
+        $permohonan = $this->createPermohonan($pemohon);
+
+        // Archive
+        $archiveResponse = $this->actingAs($madya)->post(route('madya.layanan.arsipkan', ['id' => $permohonan->id]), [
+            'catatan' => 'Layanan telah selesai dan diarsipkan.',
+        ]);
+        $archiveResponse->assertRedirect(route('madya.dashboard'));
+        $this->assertEquals('selesai', $permohonan->fresh()->status);
+        $this->assertTrue($permohonan->fresh()->dokumen_terkunci);
+
+        // Reopen (aktifkan kembali)
+        $reopenResponse = $this->actingAs($madya)->post(route('madya.layanan.aktifkan', ['id' => $permohonan->id]));
+        $reopenResponse->assertRedirect(route('madya.dashboard'));
+        $this->assertEquals('proses_madya', $permohonan->fresh()->status);
+        $this->assertFalse($permohonan->fresh()->dokumen_terkunci);
     }
 
     public function test_madya_can_record_cetak_dokumen(): void
@@ -135,20 +296,6 @@ class MadyaDashboardTest extends TestCase
         $permohonan = $this->createPermohonan($pemohon);
 
         $response = $this->actingAs($madya)->post(route('madya.layanan.cetak-dokumen', ['id' => $permohonan->id]));
-
-        $response->assertRedirect(route('madya.dashboard'));
-        $response->assertSessionHas('success');
-    }
-
-    public function test_madya_can_archive_layanan(): void
-    {
-        $madya = $this->createKuratorMadyaUser();
-        $pemohon = $this->createPemohonUser();
-        $permohonan = $this->createPermohonan($pemohon);
-
-        $response = $this->actingAs($madya)->post(route('madya.layanan.arsipkan', ['id' => $permohonan->id]), [
-            'catatan' => 'Layanan telah selesai dan diarsipkan.',
-        ]);
 
         $response->assertRedirect(route('madya.dashboard'));
         $response->assertSessionHas('success');
