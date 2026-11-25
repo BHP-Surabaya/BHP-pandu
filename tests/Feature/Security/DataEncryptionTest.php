@@ -252,4 +252,40 @@ class DataEncryptionTest extends TestCase
         $response->assertSee('value="'.$plainNik.'"', false);
         $response->assertDontSee('value="'.$encryptedNik.'"', false);
     }
+
+    public function test_undecryptable_nik_payload_returns_null_and_is_not_exposed_in_admin_verification(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'master_admin',
+            'status_akun' => 'master_admin',
+            'status_verifikasi' => 'terverifikasi',
+        ]);
+
+        $user = User::factory()->create([
+            'role' => 'pemohon',
+            'name' => 'Manggala Test',
+        ]);
+
+        // Simulate ciphertext encrypted with a different APP_KEY (invalid MAC for current key)
+        $foreignCiphertext = base64_encode(json_encode([
+            'iv' => base64_encode(random_bytes(16)),
+            'value' => base64_encode('encrypted-payload'),
+            'mac' => str_repeat('a', 64),
+            'tag' => '',
+        ]));
+
+        DB::table('users')->where('id', $user->id)->update(['nik' => $foreignCiphertext]);
+
+        $freshUser = User::find($user->id);
+        $this->assertNull($freshUser->nik);
+
+        $indexResponse = $this->actingAs($admin)->get(route('admin.verifikasi.index'));
+        $indexResponse->assertOk();
+        $indexResponse->assertSee('Manggala Test');
+        $indexResponse->assertDontSee('eyJ', false);
+
+        $showResponse = $this->actingAs($admin)->get(route('admin.verifikasi.show', $user));
+        $showResponse->assertOk();
+        $showResponse->assertDontSee('eyJ', false);
+    }
 }

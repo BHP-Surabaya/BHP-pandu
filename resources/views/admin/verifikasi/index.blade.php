@@ -227,7 +227,7 @@
                                             <p class="font-bold text-gray-900 truncate">{{ $userItem->name }}</p>
                                             <p class="text-xs text-gray-500 truncate mt-0.5">{{ $userItem->email }}</p>
                                             @if ($userItem->nik)
-                                                <p class="text-[10px] text-gray-400 font-mono mt-0.5">NIK: {{ $userItem->nik }}</p>
+                                                <p class="text-[10px] text-gray-400 font-mono truncate mt-0.5">NIK: {{ $userItem->nik }}</p>
                                             @endif
                                         </div>
                                     </div>
