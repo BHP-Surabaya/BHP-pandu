@@ -28,8 +28,8 @@ class EncryptedNik implements CastsAttributes
                 $decrypted = Crypt::decryptString($unwrapped);
                 $unwrapped = $decrypted;
             } catch (Throwable) {
-                // If decryption fails (e.g. malformed JSON or mismatched APP_KEY), stop unwrapping
-                break;
+                // If decryption fails (e.g. malformed payload or mismatched APP_KEY), never expose raw ciphertext
+                return null;
             }
         }
 
@@ -54,7 +54,7 @@ class EncryptedNik implements CastsAttributes
             try {
                 $plain = Crypt::decryptString($plain);
             } catch (Throwable) {
-                break;
+                return null;
             }
         }
 
