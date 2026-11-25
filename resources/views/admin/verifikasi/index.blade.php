@@ -3,7 +3,7 @@
         Manajemen &amp; Verifikasi Akun Pengguna - Master Admin BHP
     </x-slot:title>
 
-    <div class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6" x-data="{
+    <div id="admin-user-manager" class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-6" x-data="{
         switchModalOpen: false,
         deleteModalOpen: false,
         selectedUser: null,
@@ -28,7 +28,7 @@
                 Manajemen &amp; Verifikasi Akun
             </h1>
             <p class="text-xs sm:text-sm text-gray-500 mt-1">
-                Pantau seluruh akun pengguna yang aktif di sistem. Master Admin dapat memindahkan status akun (Notaris, Pengacara, Perorangan) secara langsung.
+                Pantau akun pengguna dan pegawai secara terpisah. Master Admin dapat memindahkan status akun pengguna (Notaris, Pengacara, Perorangan) secara langsung.
             </p>
         </div>
 
@@ -62,7 +62,7 @@
         @endif
 
         <!-- Summary Metric Cards (5 Cards Aktif) -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+        <div id="summary-cards" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
             <!-- Card 1: Total Semua Akun -->
             <a href="{{ route('admin.verifikasi.index', ['status' => 'all']) }}" 
                class="bg-white p-4 rounded-2xl border transition shadow-sm hover:shadow-md {{ $status === 'all' ? 'border-[#0066d6] ring-2 ring-[#0066d6]/10' : 'border-gray-100' }}">
@@ -74,7 +74,7 @@
                         </svg>
                     </div>
                 </div>
-                <h3 class="text-2xl font-black text-gray-900 mt-2">{{ $stats['total_user'] }}</h3>
+                <h3 class="text-2xl font-black text-gray-900 mt-2">{{ $stats['total_semua'] }}</h3>
                 <p class="text-[10px] text-gray-400 mt-1 font-medium">Terdaftar di sistem</p>
             </a>
 
@@ -125,7 +125,7 @@
 
             <!-- Card 5: Antrean Menunggu Verifikasi -->
             <a href="{{ route('admin.verifikasi.index', ['status' => 'menunggu_verifikasi']) }}" 
-               class="bg-white p-4 rounded-2xl border transition shadow-sm hover:shadow-md col-span-2 sm:col-span-1 {{ $status === 'menunggu_verifikasi' ? 'border-amber-500 ring-2 ring-amber-500/10' : 'border-gray-100' }}">
+               class="bg-white p-4 rounded-2xl border transition shadow-sm hover:shadow-md {{ $status === 'menunggu_verifikasi' ? 'border-amber-500 ring-2 ring-amber-500/10' : 'border-gray-100' }}">
                 <div class="flex items-center justify-between">
                     <p class="text-[11px] font-bold text-amber-600 uppercase tracking-wider">Antrean Verifikasi</p>
                     <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
@@ -137,16 +137,31 @@
                 <h3 class="text-2xl font-black text-amber-600 mt-2">{{ $stats['total_pending'] }}</h3>
                 <p class="text-[10px] text-amber-500 mt-1 font-medium">Perlu ditinjau</p>
             </a>
+
+            <!-- Card 6: Pegawai -->
+            <a href="{{ route('admin.verifikasi.index', ['status' => 'pegawai']) }}"
+               class="bg-white p-4 rounded-2xl border transition shadow-sm hover:shadow-md {{ $status === 'pegawai' ? 'border-violet-500 ring-2 ring-violet-500/10' : 'border-gray-100' }}">
+                <div class="flex items-center justify-between">
+                    <p class="text-[11px] font-bold text-violet-600 uppercase tracking-wider">Pegawai</p>
+                    <div class="w-8 h-8 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7h-3V4H7v3H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM9 7V5h6v2" />
+                        </svg>
+                    </div>
+                </div>
+                <h3 class="text-2xl font-black text-violet-600 mt-2">{{ $stats['total_pegawai'] }}</h3>
+                <p class="text-[10px] text-violet-400 mt-1 font-medium">Pegawai BHP</p>
+            </a>
         </div>
 
         <!-- Filter & Search Controls -->
-        <div class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+        <div id="user-filter-controls" class="bg-white p-4 sm:p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4">
             <form method="GET" action="{{ route('admin.verifikasi.index') }}" class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <!-- Status Filter Tabs -->
                 <div class="flex items-center gap-1.5 p-1 bg-gray-100/80 rounded-xl overflow-x-auto text-xs font-semibold">
                     <a href="{{ route('admin.verifikasi.index', ['status' => 'all', 'search' => $search]) }}"
                        class="px-3.5 py-2 rounded-lg transition whitespace-nowrap {{ $status === 'all' ? 'bg-white text-[#0c2a55] shadow-sm font-bold' : 'text-gray-500 hover:text-gray-900' }}">
-                        Semua Akun ({{ $stats['total_user'] }})
+                        Semua Akun ({{ $stats['total_semua'] }})
                     </a>
                     <a href="{{ route('admin.verifikasi.index', ['status' => 'notaris', 'search' => $search]) }}"
                        class="px-3.5 py-2 rounded-lg transition whitespace-nowrap {{ $status === 'notaris' ? 'bg-white text-blue-700 shadow-sm font-bold' : 'text-gray-500 hover:text-gray-900' }}">
@@ -168,11 +183,16 @@
                        class="px-3.5 py-2 rounded-lg transition whitespace-nowrap {{ $status === 'ditolak' ? 'bg-white text-red-700 shadow-sm font-bold' : 'text-gray-500 hover:text-gray-900' }}">
                         Ditolak
                     </a>
+                    <a href="{{ route('admin.verifikasi.index', ['status' => 'pegawai', 'search' => $search]) }}"
+                       class="px-3.5 py-2 rounded-lg transition whitespace-nowrap {{ $status === 'pegawai' ? 'bg-white text-violet-700 shadow-sm font-bold' : 'text-gray-500 hover:text-gray-900' }}">
+                        Pegawai ({{ $stats['total_pegawai'] }})
+                    </a>
                 </div>
 
                 <!-- Right Side: Search Input -->
                 <div class="flex items-center gap-2.5">
                     <input type="hidden" name="status" value="{{ $status }}">
+                    <input type="hidden" name="user_type" value="{{ $userType }}">
 
                     <div class="relative min-w-[240px]">
                         <input type="text" 
@@ -195,8 +215,40 @@
             </form>
         </div>
 
-        <!-- Users Table -->
+        <div id="filter-error" hidden role="alert" class="p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm">Filter gagal dimuat. Silakan coba kembali.</div>
+
+        <div id="user-results" aria-busy="false">
+            <div id="filter-loading" hidden class="mb-3 text-xs font-semibold text-blue-700" role="status">Memperbarui daftar...</div>
+        @if ($status !== 'pegawai')
         <div class="bg-white rounded-2xl border border-gray-200/90 shadow-sm overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                <div>
+                    <h2 class="text-base font-bold text-gray-900">Akun Pengguna</h2>
+                    <p class="text-xs text-gray-500 mt-0.5">Perorangan, Notaris, dan Pengacara</p>
+                </div>
+                <span class="text-xs font-semibold text-gray-500">{{ $users->total() }} akun</span>
+            </div>
+            <div class="px-5 py-3 border-b border-gray-100 bg-slate-50/60">
+                <div class="flex flex-wrap items-center gap-2">
+                    <span class="text-xs font-semibold text-gray-500 mr-1">Tipe akun:</span>
+                    <a href="{{ route('admin.verifikasi.index', ['status' => 'all', 'user_type' => 'all', 'search' => $search]) }}"
+                       class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $userType === 'all' ? 'bg-[#0c2a55] text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300' }}">
+                        Semua ({{ $stats['total_user'] }})
+                    </a>
+                    <a href="{{ route('admin.verifikasi.index', ['status' => 'all', 'user_type' => 'perorangan', 'search' => $search]) }}"
+                       class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $userType === 'perorangan' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:border-emerald-300' }}">
+                        Perorangan ({{ $stats['total_perorangan'] }})
+                    </a>
+                    <a href="{{ route('admin.verifikasi.index', ['status' => 'all', 'user_type' => 'notaris', 'search' => $search]) }}"
+                       class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $userType === 'notaris' ? 'bg-blue-600 text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:border-blue-300' }}">
+                        Notaris ({{ $stats['total_notaris'] }})
+                    </a>
+                    <a href="{{ route('admin.verifikasi.index', ['status' => 'all', 'user_type' => 'pengacara', 'search' => $search]) }}"
+                       class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {{ $userType === 'pengacara' ? 'bg-indigo-600 text-white shadow-sm' : 'bg-white text-gray-600 border border-gray-200 hover:border-indigo-300' }}">
+                        Pengacara ({{ $stats['total_pengacara'] }})
+                    </a>
+                </div>
+            </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm text-gray-600 border-collapse">
                     <thead class="bg-slate-50/90 border-b border-gray-200 text-[11px] font-bold text-gray-600 uppercase tracking-wider">
@@ -227,7 +279,11 @@
                                             <p class="font-bold text-gray-900 truncate">{{ $userItem->name }}</p>
                                             <p class="text-xs text-gray-500 truncate mt-0.5">{{ $userItem->email }}</p>
                                             @if ($userItem->nik)
-                                                <p class="text-[10px] text-gray-400 font-mono mt-0.5">NIK: {{ $userItem->nik }}</p>
+                                                @if (str_starts_with($userItem->nik, 'eyJ'))
+                                                    <p class="text-[10px] text-amber-700 mt-0.5" title="Data NIK terenkripsi tidak dapat dibaca dengan kunci aplikasi saat ini">NIK perlu diperiksa</p>
+                                                @else
+                                                    <p class="text-[10px] text-gray-400 font-mono mt-0.5">NIK: {{ $userItem->nik }}</p>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
@@ -392,6 +448,98 @@
                 </div>
             @endif
         </div>
+        @endif
+
+        @if ($status === 'all' || $status === 'pegawai' || $employees->total() > 0)
+            <div class="bg-white rounded-2xl border border-gray-200/90 shadow-sm overflow-hidden">
+                <div class="px-5 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                    <div>
+                        <h2 class="text-base font-bold text-gray-900">Pegawai</h2>
+                        <p class="text-xs text-gray-500 mt-0.5">Akun internal pegawai BHP</p>
+                    </div>
+                    <span class="text-xs font-semibold text-gray-500">{{ $employees->total() }} pegawai</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-600 border-collapse">
+                        <thead class="bg-slate-50/90 border-b border-gray-200 text-[11px] font-bold text-gray-600 uppercase tracking-wider">
+                            <tr>
+                                <th class="py-3.5 px-4 sm:px-5">Pegawai</th>
+                                <th class="py-3.5 px-3 text-center">Jabatan</th>
+                                <th class="py-3.5 px-3 text-center">Aktivasi Email</th>
+                                <th class="py-3.5 px-4 text-center">Tindakan</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @forelse ($employees as $employee)
+                                <tr class="hover:bg-violet-50/30 transition">
+                                    <td class="py-3.5 px-4 sm:px-5">
+                                        <div class="flex items-center gap-3">
+                                            @if ($employee->foto_profil_url)
+                                                <img src="{{ $employee->foto_profil_url }}" alt="{{ $employee->name }}" class="w-9 h-9 rounded-full object-cover shrink-0 shadow-inner" />
+                                            @else
+                                                <div class="w-9 h-9 rounded-full bg-violet-100 text-violet-700 font-bold text-xs flex items-center justify-center shrink-0 shadow-inner">
+                                                    {{ $employee->initials }}
+                                                </div>
+                                            @endif
+                                            </div>
+                                            <div class="min-w-0">
+                                                <p class="font-bold text-gray-900 truncate">{{ $employee->name }}</p>
+                                                <p class="text-xs text-gray-500 truncate mt-0.5">{{ $employee->email }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-3.5 px-3 text-center">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-violet-50 text-violet-800 border border-violet-200 text-xs font-bold">
+                                            {{ $employee->pekerjaan ?: ($employee->role === 'petugas' ? 'Petugas' : $employee->status_akun_label) }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-3 text-center">
+                                        @if ($employee->hasVerifiedEmail())
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold">Teraktivasi</span>
+                                        @else
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-amber-50 text-amber-900 border border-amber-300 text-xs font-bold">Belum Aktivasi</span>
+                                        @endif
+                                    </td>
+                                    <td class="py-3.5 px-4 text-center">
+                                        <div class="inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
+                                            <a href="{{ route('admin.verifikasi.show', $employee) }}"
+                                               class="inline-flex items-center gap-1 px-3 h-8 rounded-lg bg-[#0066d6] hover:bg-[#0055b8] text-white text-xs font-semibold shadow-xs transition">
+                                                <span>Tinjau</span>
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+                                            </a>
+                                            <button type="button"
+                                                    @click="openDeleteModal({{ json_encode([
+                                                        'id' => $employee->id,
+                                                        'name' => $employee->name,
+                                                        'email' => $employee->email,
+                                                        'status_akun_label' => $employee->status_akun_label,
+                                                    ]) }})"
+                                                    class="inline-flex items-center justify-center w-8 h-8 rounded-lg border border-red-200 bg-red-50 hover:bg-red-100 text-red-600 transition cursor-pointer shadow-2xs"
+                                                    title="Hapus Akun Pegawai">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="py-10 px-4 text-center">
+                                        <p class="text-sm font-bold text-gray-700">Tidak ada pegawai ditemukan</p>
+                                        <p class="text-xs text-gray-400 mt-1">Coba sesuaikan kata kunci pencarian Anda.</p>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                @if ($employees->hasPages())
+                    <div class="p-4 border-t border-gray-100 bg-gray-50/50">
+                        {{ $employees->links() }}
+                    </div>
+                @endif
+            </div>
+        @endif
 
         <!-- ================= MODAL PINDAH STATUS AKUN ================= -->
         <div x-show="switchModalOpen" 
