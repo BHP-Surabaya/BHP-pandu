@@ -25,10 +25,13 @@
             this.selectedItem = item;
             this.form.ntpn = item.ntpn || '';
             this.form.nominal = item.nominal_tagihan || 200000;
-            this.form.tanggal_bayar = '{{ now()->format('Y-m-d') }}';
-            this.form.catatan = '';
+            this.form.tanggal_bayar = item.tanggal_bayar_iso || '{{ now()->format('Y-m-d') }}';
+            this.form.catatan = item.catatan || '';
             this.form.fileName = '';
             this.form.fileSize = '';
+            if (this.$refs.fileInput) {
+                this.$refs.fileInput.value = '';
+            }
             this.isDragging = false;
             this.tindakLanjutModalOpen = true;
         },
@@ -130,6 +133,22 @@
                 </svg>
                 <div class="text-sm font-medium">
                     {{ session('error') }}
+                </div>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="rounded-xl border border-rose-200 bg-rose-50/90 p-4 shadow-xs flex items-start gap-3 text-rose-800">
+                <svg class="w-5 h-5 text-rose-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+                <div class="text-sm font-medium space-y-1">
+                    <p class="font-bold">Verifikasi gagal disimpan. Mohon periksa kembali isian berikut:</p>
+                    <ul class="list-disc pl-4 text-xs space-y-0.5">
+                        @foreach ($errors->all() as $err)
+                            <li>{{ $err }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         @endif
@@ -249,7 +268,7 @@
                     <input type="text" 
                            name="q" 
                            value="{{ request('q') }}"
-                           placeholder="Cari nomor layanan, nama pemohon, atau nama pewasiat..." 
+                           placeholder="Cari nomor layanan, nomor voucher, nama pemohon, atau nama pewasiat..." 
                            class="w-full pl-10 sm:pl-12 pr-24 sm:pr-28 py-2.5 sm:py-3 bg-gray-50/70 hover:bg-gray-50 focus:bg-white text-xs sm:text-sm text-gray-900 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition placeholder:text-gray-400 shadow-2xs" />
 
                     <!-- Tombol Aksi di Dalam Kanan Input (Rapi & Tidak Terpotong) -->
@@ -295,35 +314,35 @@
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-50/75 border-b border-gray-100 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                            <th scope="col" class="py-3.5 px-4 sm:px-6">Nomor Layanan</th>
-                            <th scope="col" class="py-3.5 px-4">Jenis Layanan</th>
-                            <th scope="col" class="py-3.5 px-4">Nama Pemohon</th>
-                            <th scope="col" class="py-3.5 px-4">Nama Pewasiat</th>
-                            <th scope="col" class="py-3.5 px-4">Tanggal Masuk</th>
-                            <th scope="col" class="py-3.5 px-4">Status PNBP</th>
-                            <th scope="col" class="py-3.5 px-4">Keterangan</th>
-                            <th scope="col" class="py-3.5 px-4 sm:px-6 text-center">Tindak Lanjut</th>
+                            <th scope="col" class="py-3.5 px-3.5">Nomor Layanan</th>
+                            <th scope="col" class="py-3.5 px-3">Voucher PNBP</th>
+                            <th scope="col" class="py-3.5 px-3">Nama Pemohon</th>
+                            <th scope="col" class="py-3.5 px-3">Nama Pewasiat</th>
+                            <th scope="col" class="py-3.5 px-3">Tgl Masuk</th>
+                            <th scope="col" class="py-3.5 px-3">Status PNBP</th>
+                            <th scope="col" class="py-3.5 px-3">Keterangan</th>
+                            <th scope="col" class="py-3.5 px-3.5 text-center">Tindak Lanjut</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100 text-xs">
                         @forelse ($pnbpList as $item)
                             <tr class="hover:bg-blue-50/30 transition-colors duration-150">
                                 <!-- 1. Nomor Layanan -->
-                                <td class="py-4 px-4 sm:px-6 whitespace-nowrap">
-                                    <div class="flex items-center gap-2">
+                                <td class="py-3.5 px-3.5 whitespace-nowrap align-middle">
+                                    <div class="inline-flex items-center gap-1.5">
                                         <span class="font-mono font-bold text-gray-900 text-xs select-all">
                                             {{ $item['nomor_layanan'] }}
                                         </span>
                                         <button type="button" 
-                                                @click="copyToClipboard('{{ $item['nomor_layanan'] }}', '{{ $item['id'] }}')" 
-                                                class="text-gray-400 hover:text-blue-600 p-1 rounded transition" 
+                                                @click="copyToClipboard('{{ $item['nomor_layanan'] }}', 'layanan_{{ $item['id'] }}')" 
+                                                class="text-gray-400 hover:text-blue-600 p-0.5 rounded transition cursor-pointer shrink-0" 
                                                 title="Salin nomor layanan">
-                                            <template x-if="copiedItemNomor === '{{ $item['id'] }}'">
+                                            <template x-if="copiedItemNomor === 'layanan_{{ $item['id'] }}'">
                                                 <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                                                 </svg>
                                             </template>
-                                            <template x-if="copiedItemNomor !== '{{ $item['id'] }}'">
+                                            <template x-if="copiedItemNomor !== 'layanan_{{ $item['id'] }}'">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
                                                 </svg>
@@ -335,43 +354,60 @@
                                     </span>
                                 </td>
 
-                                <!-- 2. Jenis Layanan -->
-                                <td class="py-4 px-4 whitespace-nowrap">
-                                    <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold 
-                                        {{ str_contains(strtolower($item['jenis_layanan']), 'skhw') ? 'bg-sky-50 text-sky-800 border border-sky-100' : 'bg-purple-50 text-purple-800 border border-purple-100' }}">
-                                        <span class="w-1.5 h-1.5 rounded-full {{ str_contains(strtolower($item['jenis_layanan']), 'skhw') ? 'bg-sky-500' : 'bg-purple-500' }}"></span>
-                                        <span>{{ $item['jenis_layanan'] }}</span>
+                                <!-- 2. Voucher PNBP -->
+                                <td class="py-3.5 px-3 whitespace-nowrap align-middle">
+                                    <div class="inline-flex items-center gap-1.5">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-50 text-blue-800 border border-blue-200/80 font-mono text-[11px] font-bold select-all">
+                                            {{ $item['nomor_voucher'] ?? '-' }}
+                                        </span>
+                                        @if (!empty($item['nomor_voucher']) && $item['nomor_voucher'] !== '-')
+                                            <button type="button" 
+                                                    @click="copyToClipboard('{{ $item['nomor_voucher'] }}', 'voucher_{{ $item['id'] }}')" 
+                                                    class="text-gray-400 hover:text-blue-600 p-0.5 rounded transition cursor-pointer shrink-0" 
+                                                    title="Salin nomor voucher">
+                                                <template x-if="copiedItemNomor === 'voucher_{{ $item['id'] }}'">
+                                                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                                    </svg>
+                                                </template>
+                                                <template x-if="copiedItemNomor !== 'voucher_{{ $item['id'] }}'">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+                                                    </svg>
+                                                </template>
+                                            </button>
+                                        @endif
                                     </div>
                                 </td>
 
                                 <!-- 3. Nama Pemohon -->
-                                <td class="py-4 px-4 whitespace-nowrap">
-                                    <div class="flex items-center gap-2.5">
+                                <td class="py-3.5 px-3 align-middle max-w-[170px]">
+                                    <div class="flex items-center gap-2">
                                         <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-800 font-bold text-[11px] flex items-center justify-center shrink-0">
                                             {{ strtoupper(substr($item['nama_pemohon'] ?? 'P', 0, 2)) }}
                                         </div>
-                                        <span class="font-bold text-gray-900 leading-snug">
+                                        <span class="font-bold text-gray-900 leading-snug truncate" title="{{ $item['nama_pemohon'] }}">
                                             {{ $item['nama_pemohon'] }}
                                         </span>
                                     </div>
                                 </td>
 
                                 <!-- 4. Nama Pewasiat -->
-                                <td class="py-4 px-4 whitespace-nowrap">
-                                    <span class="font-medium text-gray-800">
+                                <td class="py-3.5 px-3 align-middle max-w-[200px]">
+                                    <span class="font-medium text-gray-800 leading-snug block truncate" title="{{ $item['nama_pewasiat'] ?: '-' }}">
                                         {{ $item['nama_pewasiat'] ?: '-' }}
                                     </span>
                                 </td>
 
                                 <!-- 5. Tanggal Masuk Layanan -->
-                                <td class="py-4 px-4 whitespace-nowrap">
+                                <td class="py-3.5 px-3 whitespace-nowrap align-middle">
                                     <span class="text-gray-900 font-medium">
                                         {{ $item['tanggal_masuk'] }}
                                     </span>
                                 </td>
 
                                 <!-- 6. Status PNBP -->
-                                <td class="py-4 px-4 whitespace-nowrap">
+                                <td class="py-3.5 px-3 whitespace-nowrap align-middle">
                                     @if (($item['status_pnbp'] ?? '') === 'sudah_bayar')
                                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs">
                                             <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -397,43 +433,63 @@
                                 </td>
 
                                 <!-- 7. Keterangan -->
-                                <td class="py-4 px-4 whitespace-nowrap">
+                                <td class="py-3.5 px-3 align-middle max-w-[160px]">
                                     @if (($item['status_pnbp'] ?? '') === 'sudah_bayar')
-                                        <span class="text-xs font-semibold text-emerald-700">
-                                            Siap Input NTPN &amp; Voucher
+                                        <span class="text-xs font-semibold text-emerald-700 block">
+                                            Terverifikasi Lunas
                                         </span>
+                                        @if (!empty($item['ntpn']))
+                                            <span class="text-[11px] font-mono text-gray-500 block mt-0.5">NTPN: {{ $item['ntpn'] }}</span>
+                                        @endif
                                     @elseif ($item['is_expired'] ?? false)
-                                        <span class="text-xs font-semibold text-rose-600">
-                                            Harus Daftar Lagi
+                                        <span class="text-xs font-semibold text-rose-600 block">
+                                            Lewat SLA 14 Hari
                                         </span>
+                                        <span class="text-[11px] text-rose-500 block mt-0.5">Harus daftar ulang</span>
                                     @else
-                                        <span class="text-xs text-gray-400 font-medium">-</span>
+                                        <span class="text-xs font-semibold text-amber-700 block">
+                                            Sisa {{ $item['sla_hari_sisa'] ?? 14 }} hari SLA
+                                        </span>
+                                        <span class="text-[11px] text-gray-500 block mt-0.5">Menunggu verifikasi</span>
                                     @endif
                                 </td>
 
                                 <!-- 8. Tindak Lanjut -->
-                                <td class="py-4 px-4 sm:px-6 text-center whitespace-nowrap">
-                                    @if (($item['status_pnbp'] ?? '') === 'sudah_bayar')
-                                        <!-- Tombol Tindak Lanjut: Membuka Form Input NTPN & Upload Voucher -->
-                                        <button type="button" 
-                                                @click="openTindakLanjutModal({{ json_encode($item) }})"
-                                                class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition hover:shadow">
-                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-                                            </svg>
-                                            <span>Tindak Lanjut</span>
-                                        </button>
-                                    @else
-                                        <!-- Jika Belum Bayar: Tombol Info SLA / Batas Bayar -->
-                                        <button type="button" 
-                                                @click="openSlaInfoModal({{ json_encode($item) }})"
-                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border {{ ($item['is_expired'] ?? false) ? 'border-rose-200 text-rose-700 bg-rose-50/70 hover:bg-rose-100' : 'border-gray-200 text-gray-600 bg-gray-50/70 hover:bg-gray-100' }} text-xs font-semibold transition">
-                                            <svg class="w-3.5 h-3.5 {{ ($item['is_expired'] ?? false) ? 'text-rose-600' : 'text-gray-400' }}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                                            </svg>
-                                            <span>{{ ($item['is_expired'] ?? false) ? 'Info Kadaluarsa' : 'Info SLA' }}</span>
-                                        </button>
-                                    @endif
+                                <td class="py-3.5 px-3.5 text-center whitespace-nowrap align-middle">
+                                    <div class="inline-flex items-center justify-center gap-1.5">
+                                        @if (($item['status_pnbp'] ?? '') === 'sudah_bayar')
+                                            <button type="button" 
+                                                    @click="openTindakLanjutModal({{ json_encode($item) }})"
+                                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition hover:shadow cursor-pointer">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125" />
+                                                </svg>
+                                                <span>Perbarui</span>
+                                            </button>
+                                        @else
+                                            <!-- Tombol Cek Web Billing AHU Online -->
+                                            <a href="https://ahu.go.id/billing/voucher"
+                                               target="_blank"
+                                               rel="noopener noreferrer"
+                                               class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl border border-indigo-200 bg-indigo-50/80 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold transition cursor-pointer"
+                                               title="Cek status voucher di Web Billing AHU Online">
+                                                <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                                </svg>
+                                                <span>Cek AHU</span>
+                                            </a>
+
+                                            <!-- Tombol Verifikasi: Membuka Form Input NTPN & Upload Bukti Voucher -->
+                                            <button type="button" 
+                                                    @click="openTindakLanjutModal({{ json_encode($item) }})"
+                                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-xs transition hover:shadow cursor-pointer">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                <span>Verifikasi</span>
+                                            </button>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -487,10 +543,10 @@
                                 VERIFIKASI PNBP · BENDAHARA
                             </span>
                             <h3 class="text-xl font-black text-slate-900 tracking-tight mt-0.5">
-                                Tindak Lanjut Pembayaran
+                                Verifikasi Pembayaran PNBP
                             </h3>
                             <p class="text-xs text-slate-500 font-normal mt-0.5">
-                                Validasi nomor transaksi negara (NTPN) &amp; bukti setor kas negara.
+                                Unggah screenshot hasil cek billing AHU lalu klik Verifikasi PNBP.
                             </p>
                         </div>
                     </div>
@@ -514,118 +570,94 @@
                     <div class="p-6 sm:p-7 space-y-5 overflow-y-auto custom-scrollbar flex-1">
                         
                         <!-- Card Info: Layanan yang Diverifikasi -->
-                        <div class="bg-gradient-to-br from-slate-50 to-blue-50/40 border border-slate-200/80 rounded-2xl p-4 sm:p-4.5 space-y-3">
+                        <div class="bg-gradient-to-br from-slate-50 to-blue-50/40 border border-slate-200/80 rounded-2xl p-4 sm:p-4.5 space-y-3.5">
+                            <!-- Baris 1: Nomor Layanan & Status -->
                             <div class="flex items-start justify-between gap-3">
-                                <div>
+                                <div class="min-w-0">
                                     <span class="text-[10px] font-bold text-slate-400 tracking-wider uppercase block">
                                         NOMOR LAYANAN PNBP
                                     </span>
-                                    <div class="flex items-center gap-2 mt-0.5">
-                                        <span class="font-mono text-sm sm:text-base font-bold text-[#1d68d8] break-all select-all tracking-wide" 
-                                              x-text="selectedItem ? selectedItem.nomor_layanan : ''">
-                                        </span>
-                                    </div>
+                                    <span class="font-mono text-sm sm:text-base font-bold text-[#1d68d8] break-all select-all tracking-wide block mt-0.5" 
+                                          x-text="selectedItem ? selectedItem.nomor_layanan : ''">
+                                    </span>
                                 </div>
-                                <div class="shrink-0 flex flex-col items-end gap-1">
-                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100/80 text-emerald-800 border border-emerald-200/80 shadow-2xs">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                                        <span>Sudah Bayar</span>
-                                    </span>
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-white text-slate-600 border border-slate-200 shadow-2xs" 
-                                          x-text="selectedItem ? selectedItem.jenis_layanan : ''">
-                                    </span>
+                                <span class="shrink-0 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border shadow-2xs"
+                                      :class="selectedItem?.status_pnbp === 'sudah_bayar' ? 'bg-emerald-100/80 text-emerald-800 border-emerald-200/80' : 'bg-amber-100/80 text-amber-800 border-amber-200/80'">
+                                    <span class="w-1.5 h-1.5 rounded-full"
+                                          :class="selectedItem?.status_pnbp === 'sudah_bayar' ? 'bg-emerald-600' : 'bg-amber-500'"></span>
+                                    <span x-text="selectedItem?.status_pnbp === 'sudah_bayar' ? 'Sudah Bayar' : 'Menunggu Verifikasi'"></span>
+                                </span>
+                            </div>
+
+                            <!-- Baris 2: Nomor Voucher Pengguna + Tombol Cek Web Billing AHU -->
+                            <div class="border-t border-slate-200/70 pt-3">
+                                <span class="text-[10px] font-bold text-slate-400 tracking-wider uppercase block mb-1.5">
+                                    NOMOR VOUCHER PENGGUNA
+                                </span>
+                                <div class="flex items-center justify-between gap-2.5 flex-wrap">
+                                    <div class="inline-flex items-center gap-1.5">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg bg-white text-slate-900 border border-blue-200 font-mono text-xs font-bold select-all shadow-2xs" 
+                                              x-text="selectedItem ? (selectedItem.nomor_voucher || '-') : '-'">
+                                        </span>
+                                        <button type="button"
+                                                x-show="selectedItem?.nomor_voucher && selectedItem.nomor_voucher !== '-'"
+                                                @click="copyToClipboard(selectedItem.nomor_voucher, 'modal_voucher')"
+                                                class="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-slate-500 hover:text-blue-600 transition cursor-pointer"
+                                                title="Salin nomor voucher">
+                                            <template x-if="copiedItemNomor === 'modal_voucher'">
+                                                <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                                </svg>
+                                            </template>
+                                            <template x-if="copiedItemNomor !== 'modal_voucher'">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+                                                </svg>
+                                            </template>
+                                        </button>
+                                    </div>
+                                    <a href="https://ahu.go.id/billing/voucher"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
+                                       class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-indigo-200 bg-indigo-50/80 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition shrink-0">
+                                        <span>Cek Web Billing AHU</span>
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                        </svg>
+                                    </a>
                                 </div>
                             </div>
 
-                            <div class="border-t border-slate-200/70 pt-2.5 grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-                                <div>
+                            <!-- Baris 3: Pemohon, Pewasiat, Tarif PNBP -->
+                            <div class="border-t border-slate-200/70 pt-3 grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
+                                <div class="sm:col-span-3">
                                     <span class="text-[10px] text-slate-400 block font-medium">Pemohon</span>
-                                    <span class="font-bold text-slate-800 truncate block mt-0.5" x-text="selectedItem ? selectedItem.nama_pemohon : ''"></span>
+                                    <span class="font-bold text-slate-800 block mt-0.5 leading-snug" x-text="selectedItem ? selectedItem.nama_pemohon : ''"></span>
                                 </div>
-                                <div>
+                                <div class="sm:col-span-6">
                                     <span class="text-[10px] text-slate-400 block font-medium">Pewasiat</span>
-                                    <span class="font-semibold text-slate-700 truncate block mt-0.5" x-text="selectedItem ? (selectedItem.nama_pewasiat || '-') : ''"></span>
+                                    <span class="font-semibold text-slate-700 block mt-0.5 leading-snug" x-text="selectedItem ? (selectedItem.nama_pewasiat || '-') : ''"></span>
                                 </div>
-                                <div class="col-span-2 sm:col-span-1">
+                                <div class="sm:col-span-3 sm:text-right">
                                     <span class="text-[10px] text-slate-400 block font-medium">Tarif PNBP</span>
                                     <span class="font-bold text-slate-900 block mt-0.5" x-text="'Rp ' + Number(selectedItem ? selectedItem.nominal_tagihan || 200000 : 200000).toLocaleString('id-ID')"></span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Input 1: NTPN -->
+                        <!-- Unggah Screenshot / Bukti Cek Web Billing AHU -->
                         <div>
-                            <div class="flex items-center justify-between mb-1.5">
-                                <label for="ntpn" class="block text-xs font-bold text-slate-700">
-                                    Nomor Transaksi Penerimaan Negara (NTPN) <span class="text-rose-500 font-bold">*</span>
+                            <div class="flex items-center justify-between gap-2 mb-1.5">
+                                <label class="block text-xs font-bold text-slate-700">
+                                    Unggah Screenshot / Bukti Web AHU <span class="text-slate-400 font-normal">(JPG, PNG, PDF maks. 5MB)</span>
                                 </label>
-                                <span class="text-[11px] font-mono font-semibold" 
-                                      :class="form.ntpn && form.ntpn.length === 16 ? 'text-emerald-600 font-bold' : 'text-slate-400'"
-                                      x-text="(form.ntpn ? form.ntpn.length : 0) + ' / 16 digit'">
-                                </span>
+                                <a x-show="selectedItem?.file_voucher_url"
+                                   :href="selectedItem?.file_voucher_url"
+                                   target="_blank"
+                                   class="text-[11px] font-bold text-[#1d68d8] hover:underline shrink-0">
+                                    Lihat bukti tersimpan
+                                </a>
                             </div>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h13.5m-13.5 7.5h13.5M9.75 3v18m4.5-18v18" />
-                                    </svg>
-                                </div>
-                                <input type="text" 
-                                       id="ntpn" 
-                                       name="ntpn" 
-                                       x-model="form.ntpn" 
-                                       required
-                                       maxlength="30"
-                                       placeholder="Misal: 261021B123456789"
-                                       class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-[#1d68d8] focus:ring-4 focus:ring-[#1d68d8]/10 font-mono font-bold text-sm uppercase tracking-wider text-slate-900 placeholder:normal-case placeholder:font-sans placeholder:tracking-normal placeholder:font-normal placeholder:text-slate-400 transition" />
-                            </div>
-                            <p class="text-[11px] text-slate-400 mt-1 font-normal">
-                                Kode 16 digit alfanumerik resmi bukti setoran Simponi / Bank Persepsi / Pos Indonesia.
-                            </p>
-                        </div>
-
-                        <!-- Input 2: Nominal & Tanggal Bayar -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                            <!-- Nominal -->
-                            <div>
-                                <label for="nominal" class="block text-xs font-bold text-slate-700 mb-1.5">
-                                    Nominal Pembayaran <span class="text-rose-500 font-bold">*</span>
-                                </label>
-                                <div class="relative flex items-center">
-                                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-xs font-bold text-slate-400">
-                                        Rp
-                                    </div>
-                                    <input type="number" 
-                                           id="nominal" 
-                                           name="nominal" 
-                                           x-model="form.nominal" 
-                                           required
-                                           min="0"
-                                           class="w-full pl-10 pr-3 py-2.5 rounded-xl border border-slate-200 focus:border-[#1d68d8] focus:ring-4 focus:ring-[#1d68d8]/10 text-sm font-bold text-slate-900 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none transition" />
-                                </div>
-                                <p class="text-[11px] font-bold text-[#1d68d8] mt-1" x-text="formatRupiah(form.nominal)"></p>
-                            </div>
-
-                            <!-- Tanggal Bayar -->
-                            <div>
-                                <label for="tanggal_bayar" class="block text-xs font-bold text-slate-700 mb-1.5">
-                                    Tanggal Bayar <span class="text-rose-500 font-bold">*</span>
-                                </label>
-                                <input type="date" 
-                                       id="tanggal_bayar" 
-                                       name="tanggal_bayar" 
-                                       x-model="form.tanggal_bayar" 
-                                       required
-                                       class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-[#1d68d8] focus:ring-4 focus:ring-[#1d68d8]/10 text-xs sm:text-sm font-semibold text-slate-800 transition" />
-                                <p class="text-[11px] text-slate-400 mt-1">Tanggal transaksi sesuai bukti setor.</p>
-                            </div>
-                        </div>
-
-                        <!-- Input 3: Unggah Bukti Voucher -->
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1.5">
-                                Unggah Berkas Bukti Voucher / NTPN <span class="text-slate-400 font-normal">(PDF, JPG, PNG maks. 5MB)</span>
-                            </label>
 
                             <!-- Hidden Real File Input -->
                             <input type="file" 
@@ -643,17 +675,17 @@
                                      @dragleave.prevent="isDragging = false"
                                      @drop.prevent="handleDrop($event)"
                                      :class="isDragging ? 'border-[#1d68d8] bg-blue-50/60' : 'border-slate-200 hover:border-[#1d68d8] bg-slate-50/40 hover:bg-blue-50/30'"
-                                     class="relative rounded-2xl border-2 border-dashed p-5 transition-all cursor-pointer group text-center">
+                                     class="relative rounded-2xl border-2 border-dashed p-6 transition-all cursor-pointer group text-center">
                                     <div class="w-10 h-10 rounded-xl bg-blue-50 text-[#1d68d8] border border-blue-100 flex items-center justify-center mx-auto mb-2 group-hover:scale-105 transition-transform shadow-2xs">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
                                         </svg>
                                     </div>
                                     <p class="text-xs font-bold text-slate-800">
-                                        <span class="text-[#1d68d8] group-hover:underline">Pilih berkas voucher</span> atau seret dokumen ke sini
+                                        <span class="text-[#1d68d8] group-hover:underline">Pilih screenshot / bukti AHU</span> atau seret file ke sini
                                     </p>
                                     <p class="text-[11px] text-slate-400 mt-0.5">
-                                        Format didukung: PDF, JPG, atau PNG (Maksimal 5 MB)
+                                        Format didukung: JPG, PNG, atau PDF (Maksimal 5 MB)
                                     </p>
                                 </div>
                             </template>
@@ -694,43 +726,22 @@
                                 </div>
                             </template>
                         </div>
-
-                        <!-- Input 4: Catatan Verifikasi -->
-                        <div>
-                            <label for="catatan" class="block text-xs font-bold text-slate-700 mb-1.5">
-                                Catatan Verifikasi <span class="text-slate-400 font-normal">(Opsional)</span>
-                            </label>
-                            <textarea id="catatan" 
-                                      name="catatan" 
-                                      rows="2" 
-                                      x-model="form.catatan" 
-                                      class="w-full text-xs rounded-xl border border-slate-200 focus:border-[#1d68d8] focus:ring-4 focus:ring-[#1d68d8]/10 p-3 transition text-slate-800 placeholder-slate-400 resize-none" 
-                                      placeholder="Contoh: Pembayaran telah divalidasi lunas via sistem Simponi Kementerian Keuangan..."></textarea>
-                        </div>
                     </div>
 
                     <!-- Modal Actions (Footer) -->
-                    <div class="px-6 sm:px-7 py-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between gap-3">
-                        <div class="hidden sm:flex items-center gap-1.5 text-[11px] text-slate-500">
-                            <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                    <div class="px-6 sm:px-7 py-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                        <button @click="tindakLanjutModalOpen = false" 
+                                type="button" 
+                                class="px-4.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold transition cursor-pointer">
+                            Batal
+                        </button>
+                        <button type="submit" 
+                                class="px-5 py-2.5 rounded-xl bg-[#1d68d8] hover:bg-blue-700 text-white text-xs font-bold shadow-sm hover:shadow transition active:scale-95 cursor-pointer flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                             </svg>
-                            <span>Tervalidasi Kas Negara RI</span>
-                        </div>
-                        <div class="flex items-center gap-2.5 ml-auto">
-                            <button @click="tindakLanjutModalOpen = false" 
-                                    type="button" 
-                                    class="px-4.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold transition cursor-pointer">
-                                Batal
-                            </button>
-                            <button type="submit" 
-                                    class="px-5 py-2.5 rounded-xl bg-[#1d68d8] hover:bg-blue-700 text-white text-xs font-bold shadow-sm hover:shadow transition active:scale-95 cursor-pointer flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                </svg>
-                                <span>Simpan &amp; Verifikasi PNBP</span>
-                            </button>
-                        </div>
+                            <span>Verifikasi PNBP</span>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -817,6 +828,10 @@
                             <span class="font-mono font-bold text-right break-all text-slate-900" x-text="selectedItem?.nomor_layanan"></span>
                         </div>
                         <div class="flex justify-between items-center py-1 border-b border-slate-200/70 gap-3">
+                            <span class="text-slate-500 font-medium">Nomor Voucher:</span>
+                            <span class="font-mono font-bold text-right break-all text-blue-700" x-text="selectedItem?.nomor_voucher || '-'"></span>
+                        </div>
+                        <div class="flex justify-between items-center py-1 border-b border-slate-200/70 gap-3">
                             <span class="text-slate-500 font-medium">Nama Pemohon:</span>
                             <span class="font-bold text-right text-slate-900" x-text="selectedItem?.nama_pemohon"></span>
                         </div>
@@ -857,11 +872,17 @@
                 </div>
 
                 <!-- Footer -->
-                <div class="px-6 sm:px-7 py-4 bg-slate-50/80 border-t border-slate-100 flex justify-end">
+                <div class="px-6 sm:px-7 py-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-end gap-2.5">
                     <button type="button" 
                             @click="slaInfoModalOpen = false" 
                             class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition cursor-pointer">
                         Mengerti &amp; Tutup
+                    </button>
+                    <button type="button"
+                            x-show="selectedItem && selectedItem.status_pnbp !== 'sudah_bayar'"
+                            @click="let item = selectedItem; slaInfoModalOpen = false; openTindakLanjutModal(item);"
+                            class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition cursor-pointer">
+                        Verifikasi Pembayaran
                     </button>
                 </div>
             </div>
