@@ -182,9 +182,12 @@
                     <tbody class="divide-y divide-gray-100 text-xs">
                         @forelse ($historyList as $item)
                             <tr class="hover:bg-blue-50/30 transition-colors duration-150">
-                                <!-- 1. Nomor Layanan -->
+                                <!-- 1. Nomor Layanan & Voucher -->
                                 <td class="py-4 px-4 sm:px-6 font-mono font-bold text-gray-900 select-all">
-                                    {{ $item['nomor_layanan'] }}
+                                    <div>{{ $item['nomor_layanan'] }}</div>
+                                    @if (!empty($item['nomor_voucher']) && $item['nomor_voucher'] !== '-')
+                                        <div class="text-[11px] font-semibold text-blue-700 mt-0.5">Voucher: {{ $item['nomor_voucher'] }}</div>
+                                    @endif
                                 </td>
 
                                 <!-- 2. Jenis Layanan -->
@@ -207,26 +210,30 @@
 
                                 <!-- 4. NTPN -->
                                 <td class="py-4 px-4">
-                                    <div class="inline-flex items-center gap-1.5 bg-gray-100/80 px-2 py-1 rounded-lg border border-gray-200">
-                                        <span class="font-mono font-bold text-gray-900 select-all">
-                                            {{ $item['ntpn'] }}
-                                        </span>
-                                        <button type="button" 
-                                                @click="copyToClipboard('{{ $item['ntpn'] }}', '{{ $item['id'] }}')" 
-                                                class="text-gray-400 hover:text-blue-600 transition" 
-                                                title="Salin NTPN">
-                                            <template x-if="copiedNtpn === '{{ $item['id'] }}'">
-                                                <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                                </svg>
-                                            </template>
-                                            <template x-if="copiedNtpn !== '{{ $item['id'] }}'">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
-                                                </svg>
-                                            </template>
-                                        </button>
-                                    </div>
+                                    @if (!empty($item['ntpn']) && $item['ntpn'] !== '-')
+                                        <div class="inline-flex items-center gap-1.5 bg-gray-100/80 px-2 py-1 rounded-lg border border-gray-200">
+                                            <span class="font-mono font-bold text-gray-900 select-all">
+                                                {{ $item['ntpn'] }}
+                                            </span>
+                                            <button type="button" 
+                                                    @click="copyToClipboard('{{ $item['ntpn'] }}', '{{ $item['id'] }}')" 
+                                                    class="text-gray-400 hover:text-blue-600 transition" 
+                                                    title="Salin NTPN">
+                                                <template x-if="copiedNtpn === '{{ $item['id'] }}'">
+                                                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                                    </svg>
+                                                </template>
+                                                <template x-if="copiedNtpn !== '{{ $item['id'] }}'">
+                                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" />
+                                                    </svg>
+                                                </template>
+                                            </button>
+                                        </div>
+                                    @else
+                                        <span class="text-gray-400 font-mono">-</span>
+                                    @endif
                                 </td>
 
                                 <!-- 5. Nominal -->
@@ -346,6 +353,10 @@
                         <div class="flex justify-between items-center py-1 border-b border-slate-200/70 gap-3">
                             <span class="text-slate-500 font-medium">Nomor Layanan:</span>
                             <span class="font-mono font-bold text-right text-slate-900 break-all select-all" x-text="selectedItem?.nomor_layanan"></span>
+                        </div>
+                        <div class="flex justify-between items-center py-1 border-b border-slate-200/70 gap-3">
+                            <span class="text-slate-500 font-medium">Nomor Voucher:</span>
+                            <span class="font-mono font-bold text-right text-blue-700 break-all select-all" x-text="selectedItem?.nomor_voucher || '-'"></span>
                         </div>
                         <div class="flex justify-between items-center py-1 border-b border-slate-200/70 gap-3">
                             <span class="text-slate-500 font-medium">Jenis Layanan:</span>

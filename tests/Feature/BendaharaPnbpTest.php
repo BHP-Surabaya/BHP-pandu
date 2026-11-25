@@ -65,6 +65,20 @@ class BendaharaPnbpTest extends TestCase
     public function test_bendahara_can_view_verifikasi_pnbp_page(): void
     {
         $bendahara = $this->createBendaharaUser();
+        $pemohon = $this->createPemohonUser();
+
+        $permohonan = Permohonan::create([
+            'user_id' => $pemohon->id,
+            'nomor_permohonan' => 'WST-20261125-001234',
+            'status' => 'menunggu_verifikasi',
+        ]);
+
+        Voucher::create([
+            'permohonan_id' => $permohonan->id,
+            'nomor_voucher' => 'AHU-001008002-99887766',
+            'status_pembayaran' => 'belum_bayar',
+            'nominal' => 200000,
+        ]);
 
         $response = $this->actingAs($bendahara)->get(route('bendahara.verifikasi.index'));
 
@@ -73,6 +87,20 @@ class BendaharaPnbpTest extends TestCase
         $response->assertSee('Daftar Antrean Verifikasi PNBP');
         $response->assertSee('Sudah Bayar');
         $response->assertSee('Belum Bayar');
+        $response->assertSee('AHU-001008002-99887766');
+        $response->assertSee('Nomor Layanan');
+        $response->assertSee('Voucher PNBP');
+        $response->assertSee('Nama Pemohon');
+        $response->assertSee('Nama Pewasiat');
+        $response->assertDontSee('Jenis Layanan');
+        $response->assertSee('https://ahu.go.id/billing/voucher');
+        $response->assertSee('Cek AHU');
+        $response->assertSee('openTindakLanjutModal', false);
+        $response->assertSee('Verifikasi');
+        $response->assertViewHas('stats', function (array $stats): bool {
+            return ($stats['total_verifikasi'] ?? 0) === 1
+                && ($stats['belum_bayar'] ?? 0) === 1;
+        });
     }
 
     public function test_bendahara_can_filter_verifikasi_pnbp_by_status(): void
@@ -117,7 +145,7 @@ class BendaharaPnbpTest extends TestCase
 
     public function test_bendahara_can_submit_tindak_lanjut_with_ntpn_and_voucher(): void
     {
-        Storage::fake('public');
+        Storage::fake('local');
 
         $bendahara = $this->createBendaharaUser();
         $pemohon = $this->createPemohonUser();
@@ -157,6 +185,44 @@ class BendaharaPnbpTest extends TestCase
         $this->assertSame('lunas', $voucher->status_pembayaran);
         $this->assertSame('261023B999888777', $voucher->ntpn);
         $this->assertSame(200000, $voucher->nominal);
+        $this->assertNotNull($voucher->file_voucher);
+    }
+
+    public function test_bendahara_can_verify_with_screenshot_only(): void
+    {
+        Storage::fake('local');
+
+        $bendahara = $this->createBendaharaUser();
+        $pemohon = $this->createPemohonUser();
+
+        $permohonan = Permohonan::create([
+            'user_id' => $pemohon->id,
+            'nomor_permohonan' => 'WST-20261125-SIMPLE',
+            'status' => 'menunggu_verifikasi',
+        ]);
+
+        $this->createPewasiat($permohonan->id, 'Alm. Uji Coba Simpel');
+
+        $voucher = Voucher::create([
+            'permohonan_id' => $permohonan->id,
+            'nomor_voucher' => 'AHU-001008002-77766655',
+            'status_pembayaran' => 'belum_bayar',
+        ]);
+
+        $screenshot = UploadedFile::fake()->image('ss_ahu.png');
+
+        $response = $this->actingAs($bendahara)
+            ->post(route('bendahara.verifikasi.tindak-lanjut', $permohonan->id), [
+                'file_voucher' => $screenshot,
+            ]);
+
+        $response->assertRedirect(route('bendahara.verifikasi.index'));
+        $response->assertSessionHas('success');
+
+        $voucher->refresh();
+        $this->assertSame('lunas', $voucher->status_pembayaran);
+        $this->assertSame(200000, $voucher->nominal);
+        $this->assertNotNull($voucher->tanggal_bayar);
         $this->assertNotNull($voucher->file_voucher);
     }
 
