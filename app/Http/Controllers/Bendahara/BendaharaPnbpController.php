@@ -77,6 +77,9 @@ class BendaharaPnbpController extends Controller
                 'nominal_tagihan' => (int) ($voucher?->nominal ?: 200000),
                 'nomor_voucher' => $voucher?->nomor_voucher ?? '-',
                 'ntpn' => $voucher?->ntpn,
+                'tanggal_bayar_iso' => $voucher?->tanggal_bayar ? Carbon::parse($voucher->tanggal_bayar)->format('Y-m-d') : null,
+                'file_voucher_url' => $voucher?->file_voucher ? route('secure.voucher.show', $voucher->id) : null,
+                'catatan' => $voucher?->catatan,
                 'sla_hari_berjalan' => $hariBerjalan,
                 'sla_hari_sisa' => $sisaHari,
                 'sla_status' => $slaStatus,
@@ -116,7 +119,9 @@ class BendaharaPnbpController extends Controller
 
         $stats = [
             'total_semua' => count($pnbpList),
+            'total_verifikasi' => count($pnbpList),
             'sudah_bayar' => collect($pnbpList)->where('status_pnbp', 'sudah_bayar')->count(),
+            'total_terverifikasi' => collect($pnbpList)->where('status_pnbp', 'sudah_bayar')->count(),
             'belum_bayar' => collect($pnbpList)->where('status_pnbp', 'belum_bayar')->where('is_expired', false)->count(),
             'kadaluarsa' => collect($pnbpList)->where('is_expired', true)->count(),
             'total_nominal_sudah_bayar' => collect($pnbpList)->where('status_pnbp', 'sudah_bayar')->sum('nominal_tagihan'),
@@ -125,20 +130,21 @@ class BendaharaPnbpController extends Controller
         return view('bendahara.verifikasi', [
             'pnbpList' => $filteredList,
             'stats' => $stats,
+            'statusFilter' => $statusFilter,
             'currentFilter' => $statusFilter,
             'search' => $search,
         ]);
     }
 
     /**
-     * Proses tindak lanjut verifikasi PNBP (input NTPN dan berkas bukti setor).
+     * Proses tindak lanjut verifikasi PNBP (unggah bukti/screenshot web billing AHU atau input NTPN opsional).
      */
     public function tindakLanjut(Request $request, string|int $id): RedirectResponse
     {
         $validated = $request->validate([
-            'ntpn' => ['required', 'string', 'min:8', 'max:50'],
-            'nominal' => ['required', 'numeric', 'min:1000'],
-            'tanggal_bayar' => ['required', 'date'],
+            'ntpn' => ['nullable', 'string', 'min:8', 'max:50'],
+            'nominal' => ['nullable', 'numeric', 'min:1000'],
+            'tanggal_bayar' => ['nullable', 'date'],
             'catatan' => ['nullable', 'string', 'max:500'],
             'file_voucher' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
         ]);
@@ -159,27 +165,36 @@ class BendaharaPnbpController extends Controller
             ]);
         }
 
-        $voucher->ntpn = strtoupper(trim($validated['ntpn']));
-        $voucher->nominal = (int) $validated['nominal'];
-        $voucher->tanggal_bayar = $validated['tanggal_bayar'];
+        if (! empty($validated['ntpn'])) {
+            $voucher->ntpn = strtoupper(trim($validated['ntpn']));
+        }
+        $voucher->nominal = (int) ($validated['nominal'] ?? $voucher->nominal ?? 200000);
+        $voucher->tanggal_bayar = $validated['tanggal_bayar'] ?? $voucher->tanggal_bayar ?? now()->toDateString();
         $voucher->status_pembayaran = 'lunas';
         if ($filePath) {
             $voucher->file_voucher = $filePath;
         }
-        $voucher->catatan = $validated['catatan'] ?? null;
+        if (array_key_exists('catatan', $validated) && $validated['catatan'] !== null) {
+            $voucher->catatan = $validated['catatan'];
+        }
         $voucher->save();
 
         $user = auth()->user();
+        $ntpnText = $voucher->ntpn ? " dengan NTPN {$voucher->ntpn}" : '';
         AuditLogger::log(
             action: 'verifikasi_pnbp',
             permohonan: $permohonan,
-            description: "Bendahara {$user->name} memverifikasi pembayaran PNBP untuk permohonan {$permohonan->nomor_permohonan} dengan NTPN {$validated['ntpn']}.",
+            description: "Bendahara {$user->name} memverifikasi pembayaran PNBP untuk permohonan {$permohonan->nomor_permohonan}{$ntpnText}.",
             resource: $voucher,
-            details: ['ntpn' => $validated['ntpn'], 'nominal' => $validated['nominal']]
+            details: [
+                'ntpn' => $voucher->ntpn,
+                'nominal' => $voucher->nominal,
+                'has_file_voucher' => ! empty($voucher->file_voucher),
+            ]
         );
 
         return redirect()->route('bendahara.verifikasi.index')
-            ->with('success', "Verifikasi PNBP layanan {$permohonan->nomor_permohonan} berhasil disimpan! NTPN: {$validated['ntpn']}.");
+            ->with('success', "Verifikasi PNBP layanan {$permohonan->nomor_permohonan} berhasil disimpan!".($voucher->ntpn ? " NTPN: {$voucher->ntpn}." : ''));
     }
 
     /**
@@ -204,6 +219,7 @@ class BendaharaPnbpController extends Controller
             return [
                 'id' => $item->id,
                 'nomor_layanan' => $item->nomor_permohonan ?: ('W15.AHU-'.str_pad((string) $item->id, 5, '0', STR_PAD_LEFT)),
+                'nomor_voucher' => $voucher?->nomor_voucher ?? '-',
                 'jenis_layanan' => $item->jenis_layanan_label,
                 'nama_pemohon' => $item->user?->name ?? 'Pemohon',
                 'nama_pewasiat' => $item->pewasiat?->nama_lengkap ?? 'Pewasiat',
@@ -225,6 +241,7 @@ class BendaharaPnbpController extends Controller
                 $needle = mb_strtolower($search);
                 $haystack = mb_strtolower(
                     ($item['nomor_layanan'] ?? '').' '.
+                    ($item['nomor_voucher'] ?? '').' '.
                     ($item['jenis_layanan'] ?? '').' '.
                     ($item['nama_pemohon'] ?? '').' '.
                     ($item['nama_pewasiat'] ?? '').' '.
@@ -259,6 +276,7 @@ class BendaharaPnbpController extends Controller
         return view('bendahara.history', [
             'historyList' => $filteredHistory,
             'stats' => $stats,
+            'totalNominal' => $stats['total_nominal'],
             'search' => $search,
             'dateFrom' => $dateFrom,
             'dateTo' => $dateTo,
