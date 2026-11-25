@@ -18,6 +18,11 @@ class UserVerificationController extends Controller
     {
         $status = $request->query('status', 'all');
         $search = $request->query('search', '');
+        $userType = $request->query('user_type', 'all');
+
+        if (! in_array($userType, ['all', 'perorangan', 'notaris', 'pengacara'], true)) {
+            $userType = 'all';
+        }
 
         $query = User::query()->where('role', '!=', 'master_admin');
 
@@ -37,6 +42,8 @@ class UserVerificationController extends Controller
             $query->where('status_verifikasi', 'ditolak');
         } elseif ($status === 'terverifikasi') {
             $query->where('status_verifikasi', 'terverifikasi');
+        } elseif ($status === 'pegawai') {
+            $query->where('role', '!=', 'pemohon');
         }
 
         // Apply search filter
@@ -61,21 +68,41 @@ class UserVerificationController extends Controller
             });
         }
 
-        $users = $query->latest()->paginate(10)->withQueryString();
+        $accountQuery = (clone $query)->where('role', 'pemohon');
+
+        if ($userType === 'perorangan') {
+            $accountQuery->where(function ($query) {
+                $query->where('status_akun', 'perorangan')->orWhereNull('status_akun');
+            });
+        } elseif (in_array($userType, ['notaris', 'pengacara'], true)) {
+            $accountQuery->where('status_akun', $userType);
+        }
+
+        $users = $accountQuery
+            ->latest()
+            ->paginate(10, ['*'], 'users_page')
+            ->withQueryString();
+        $employees = (clone $query)
+            ->where('role', '!=', 'pemohon')
+            ->latest()
+            ->paginate(10, ['*'], 'employees_page')
+            ->withQueryString();
 
         // Calculate statistics for active accounts & pending verifications
         $stats = [
-            'total_user' => User::where('role', '!=', 'master_admin')->count(),
-            'total_notaris' => User::where('status_akun', 'notaris')->count(),
-            'total_pengacara' => User::where('status_akun', 'pengacara')->count(),
-            'total_perorangan' => User::where('role', '!=', 'master_admin')
+            'total_user' => User::where('role', 'pemohon')->count(),
+            'total_pegawai' => User::whereNotIn('role', ['pemohon', 'master_admin'])->count(),
+            'total_semua' => User::where('role', '!=', 'master_admin')->count(),
+            'total_notaris' => User::where('role', 'pemohon')->where('status_akun', 'notaris')->count(),
+            'total_pengacara' => User::where('role', 'pemohon')->where('status_akun', 'pengacara')->count(),
+            'total_perorangan' => User::where('role', 'pemohon')
                 ->where(function ($q) {
                     $q->where('status_akun', 'perorangan')->orWhereNull('status_akun');
                 })->count(),
-            'total_pending' => User::where('status_verifikasi', 'menunggu_verifikasi')->count(),
+            'total_pending' => User::where('role', 'pemohon')->where('status_verifikasi', 'menunggu_verifikasi')->count(),
         ];
 
-        return view('admin.verifikasi.index', compact('users', 'stats', 'status', 'search'));
+        return view('admin.verifikasi.index', compact('users', 'employees', 'stats', 'status', 'search', 'userType'));
     }
 
     /**

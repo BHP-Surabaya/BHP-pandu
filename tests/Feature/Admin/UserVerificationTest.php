@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -81,6 +82,90 @@ class UserVerificationTest extends TestCase
         $response->assertOk();
         $response->assertSee($notaris->name);
         $response->assertSee('Menunggu Verifikasi');
+    }
+
+    public function test_master_admin_sees_user_and_employee_tables_by_default(): void
+    {
+        $admin = $this->createMasterAdmin();
+        $accounts = User::factory()->count(11)->create(['role' => 'pemohon']);
+        $employee = User::factory()->create([
+            'name' => 'Pegawai Internal',
+            'role' => 'kasi',
+            'status_akun' => 'kasi',
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('admin.verifikasi.index'));
+
+        $response->assertOk()
+            ->assertSeeInOrder(['Akun Pengguna', '11 akun', 'Pegawai', $employee->name]);
+
+        $employeeFilterResponse = $this->actingAs($admin)->get(route('admin.verifikasi.index', ['status' => 'pegawai']));
+
+        $employeeFilterResponse->assertOk()
+            ->assertSee($employee->name)
+            ->assertDontSee($accounts->first()->name);
+    }
+
+    public function test_master_admin_can_filter_account_table_by_account_type(): void
+    {
+        $admin = $this->createMasterAdmin();
+        $perorangan = User::factory()->create([
+            'name' => 'Akun Perorangan Filter',
+            'role' => 'pemohon',
+            'status_akun' => 'perorangan',
+        ]);
+        $notaris = User::factory()->create([
+            'name' => 'Akun Notaris Filter',
+            'role' => 'pemohon',
+            'status_akun' => 'notaris',
+        ]);
+        $pengacara = User::factory()->create([
+            'name' => 'Akun Pengacara Filter',
+            'role' => 'pemohon',
+            'status_akun' => 'pengacara',
+        ]);
+
+        $response = $this->actingAs($admin)->get(route('admin.verifikasi.index', ['user_type' => 'notaris']));
+
+        $response->assertOk()
+            ->assertSee($notaris->name)
+            ->assertDontSee($perorangan->name)
+            ->assertDontSee($pengacara->name);
+    }
+
+    public function test_master_admin_account_table_displays_plain_nik_for_encrypted_user_data(): void
+    {
+        $admin = $this->createMasterAdmin();
+        $plainNik = '3578012345678912';
+        $user = User::factory()->create([
+            'name' => 'Pengguna dengan NIK',
+            'role' => 'pemohon',
+            'nik' => $plainNik,
+        ]);
+        $encryptedNik = DB::table('users')->where('id', $user->id)->value('nik');
+
+        $response = $this->actingAs($admin)->get(route('admin.verifikasi.index'));
+
+        $response->assertOk()
+            ->assertSee('NIK: '.$plainNik)
+            ->assertDontSee($encryptedNik, false);
+    }
+
+    public function test_master_admin_account_table_does_not_expose_unreadable_encrypted_nik(): void
+    {
+        $admin = $this->createMasterAdmin();
+        $user = User::factory()->create([
+            'name' => 'Pengguna dengan NIK lama',
+            'role' => 'pemohon',
+        ]);
+        $unreadableEncryptedNik = 'eyJpdiI6ImJhZCIsInZhbHVlIjoiYmFkIn0=';
+        DB::table('users')->where('id', $user->id)->update(['nik' => $unreadableEncryptedNik]);
+
+        $response = $this->actingAs($admin)->get(route('admin.verifikasi.index'));
+
+        $response->assertOk()
+            ->assertSee('NIK perlu diperiksa')
+            ->assertDontSee($unreadableEncryptedNik, false);
     }
 
     public function test_master_admin_can_view_verification_detail(): void
@@ -254,7 +339,7 @@ class UserVerificationTest extends TestCase
         $response->assertSessionHas('status');
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
-        Storage::disk('public')->assertMissing('sk_notaris/sample.pdf');
+        $this->assertFalse(Storage::disk('public')->exists('sk_notaris/sample.pdf'));
     }
 
     public function test_master_admin_cannot_delete_themselves_or_other_master_admin(): void
