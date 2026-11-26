@@ -121,6 +121,32 @@ class KasiDashboardTest extends TestCase
         $response->assertSessionHas('success');
     }
 
+    public function test_kasi_can_disposisi_layanan_without_prioritas(): void
+    {
+        $kasi = $this->createKasiUser();
+        $pemohon = $this->createPemohonUser();
+        $permohonan = $this->createPermohonan($pemohon);
+
+        $response = $this->actingAs($kasi)->post(route('kasi.disposisi', ['id' => $permohonan->id]), [
+            'pic' => ['Iman', 'Lutfy', 'Inara'],
+        ]);
+
+        $response->assertRedirect(route('kasi.dashboard'));
+        $response->assertSessionHas('success');
+
+        $this->assertDatabaseHas('permohonans', [
+            'id' => $permohonan->id,
+            'disposisi_pic' => 'Iman, Lutfy, Inara',
+            'disposisi_prioritas' => 'biasa',
+        ]);
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'disposisi_kasi',
+            'user_id' => $kasi->id,
+            'permohonan_id' => $permohonan->id,
+        ]);
+    }
+
     public function test_kasi_can_tindak_lanjut_sla(): void
     {
         $kasi = $this->createKasiUser();

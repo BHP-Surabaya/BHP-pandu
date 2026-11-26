@@ -261,6 +261,7 @@ class KasiDashboardController extends Controller
         $permohonan = Permohonan::findOrFail($id);
 
         $picStr = implode(', ', $validated['pic']);
+        $prioritas = $validated['prioritas'] ?? 'biasa';
         $nextStatus = 'proses_muda';
 
         // Tentukan tahap berdasarkan PIC
@@ -273,7 +274,7 @@ class KasiDashboardController extends Controller
         $permohonan->update([
             'disposisi_pic' => $picStr,
             'disposisi_kasi' => $validated['catatan'] ?? 'Telah didisposisikan oleh Kepala Seksi.',
-            'disposisi_prioritas' => $validated['prioritas'] ?? 'biasa',
+            'disposisi_prioritas' => $prioritas,
             'tanggal_disposisi' => now(),
             'status' => $nextStatus,
         ]);
@@ -282,9 +283,9 @@ class KasiDashboardController extends Controller
         AuditLogger::log(
             action: 'disposisi_kasi',
             permohonan: $permohonan,
-            description: "Kasi {$user->name} melakukan disposisi permohonan {$permohonan->nomor_permohonan} kepada PIC {$picStr} dengan prioritas {$validated['prioritas']}.",
+            description: "Kasi {$user->name} melakukan disposisi permohonan {$permohonan->nomor_permohonan} kepada PIC {$picStr} dengan prioritas {$prioritas}.",
             resource: $permohonan,
-            details: ['pic' => $validated['pic'], 'prioritas' => $validated['prioritas'] ?? 'biasa']
+            details: ['pic' => $validated['pic'], 'prioritas' => $prioritas]
         );
 
         return redirect()->route('kasi.dashboard')
